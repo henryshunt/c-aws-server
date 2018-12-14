@@ -152,30 +152,30 @@
 
         <div id="main">
             <div class="group">
-            <div class="group_header">
+                <div class="group_header">
                     <p class="group_title">Station Information</p>
                 </div>
     
                 <table class="field_table">
                     <tr>
                         <td><p class="field_label">Location:</p></td>
-                        <td><p class="field_value">{{ aws_location }}</p></td>
+                        <td><p class="field_value"><?php echo $aws_location; ?></p></td>
                     </tr>
                     <tr>
                         <td><p class="field_label">Time Zone Name:</p></td>
-                        <td><p class="field_value">{{ aws_time_zone }}</p></td>
+                        <td><p class="field_value"><?php echo $aws_time_zone; ?></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label" style="margin-top: 10px">Elevation:</p></td>
-                        <td><p class="field_value" style="margin-top: 10px">{{ aws_elevation }} m</p></td>
+                        <td><p class="field_label">Elevation:</p></td>
+                        <td><p class="field_value"><?php echo $aws_elevation; ?> m asl.</p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label">Latitude:</p></td>
-                        <td><p class="field_value">{{ aws_latitude }}</p></td>
+                        <td><p class="field_label" style="margin-top: 10px">Latitude:</p></td>
+                        <td><p class="field_value" style="margin-top: 10px"><?php echo $aws_latitude; ?></p></td>
                     </tr>
                     <tr>
                         <td><p class="field_label">Longitude:</p></td>
-                        <td><p class="field_value">{{ aws_longitude }}</p></td>
+                        <td><p class="field_value"><?php echo $aws_longitude; ?></p></td>
                     </tr>
                     <tr>
                         <td><p class="field_label" style="margin-top: 10px">System Version:</p></td>
