@@ -9,8 +9,7 @@ $SELECT_FIELDS_ENVREPORTS = "SELECT %s FROM envReports WHERE Time BETWEEN '%s' A
 $SELECT_FIELDS_DAYSTATS = "SELECT %s FROM dayStats WHERE Date BETWEEN '%s' AND '%s'";
 
 $GENERATE_YEAR_STATS = "SELECT ROUND(AVG(AirT_Avg), 3) AS AirT_Avg, ROUND(MIN(AirT_Min), 3) AS AirT_Min, "
-    . "ROUND(MAX(AirT_Max), 3) AS AirT_Max, ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS SunD_Ttl, "
-    . "ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl FROM dayStats WHERE YEAR(Date) = %s";
+    . "ROUND(MAX(AirT_Max), 3) AS AirT_Max FROM dayStats WHERE YEAR(Date) = %s";
 $GENERATE_MONTHS_STATS = "SELECT MONTH(Date) AS Month, ROUND(AVG(AirT_Avg), 3) AS AirT_Avg, "
     . "ROUND(MIN(AirT_Min), 3) AS AirT_Min, ROUND(MAX(AirT_Max), 3) AS AirT_Max, "
     . "ROUND(AVG(RelH_Avg), 3) AS RelH_Avg, ROUND(AVG(WSpd_Avg), 3) AS WSpd_Avg, "

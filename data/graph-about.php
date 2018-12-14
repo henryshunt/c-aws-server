@@ -14,7 +14,7 @@ try {
 }
 catch(Exception $e) { echo json_encode($data); exit(); }
 
-$range_start = clone $url_time; $range_start -> sub(new DateInterval("PT5H"));
+$range_start = clone $url_time; $range_start -> sub(new DateInterval("PT6H"));
 $range_end = clone $url_time;
 $fields = "Time," . $_GET["fields"];
 

@@ -51,8 +51,6 @@
                         document.getElementById("item_AirT_Avg_Year").innerHTML = "no data";
                         document.getElementById("item_AirT_Min_Year").innerHTML = "no data";
                         document.getElementById("item_AirT_Max_Year").innerHTML = "no data";
-                        document.getElementById("item_SunD_Ttl_Year").innerHTML = "no data";
-                        document.getElementById("item_Rain_Ttl_Year").innerHTML = "no data";
                         
                         var table = document.getElementById("climate_months_a");
                         for (var i = 1, row; row = table.rows[i]; i++) {
@@ -78,9 +76,7 @@
 
                 displayValue(data["AirT_Avg_Year"], "item_AirT_Avg_Year", "°C", 1);
                 displayValue(data["AirT_Min_Year"], "item_AirT_Min_Year", "°C", 1);
-                displayValue(data["AirT_Max_Year"], "item_AirT_Max_Year", "°C", 1);                
-                displayValue(data["SunD_Ttl_Year"], "item_SunD_Ttl_Year", " hrs", 1);
-                displayValue(data["Rain_Ttl_Year"], "item_Rain_Ttl_Year", " mm", 1);
+                displayValue(data["AirT_Max_Year"], "item_AirT_Max_Year", "°C", 1);
 
                 displayMonths(data["AirT_Avg_Months"], "item_AirT_Avg_Months", 1);
                 displayMonths(data["AirT_Min_Months"], "item_AirT_Min_Months", 1);
@@ -193,14 +189,6 @@
                     <tr>
                         <td><p class="field_label">Air Temperature Maximum:</p></td>
                         <td><p id="item_AirT_Max_Year" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label" style="margin-top: 10px">Sunshine Duration Total:</p></td>
-                        <td><p id="item_SunD_Ttl_Year" class="field_value" style="margin-top: 10px"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Rainfall Total:</p></td>
-                        <td><p id="item_Rain_Ttl_Year" class="field_value"></p></td>
                     </tr>
                 </table>
             </div>

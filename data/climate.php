@@ -4,8 +4,7 @@ include_once("../res/php-config.php");
 include_once("../res/php-database.php");
 include_once("../res/php-queries.php");
 
-$data = array_fill_keys(array("AirT_Avg_Year", "AirT_Min_Year", "AirT_Max_Year",
-                              "SunD_Ttl_Year", "Rain_Ttl_Year"), null);
+$data = array_fill_keys(array("AirT_Avg_Year", "AirT_Min_Year", "AirT_Max_Year"), null);
 
 $fill_value = array_fill_keys(array(
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"), null);
