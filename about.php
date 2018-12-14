@@ -166,12 +166,12 @@
                         <td><p class="field_value"><?php echo $aws_time_zone; ?></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label">Elevation:</p></td>
-                        <td><p class="field_value"><?php echo $aws_elevation; ?> m asl.</p></td>
+                        <td><p class="field_label" style="margin-top: 10px">Elevation:</p></td>
+                        <td><p class="field_value" style="margin-top: 10px"><?php echo $aws_elevation; ?> m</p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label" style="margin-top: 10px">Latitude:</p></td>
-                        <td><p class="field_value" style="margin-top: 10px"><?php echo $aws_latitude; ?></p></td>
+                        <td><p class="field_label">Latitude:</p></td>
+                        <td><p class="field_value"><?php echo $aws_latitude; ?></p></td>
                     </tr>
                     <tr>
                         <td><p class="field_label">Longitude:</p></td>
