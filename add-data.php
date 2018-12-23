@@ -126,7 +126,7 @@ if ($db_conn) {
                         . "ST00_Avg = ?, ST00_Min = ?, ST00_Max = ? WHERE Date = ?");
                 
                 if ($query) {
-                    $query -> bind_param("ddddddddddddiiidddiddddddddddddds", $AirT_Avg, $AirT_Min,
+                    $query -> bind_param("dddddddddddddiidddiddddddddddddds", $AirT_Avg, $AirT_Min,
                         $AirT_Max, $RelH_Avg, $RelH_Min, $RelH_Max, $DewP_Avg, $DewP_Min, $DewP_Max,
                         $WSpd_Avg, $WSpd_Min, $WSpd_Max, $WDir_Avg, $WDir_Min, $WDir_Max, $WGst_Avg,
                         $WGst_Min, $WGst_Max, $SunD_Ttl, $Rain_Ttl, $MSLP_Avg, $MSLP_Min, $MSLP_Max,
