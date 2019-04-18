@@ -3,7 +3,7 @@
 
 <html>
     <head>
-        <title>C-AWS <?php echo explode(",", $aws_location)[0]; ?> [Remote]</title>
+        <title>C-AWS <?php echo $aws_location; ?> [Remote]</title>
         <link href="res/css-trebuchet.ttf" type="x-font-ttf">
         <link href="res/css-global.css" rel="stylesheet" type="text/css">
         <link href="res/css-chartist.css" rel="stylesheet" type="text/css">
@@ -50,7 +50,7 @@
 
             function setupGraph(graph) {
                 var options = {
-                    showPoint: false, lineSmooth: false, height: 300,
+                    showPoint: false, lineSmooth: false, height: 350,
 
                     axisY: {
                         offset: 38,
@@ -282,7 +282,7 @@
     
                         <span>|</span>
                         <a class="menu_item" href="climate.php">Climate</a>
-                        <a class="menu_item" href="about.php">About</a>
+                        <a class="menu_item" href="station.php">Station</a>
                     </div>
 
                     <span>Accessing <b>REMOTE</b> Data Stores</span>

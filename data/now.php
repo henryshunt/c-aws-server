@@ -61,7 +61,9 @@ if ($db_conn) {
         "Rain", $past_hour -> format("Y-m-d H:i:s"), $url_time -> format("Y-m-d H:i:s")));
 
     if ($Rain_PHr_record && $Rain_PHr_record -> num_rows == 1) {
-        $data["Rain_PHr"] = round($Rain_PHr_record -> fetch_assoc()["Rain_PHr"], 3);
+        if ($Rain_PHr_record["Rain_PHr"] != null) {
+            $data["Rain_PHr"] = round($Rain_PHr_record -> fetch_assoc()["Rain_PHr"], 3);
+        }
     }
 
     // Calculate three hour pressure tendency

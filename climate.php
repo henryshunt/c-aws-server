@@ -3,7 +3,7 @@
 
 <html>
     <head>
-        <title>C-AWS <?php echo explode(",", $aws_location)[0]; ?> [Remote]</title>
+        <title>C-AWS <?php echo $aws_location; ?> [Remote]</title>
         <link href="res/css-trebuchet.ttf" type="x-font-ttf">
         <link href="res/css-global.css" rel="stylesheet" type="text/css">
         <link href="res/css-climate.css" rel="stylesheet" type="text/css">
@@ -85,7 +85,6 @@
                 displayMonths(data["WSpd_Avg_Months"], "item_WSpd_Avg_Months", 1);
                 displayMonths(data["WSpd_Max_Months"], "item_WSpd_Max_Months", 1);
                 displayMonths(data["WDir_Avg_Months"], "item_WDir_Avg_Months", -1);
-                displayMonths(data["WGst_Avg_Months"], "item_WGst_Avg_Months", 1);
                 displayMonths(data["WGst_Max_Months"], "item_WGst_Max_Months", 1);
                 displayMonths(data["SunD_Ttl_Months"], "item_SunD_Ttl_Months", 1);
                 displayMonths(data["Rain_Ttl_Months"], "item_Rain_Ttl_Months", 1);
@@ -147,7 +146,7 @@
     
                         <span>|</span>
                         <a class="menu_item" id="ami" href="climate.php">Climate</a>
-                        <a class="menu_item" href="about.php">About</a>
+                        <a class="menu_item" href="station.php">Station</a>
                     </div>
 
                     <span>Accessing <b>REMOTE</b> Data Stores</span>
@@ -245,11 +244,6 @@
                         </tr>
                         <tr id="item_WDir_Avg_Months">
                             <td>Wind Direction Average (°)</td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                        <tr id="item_WGst_Avg_Months">
-                            <td>Wind Gust Average (mph)</td>
                             <td></td><td></td><td></td><td></td><td></td><td></td>
                             <td></td><td></td><td></td><td></td><td></td><td></td>
                         </tr>

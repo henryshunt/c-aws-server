@@ -15,7 +15,6 @@ $data["RelH_Avg_Months"] = $fill_value;
 $data["WSpd_Avg_Months"] = $fill_value;
 $data["WSpd_Max_Months"] = $fill_value;
 $data["WDir_Avg_Months"] = $fill_value;
-$data["WGst_Avg_Months"] = $fill_value;
 $data["WGst_Max_Months"] = $fill_value;
 $data["SunD_Ttl_Months"] = $fill_value;
 $data["Rain_Ttl_Months"] = $fill_value;
