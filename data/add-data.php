@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set("UTC");
-include_once("data/database.php");
+include_once("database.php");
 
 $error_report = false; $error_envReport = false; $error_dayStat = false;
 

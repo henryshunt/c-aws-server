@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("UTC");
-include_once("../data/config.php");
-include_once("../data/database.php");
+include_once("config.php");
+include_once("database.php");
 
 $data = array_fill_keys(array("Time", "CImg", "SRis", "SSet"), null);
 

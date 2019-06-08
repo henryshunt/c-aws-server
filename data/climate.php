@@ -1,8 +1,8 @@
 <?php
 date_default_timezone_set("UTC");
-include_once("../data/config.php");
-include_once("../data/database.php");
-include_once("../data/queries.php");
+include_once("config.php");
+include_once("database.php");
+include_once("queries.php");
 
 $data = array_fill_keys(array("AirT_Avg_Year", "AirT_Min_Year", "AirT_Max_Year"), null);
 
