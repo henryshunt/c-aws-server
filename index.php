@@ -1,15 +1,16 @@
+<meta charset="UTF-8">
 <!DOCTYPE html>
-<?php include_once("res/php-config.php"); ?>
+<?php include_once("data/config.php"); ?>
 
 <html>
     <head>
         <title>C-AWS <?php echo $aws_location; ?> [Remote]</title>
-        <link href="res/css-trebuchet.ttf" type="x-font-ttf">
-        <link href="res/css-global.css" rel="stylesheet" type="text/css">
-        <script src="res/js-global.js" type="text/javascript"></script>
-        <script src="res/js-jquery.js" type="text/javascript"></script>
-        <script src="res/js-moment.js" type="text/javascript"></script>
-        <script src="res/js-moment-tz.js" type="text/javascript"></script>
+        <link href="resources/styles/trebuchet.ttf" type="x-font-ttf">
+        <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
+        <script src="resources/scripts/global.js" type="text/javascript"></script>
+        <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+        <script src="resources/scripts/moment.js" type="text/javascript"></script>
+        <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
 
         <script>
             const awsTimeZone = "<?php echo $aws_time_zone; ?>";

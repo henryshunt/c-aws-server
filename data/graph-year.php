@@ -1,8 +1,8 @@
 <?php
 date_default_timezone_set("UTC");
-include_once("../res/php-config.php");
-include_once("../res/php-database.php");
-include_once("../res/php-queries.php");
+include_once("../data/config.php");
+include_once("../data/database.php");
+include_once("../data/queries.php");
 
 $data = array();
 if (isset($_GET["time"]) == false) { echo json_encode($data); exit(); }
