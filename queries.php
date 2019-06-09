@@ -1,0 +1,4 @@
+<?php
+$SELECT_SINGLE_REPORT = "SELECT * FROM reports WHERE Time = ?";
+$SELECT_SINGLE_ENVREPORT = "SELECT * FROM envReports WHERE Time = ?";
+$SELECT_SINGLE_DAYSTAT = "SELECT * FROM dayStats WHERE Date = ?";
