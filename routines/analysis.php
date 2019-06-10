@@ -85,10 +85,14 @@ function past_hour_total($pdo, $time, $column)
     $QUERY = "SELECT SUM(%s) AS %s_PHr FROM reports WHERE Time BETWEEN ? AND ?";
     $time->setTime($time->format("H"), $time->format("i"), 0);
 
+    $past_hour = clone $time;
+    $past_hour->sub(new DateInterval("PT59M"));
+
     try
     {
         $query = query_database($pdo, sprintf($QUERY,
-            $column, $column), [$time->format("Y-m-d H:i:s")]);
+            $column, $column), [$past_hour->format("Y-m-d H:i:s"),
+            $time->format("Y-m-d H:i:s")]);
 
         if ($query)
             return $query->fetch();

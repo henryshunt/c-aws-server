@@ -3,7 +3,9 @@
 
 <?php
     include_once("routines/config.php");
-    $config = new Config();
+    $config = new Config("config.ini");
+    
+    if (!$config) { echo "Configuration file error"; exit(); }
 
     // Create the page title and scope text
     $title = "C-AWS " . $config->get_aws_name();

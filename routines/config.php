@@ -15,9 +15,9 @@ class Config
     private $mysql_username;
     private $mysql_password;
 
-    function __construct()
+    function __construct($config_file)
     {
-        $config = parse_ini_file("../config.ini");
+        $config = parse_ini_file($config_file);
 
         $this->aws_name = $config["Name"];
         $this->aws_time_zone = $config["TimeZone"];
