@@ -1,12 +1,20 @@
 <?php
 function record_for_time($pdo, $time, $table)
 {
-    $QUERY = "SELECT * FROM %s WHERE Time = ?";
+    $QUERY = "SELECT * FROM %s WHERE %s = ?";
 
     try
     {
-        $query = query_database($pdo, sprintf($QUERY, $table), [$time
-            ->format($table == DbTable::DAYSTATS ? "Y-m-d" : "Y-m-d H:i:s")]);
+        if ($table == DbTable::DAYSTATS)
+        {
+            $query = query_database($pdo, sprintf($QUERY, $table, "Date"),
+                [$time->format("Y-m-d")]);
+        }
+        else
+        {
+            $query = query_database($pdo, sprintf($QUERY, $table, "Time"),
+                [$time->format("Y-m-d H:i:s")]);
+        }
         
         if ($query)
         {
