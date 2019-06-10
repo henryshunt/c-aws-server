@@ -2,7 +2,6 @@
 function record_for_time($pdo, $time, $table)
 {
     $QUERY = "SELECT * FROM %s WHERE Time = ?";
-    $time->setTime($time->format("H"), $time->format("i"), 0);
 
     try
     {
@@ -10,8 +9,11 @@ function record_for_time($pdo, $time, $table)
             [$time->format("Y-m-d H:i:s")]);
         
         if ($query)
-            return $query->fetch();
-        else return false;
+        {
+            if ($query->rowCount() == 0)
+                return NULL;
+            else return $query->fetch();
+        } else return false;
     }
     catch (Exception $e) { return false; }
 }
@@ -19,8 +21,6 @@ function record_for_time($pdo, $time, $table)
 function fields_in_range($pdo, $start, $end, $fields, $table)
 {
     $QUERY = "SELECT %s FROM %s WHERE Time BETWEEN ? AND ?";
-    $start->setTime($start->format("H"), $start->format("i"), 0);
-    $end->setTime($end->format("H"), $end->format("i"), 0);
 
     try
     {
@@ -28,8 +28,11 @@ function fields_in_range($pdo, $start, $end, $fields, $table)
             [$start->format("Y-m-d H:i:s"), $end->format("Y-m-d H:i:s")]);
 
         if ($query)
-            return $query->fetchAll();
-        else return false;
+        {
+            if ($query->rowCount() == 0)
+                return NULL;
+            else return $query->fetchAll();
+        } else return false;
     }
     catch (Exception $e) { return false; }
 }
@@ -50,8 +53,11 @@ function stats_for_year($pdo, $year)
         $query = query_database($pdo, $QUERY, [$year]);
 
         if ($query)
-            return $query->fetch();
-        else return false;
+        {
+            if ($query->rowCount() == 0)
+                return NULL;
+            else return $query->fetch();
+        } else return false;
     }
     catch (Exception $e) { return false; }
 }
@@ -74,8 +80,11 @@ function stats_for_months($pdo, $year)
         $query = query_database($pdo, $QUERY, [$year]);
 
         if ($query)
-            return $query->fetchAll();
-        else return false;
+        {
+            if ($query->rowCount() == 0)
+                return NULL;
+            else return $query->fetch();
+        } else return false;
     }
     catch (Exception $e) { return false; }
 }
@@ -83,8 +92,6 @@ function stats_for_months($pdo, $year)
 function past_hour_total($pdo, $time, $column)
 {
     $QUERY = "SELECT SUM(%s) AS %s_PHr FROM reports WHERE Time BETWEEN ? AND ?";
-    $time->setTime($time->format("H"), $time->format("i"), 0);
-
     $past_hour = clone $time;
     $past_hour->sub(new DateInterval("PT59M"));
 
@@ -95,8 +102,11 @@ function past_hour_total($pdo, $time, $column)
             $time->format("Y-m-d H:i:s")]);
 
         if ($query)
-            return $query->fetch();
-        else return false;
+        {
+            if ($query->rowCount() == 0)
+                return NULL;
+            else return $query->fetch();
+        } else return false;
     }
     catch (Exception $e) { return false; }
 }

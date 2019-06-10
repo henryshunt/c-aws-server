@@ -40,7 +40,6 @@ function query_database($pdo, $query, $params)
 
         $query->execute($params);
         if (!$query) return false;
-
         return $query;
     }
     catch (Exception $e) { return false; }
