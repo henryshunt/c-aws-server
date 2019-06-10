@@ -5,10 +5,9 @@ include_once("../routines/database.php");
 include_once("../routines/analysis.php");
 
 // Array for return data
-$data = array_fill_keys(
-    ["Time", "AirT", "ExpT", "RelH", "DewP", "WSpd", "WDir", "WGst",
-     "SunD", "SunD_PHr", "Rain", "Rain_PHr", "StaP", "MSLP", "StaP_PTH", 
-     "ST10", "ST30", "ST00"], null);
+$data = array_fill_keys(["Time", "AirT", "ExpT", "RelH", "DewP",
+    "WSpd", "WDir", "WGst", "SunD", "SunD_PHr", "Rain", "Rain_PHr",
+     "StaP", "MSLP", "StaP_PTH", "ST10", "ST30", "ST00"], null);
 
 $config = new Config("../config.ini");
 if (!$config) { echo json_encode($data); exit(); }
@@ -20,7 +19,8 @@ if (isset($_GET["time"]))
 {
     try
     {
-        $url_time = date_create_from_format("Y-m-d\TH-i-s", $_GET["time"]);
+        $url_time = date_create_from_format(
+            "Y-m-d\TH-i-s", $_GET["time"]);
     }
     catch(Exception $e) { echo json_encode($data); exit(); }
 }

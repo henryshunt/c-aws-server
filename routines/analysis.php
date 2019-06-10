@@ -5,8 +5,8 @@ function record_for_time($pdo, $time, $table)
 
     try
     {
-        $query = query_database($pdo, sprintf($QUERY, $table),
-            [$time->format("Y-m-d H:i:s")]);
+        $query = query_database($pdo, sprintf($QUERY, $table), [$time
+            ->format($table == DbTable::DAYSTATS ? "Y-m-d" : "Y-m-d H:i:s")]);
         
         if ($query)
         {
@@ -35,11 +35,6 @@ function fields_in_range($pdo, $start, $end, $fields, $table)
         } else return false;
     }
     catch (Exception $e) { return false; }
-}
-
-function stats_for_date($pdo, $local_time)
-{
-
 }
 
 function stats_for_year($pdo, $year)
