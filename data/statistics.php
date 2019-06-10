@@ -29,41 +29,43 @@ if (isset($_GET["time"]))
         $local_time->setTimezone(
             new DateTimeZone($config->get_aws_time_zone()));
     }
-    catch(Exception $e) { echo json_encode($data); exit(); }
+    catch (Exception $e) { echo json_encode($data); exit(); }
 }
 else { echo json_encode($data); exit(); }
 
 // Get record for specified date
 $result = record_for_time($pdo, $local_time, DbTable::DAYSTATS);
-if ($result === false) { echo json_encode($data); exit(); }
 
-if ($result === NULL)
+if ($result !== false)
 {
-    // Go back a minute if no record and not in absolute mode
-    if (!isset($_GET["abs"]))
+    if ($result === NULL)
     {
-        $url_time->sub(new DateInterval("PT1M"));
-        $local_time->sub(new DateInterval("PT1M"));
-        $result = record_for_time($pdo, $local_time, DbTable::DAYSTATS);
-
-        if ($result !== false && $result !== NULL)
+        // Go back a minute if no record and not in absolute mode
+        if (!isset($_GET["abs"]))
         {
-            // Add result data to return data
-            foreach ($result as $key=>$value)
+            $url_time->sub(new DateInterval("PT1M"));
+            $local_time->sub(new DateInterval("PT1M"));
+            $result = record_for_time($pdo, $local_time, DbTable::DAYSTATS);
+
+            if ($result !== false && $result !== NULL)
             {
-                if (array_key_exists($key, $data))
-                    $data[$key] = $value;
-            }
-        } else $url_time->add(new DateInterval("PT1M"));
+                // Add result data to return data
+                foreach ($result as $key => $value)
+                {
+                    if (array_key_exists($key, $data))
+                        $data[$key] = $value;
+                }
+            } else $url_time->add(new DateInterval("PT1M"));
+        }
     }
-}
-else
-{
-    // Add result data to return data
-    foreach ($result as $key=>$value)
+    else
     {
-        if (array_key_exists($key, $data))
-            $data[$key] = $value;
+        // Add result data to return data
+        foreach ($result as $key => $value)
+        {
+            if (array_key_exists($key, $data))
+                $data[$key] = $value;
+        }
     }
 }
 

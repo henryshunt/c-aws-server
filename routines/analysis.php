@@ -47,9 +47,9 @@ function fields_in_range($pdo, $start, $end, $fields, $table)
 
 function stats_for_year($pdo, $year)
 {
-    $QUERY = "SELECT ROUND(AVG(AirT_Avg), 3) AS AirT_Avg, "
-        . "ROUND(MIN(AirT_Min), 3) AS AirT_Min, ROUND(MAX(AirT_Max), 3) AS AirT_Max, "
-        . " FROM dayStats WHERE YEAR(Date) = ?";
+    $QUERY = "SELECT ROUND(AVG(AirT_Avg), 3) AS AirT_Avg_Year, "
+        . "ROUND(MIN(AirT_Min), 3) AS AirT_Min_Year, ROUND(MAX(AirT_Max), 3) "
+        . "AS AirT_Max_Year, FROM dayStats WHERE YEAR(Date) = ?";
 
     try
     {
@@ -86,7 +86,7 @@ function stats_for_months($pdo, $year)
         {
             if ($query->rowCount() == 0)
                 return NULL;
-            else return $query->fetch();
+            else return $query->fetchAll();
         } else return false;
     }
     catch (Exception $e) { return false; }

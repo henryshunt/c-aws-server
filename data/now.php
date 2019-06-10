@@ -4,7 +4,6 @@ include_once("../routines/config.php");
 include_once("../routines/database.php");
 include_once("../routines/analysis.php");
 
-// Array for return data
 $data = array_fill_keys(["Time", "AirT", "ExpT", "RelH", "DewP",
     "WSpd", "WDir", "WGst", "SunD", "SunD_PHr", "Rain", "Rain_PHr",
      "StaP", "MSLP", "StaP_PTH", "ST10", "ST30", "ST00"], null);
@@ -22,40 +21,42 @@ if (isset($_GET["time"]))
         $url_time = date_create_from_format(
             "Y-m-d\TH-i-s", $_GET["time"]);
     }
-    catch(Exception $e) { echo json_encode($data); exit(); }
+    catch (Exception $e) { echo json_encode($data); exit(); }
 }
 else { echo json_encode($data); exit(); }
 
 // Get record for specified time
 $result = record_for_time($pdo, $url_time, DbTable::REPORTS);
-if ($result === false) { echo json_encode($data); exit(); }
 
-if ($result === NULL)
+if ($result !== false)
 {
-    // Go back a minute if no record and not absolute mode
-    if (!isset($_GET["abs"]))
+    if ($result === NULL)
     {
-        $url_time->sub(new DateInterval("PT1M"));
-        $result = record_for_time($pdo, $url_time, DbTable::REPORTS);
-
-        if ($result !== false && $result !== NULL)
+        // Go back a minute if no record and not absolute mode
+        if (!isset($_GET["abs"]))
         {
-            // Add result data to return data
-            foreach ($result as $key=>$value)
+            $url_time->sub(new DateInterval("PT1M"));
+            $result = record_for_time($pdo, $url_time, DbTable::REPORTS);
+
+            if ($result !== false && $result !== NULL)
             {
-                if (array_key_exists($key, $data))
-                    $data[$key] = $value;
-            }
-        } else $url_time->add(new DateInterval("PT1M"));
+                // Add result data to return data
+                foreach ($result as $key => $value)
+                {
+                    if (array_key_exists($key, $data))
+                        $data[$key] = $value;
+                }
+            } else $url_time->add(new DateInterval("PT1M"));
+        }
     }
-}
-else
-{
-    // Add result data to return data
-    foreach ($result as $key=>$value)
+    else
     {
-        if (array_key_exists($key, $data))
-            $data[$key] = $value;
+        // Add result data to return data
+        foreach ($result as $key => $value)
+        {
+            if (array_key_exists($key, $data))
+                $data[$key] = $value;
+        }
     }
 }
 
