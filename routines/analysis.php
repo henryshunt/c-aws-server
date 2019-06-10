@@ -49,7 +49,7 @@ function stats_for_year($pdo, $year)
 {
     $QUERY = "SELECT ROUND(AVG(AirT_Avg), 3) AS AirT_Avg_Year, "
         . "ROUND(MIN(AirT_Min), 3) AS AirT_Min_Year, ROUND(MAX(AirT_Max), 3) "
-        . "AS AirT_Max_Year, FROM dayStats WHERE YEAR(Date) = ?";
+        . "AS AirT_Max_Year FROM dayStats WHERE YEAR(Date) = ?";
 
     try
     {
@@ -67,15 +67,17 @@ function stats_for_year($pdo, $year)
 
 function stats_for_months($pdo, $year)
 {
-    $QUERY = "SELECT MONTH(Date) AS Month, ROUND(AVG(AirT_Avg), 3) AS AirT_Avg, "
-        . "ROUND(MIN(AirT_Min), 3) AS AirT_Min, ROUND(MAX(AirT_Max), 3) AS AirT_Max, "
-        . "ROUND(AVG(RelH_Avg), 3) AS RelH_Avg, ROUND(AVG(WSpd_Avg), 3) AS WSpd_Avg, "
-        . "ROUND(MAX(WSpd_Max), 3) AS WSpd_Max, ROUND(AVG(WDir_Avg), 3) AS WDir_Avg, "
-        . "ROUND(MAX(WGst_Max), 3) AS WGst_Max, "
-        . "ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS SunD_Ttl, "
-        . "ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl, ROUND(AVG(MSLP_Avg), 3) AS MSLP_Avg, "
-        . "ROUND(AVG(ST10_Avg), 3) AS ST10_Avg, ROUND(AVG(ST30_Avg), 3) AS ST30_Avg, "
-        . "ROUND(AVG(ST00_Avg), 3) AS ST00_Avg "
+    $QUERY = "SELECT MONTH(Date) AS Month, ROUND(AVG(AirT_Avg), 3) AS "
+        . "AirT_Avg_Months, ROUND(MIN(AirT_Min), 3) AS AirT_Min_Months, "
+        . "ROUND(MAX(AirT_Max), 3) AS AirT_Max_Months, ROUND(AVG(RelH_Avg), 3) "
+        . "AS RelH_Avg_Months, ROUND(AVG(WSpd_Avg), 3) AS WSpd_Avg_Months, "
+        . "ROUND(MAX(WSpd_Max), 3) AS WSpd_Max_Months, ROUND(AVG(WDir_Avg), 3) "
+        . "AS WDir_Avg_Months, ROUND(MAX(WGst_Max), 3) AS WGst_Max_Months, "
+        . "ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS SunD_Ttl_Months, "
+        . "ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl_Months, ROUND(AVG(MSLP_Avg), 3) "
+        . "AS MSLP_Avg_Months, ROUND(AVG(ST10_Avg), 3) AS ST10_Avg_Months, "
+        . "ROUND(AVG(ST30_Avg), 3) AS ST30_Avg_Months, ROUND(AVG(ST00_Avg), 3) "
+        . "AS ST00_Avg_Months "
         . "FROM dayStats WHERE YEAR(Date) = ? GROUP BY MONTH(Date)";
 
     try

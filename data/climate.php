@@ -69,7 +69,7 @@ if ($result !== false && $result !== NULL)
         foreach ($row as $key => $value)
         {
             if (array_key_exists($key, $data))
-                $data[$key] = $value;
+                $data[$key][$row["Month"]] = $value;
         }
     }
 }
