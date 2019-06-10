@@ -19,73 +19,73 @@ class Config
     {
         $config = parse_ini_file("../config.ini");
 
-        $aws_name = $config["Name"];
-        $aws_time_zone = $config["TimeZone"];
-        $aws_latitude = $config["Latitude"];
-        $aws_longitude = $config["Longitude"];
-        $aws_elevation = $config["Elevation"];
+        $this->aws_name = $config["Name"];
+        $this->aws_time_zone = $config["TimeZone"];
+        $this->aws_latitude = $config["Latitude"];
+        $this->aws_longitude = $config["Longitude"];
+        $this->aws_elevation = $config["Elevation"];
 
-        $is_remote = $config["IsRemote"];
+        $this->is_remote = $config["IsRemote"];
 
-        $sqlite_database = $config["SQLiteDatabase"];
-        $mysql_host = $config["MySQLHost"];
-        $mysql_database = $config["MySQLDatabase"];
-        $mysql_username = $config["MySQLUsername"];
-        $mysql_password = $config["MySQLPassword"];
+        $this->sqlite_database = $config["SQLiteDatabase"];
+        $this->mysql_host = $config["MySQLHost"];
+        $this->mysql_database = $config["MySQLDatabase"];
+        $this->mysql_username = $config["MySQLUsername"];
+        $this->mysql_password = $config["MySQLPassword"];
     }
 
     function get_aws_name()
     {
-        return $aws_name;
+        return $this->aws_name;
     }
 
     function get_aws_time_zone()
     {
-        return $aws_time_zone;
+        return $this->aws_time_zone;
     }
 
     function get_aws_latitude()
     {
-        return $aws_latitude;
+        return $this->aws_latitude;
     }
 
     function get_aws_longitude()
     {
-        return $aws_longitude;
+        return $this->aws_longitude;
     }
 
     function get_aws_elevation()
     {
-        return $aws_elevation;
+        return $this->aws_elevation;
     }
 
     function get_is_remote()
     {
-        return $is_remote;
+        return $this->is_remote;
     }
 
     function get_sqlite_database()
     {
-        return $sqlite_database;
+        return $this->sqlite_database;
     }
 
     function get_mysql_host()
     {
-        return $mysql_host;
+        return $this->mysql_host;
     }
 
     function get_mysql_database()
     {
-        return $mysql_database;
+        return $this->mysql_database;
     }
 
     function get_mysql_username()
     {
-        return $mysql_username;
+        return $this->mysql_username;
     }
 
     function get_mysql_password()
     {
-        return $mysql_password;
+        return $this->mysql_password;
     }
 }

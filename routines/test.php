@@ -1,6 +1,7 @@
 <?php
 include_once("config.php");
 include_once("database.php");
+include_once("analysis.php");
 
 $config = new Config();
 $pdo = new_db_conn($config);
