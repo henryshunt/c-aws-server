@@ -30,8 +30,7 @@ else { echo json_encode($data); exit(); }
 // Validate fields specified in URL
 if (isset($_GET["fields"]))
 {
-    $fields = "Time," . $_GET["fields"];
-    if (!preg_match("/^[a-zA-Z0-9,_]+$/", $fields)) {
+    if (!preg_match("/^[a-zA-Z0-9,_]+$/", $_GET["fields"])) {
         echo json_encode($data); exit();
     }
 }
@@ -47,36 +46,38 @@ $range_end->setTimezone(new DateTimeZone("UTC"));
 
 // Averaged/totalled parameters are valid for previous minute, not current,
 // and we don't want anything from previous day
-if (strpos($fields, "AirT") !== false || strpos($fields, "RelH") !== false ||
-    strpos($fields, "DewP") !== false || strpos($fields, "WSpd") !== false ||
-    strpos($fields, "WDir") !== false || strpos($fields, "WGst") !== false ||
-    strpos($fields, "SunD") !== false || strpos($fields, "Rain") !== false ||
-    strpos($fields, "StaP") !== false || strpos($fields, "MSLP") !== false)
+if (strpos($_GET["fields"], "AirT") !== false || strpos($_GET["fields"],
+    "RelH") !== false || strpos($_GET["fields"], "DewP") !== false ||
+    strpos($_GET["fields"], "WSpd") !== false || strpos($_GET["fields"],
+    "WDir") !== false || strpos($_GET["fields"], "WGst") !== false ||
+    strpos($_GET["fields"], "SunD") !== false || strpos($_GET["fields"],
+    "Rain") !== false || strpos($_GET["fields"], "StaP") !== false || 
+    strpos($_GET["fields"], "MSLP") !== false)
 {
     $range_start -> add(new DateInterval("PT1M"));
     $range_end -> add(new DateInterval("PT1M"));
 }
 
 // Get data in range for specified parameters
-$result = fields_in_range(
-    $pdo, $range_start, $range_end, $fields, DbTable::REPORTS);
+$result = fields_in_range($pdo, $range_start,
+    $range_end, "Time," . $_GET["fields"], DbTable::REPORTS);
 
-if ($result !=== false && $result != NULL)
+if ($result !== false && $result !== NULL)
 {
     // Fill return data with empty array for each field
-    $fields = explode(",", $fields);
-    $data = array_fill(0, count($fields) - 1, []);
+    $fields = explode(",", $_GET["fields"]);
+    $data = array_fill(0, count($fields), []);
 
     if (in_array("Rain", $fields)) $Rain_Ttl = 0;
     if (in_array("SunD", $fields)) $SunD_Ttl = 0;
 
     // Generate each series from retrieved records
-    foreach ($record in $result)
+    foreach ($result as $record)
     {
         $utc = date_create_from_format("Y-m-d H:i:s", $record["Time"]);
 
         // Create point and add to relevant series
-        for ($field = 1; $field <= count($fields) - 1; $field++)
+        for ($field = 0; $field < count($fields); $field++)
         {
             if ($fields[$field] == "Rain")
             {
@@ -100,7 +101,7 @@ if ($result !=== false && $result != NULL)
                     ->getTimestamp(), "y" => $record[$fields[$field]]);
             }
 
-            array_push($data[$field - 1], $point);
+            array_push($data[$field], $point);
         }
     }
 }
