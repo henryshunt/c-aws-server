@@ -46,7 +46,7 @@ if (isset($_GET["time"]))
 else { echo json_encode($data); exit(); }
 
 // Get climate data for that year
-$result = stats_for_year($pdo, $local_time->format("Y"));
+$result = stats_for_year($config, $pdo, $local_time->format("Y"));
 
 if ($result !== false && $result !== NULL)
 {
@@ -59,7 +59,7 @@ if ($result !== false && $result !== NULL)
 }
 
 // Get climate data for that year per month
-$result = stats_for_months($pdo, $local_time->format("Y"));
+$result = stats_for_months($config, $pdo, $local_time->format("Y"));
 
 if ($result !== false && $result !== NULL)
 {
@@ -69,7 +69,7 @@ if ($result !== false && $result !== NULL)
         foreach ($row as $key => $value)
         {
             if (array_key_exists($key, $data))
-                $data[$key][$row["Month"]] = $value;
+                $data[$key][ltrim($row["Month"], "0")] = $value;
         }
     }
 }
