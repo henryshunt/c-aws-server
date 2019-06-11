@@ -12,9 +12,9 @@
     $title .= ($config->get_is_remote()
         ? " [Remote]" : " [Local]");
 
-    $scope = "Accessing "
+    $scope = "Accessing <b>"
         . ($config->get_is_remote() ? "REMOTE" : "LOCAL")
-        . " data stores";
+        . "</b> data stores";
 ?>
 
 <html>
