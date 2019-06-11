@@ -44,7 +44,7 @@ $range_start -> sub(new DateInterval("P365D"));
 
 // Get data in range for specified parameters
 $result = fields_in_range($pdo, $range_start,
-    $range_end, "Date," . $_GET["fields"], DbTable::REPORTS);
+    $range_end, "Date," . $_GET["fields"], DbTable::DAYSTATS);
 
 if ($result !== false && $result !== NULL)
 {
