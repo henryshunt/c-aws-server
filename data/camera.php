@@ -19,7 +19,7 @@ if (isset($_GET["time"]))
 }
 else { echo json_encode($data); exit(); }
 
-// Get image for specified time
+// Get image path for specified time
 $image_path = $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
 
 if ($config->get_is_remote())
@@ -27,7 +27,7 @@ if ($config->get_is_remote())
 else $image_path = $config->get_local_camera_dir() . "/" . $image_path;
 
 // Go back five minutes if no image and not in absolute mode
-if (!file_exists($image_path))
+if (!file_exists($_SERVER["DOCUMENT_ROOT"] . $image_path))
 {
     if (!isset($_GET["abs"]))
     {
@@ -42,10 +42,10 @@ if (!file_exists($image_path))
         else
         {
             $image_path = $config
-            ->get_local_camera_dir() . "/" . $image_path;
+                ->get_local_camera_dir() . "/" . $image_path;
         }
 
-        if (file_exists($image_path))
+        if (file_exists($_SERVER["DOCUMENT_ROOT"] . $image_path))
             $data["CImg"] = $image_path;
         else $url_time->add(new DateInterval("PT5M"));
     }
