@@ -49,7 +49,7 @@
     <body>
         <div id="header">
             <div id="header_items">
-                <h1 id="header_left"><?php echo $aws_location ?></h1>
+                <h1 id="header_left"><?php echo $config->get_aws_name(); ?></h1>
                 <h2 id="header_right">C - AWS</h2>
             </div>
 
