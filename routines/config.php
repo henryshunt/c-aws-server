@@ -10,13 +10,11 @@ class Config
     private $is_remote;
 
     private $local_database;
-    private $local_camera_dir;
     private $local_server_py;
     private $remote_host;
     private $remote_database;
     private $remote_username;
     private $remote_password;
-    private $remote_camera_dir;
 
     function __construct($config_file)
     {
@@ -31,13 +29,11 @@ class Config
         $this->is_remote = $config["IsRemote"];
 
         $this->local_database = $config["LocalDatabase"];
-        $this->local_camera_dir = $config["LocalCameraDir"];
         $this->local_server_py = $config["LocalServerPy"];
         $this->remote_host = $config["RemoteHost"];
         $this->remote_database = $config["RemoteDatabase"];
         $this->remote_username = $config["RemoteUsername"];
         $this->remote_password = $config["RemotePassword"];
-        $this->remote_camera_dir = $config["RemoteCameraDir"];
     }
 
     function get_aws_name()
@@ -75,11 +71,6 @@ class Config
         return $this->local_database;
     }
 
-    function get_local_camera_dir()
-    {
-        return $this->local_camera_dir;
-    }
-
     function get_local_server_py()
     {
         return $this->local_server_py;
@@ -103,10 +94,5 @@ class Config
     function get_remote_password()
     {
         return $this->remote_password;
-    }
-
-    function get_remote_camera_dir()
-    {
-        return $this->remote_camera_dir;
     }
 }
