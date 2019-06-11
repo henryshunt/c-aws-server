@@ -1,7 +1,11 @@
 <?php
 date_default_timezone_set("UTC");
+include_once("../routines/config.php");
 
 $data = array_fill_keys(["Time", "CImg", "SRis", "SSet"], null);
+
+$config = new Config("../config.ini");
+if (!$config) { echo json_encode($data); exit(); }
 
 // Parse time specified in URL
 if (isset($_GET["time"]))
@@ -16,7 +20,11 @@ if (isset($_GET["time"]))
 else { echo json_encode($data); exit(); }
 
 // Get image for specified time
-$image_path = "camera/" . $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
+$image_path = $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
+
+if ($config->get_is_remote())
+    $image_path = $config->get_remote_camera_dir() . "/" . $image_path;
+else $image_path = $config->get_local_camera_dir() . "/" . $image_path;
 
 // Go back five minutes if no image and not in absolute mode
 if (!file_exists($image_path))
@@ -24,22 +32,25 @@ if (!file_exists($image_path))
     if (!isset($_GET["abs"]))
     {
         $url_time->sub(new DateInterval("PT5M"));
-        $image_path = "camera/"
-            . $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
+        $image_path = $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
+
+        if ($config->get_is_remote())
+        {
+            $image_path = $config
+                ->get_remote_camera_dir() . "/" . $image_path;
+        }
+        else
+        {
+            $image_path = $config
+            ->get_local_camera_dir() . "/" . $image_path;
+        }
 
         if (file_exists($image_path))
-        {
-            $data["CImg"] = "data/camera/"
-                . $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
-        } 
+            $data["CImg"] = $image_path;
         else $url_time->add(new DateInterval("PT5M"));
     }
 }
-else
-{
-    $data["CImg"] = "data/camera/"
-        . $url_time -> format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
-}
+else $data["CImg"] = $image_path;
 
 $data["Time"] = $url_time->format("Y-m-d H:i:s");
 echo json_encode($data, JSON_NUMERIC_CHECK);

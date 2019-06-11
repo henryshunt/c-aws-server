@@ -12,10 +12,10 @@ function new_db_conn($config)
         if ($config->get_is_remote())
         {
             // Use MySQL
-            $host = $config->get_mysql_host();
-            $database = $config->get_mysql_database();
-            $username = $config->get_mysql_username();
-            $password = $config->get_mysql_password();
+            $host = $config->get_remote_host();
+            $database = $config->get_remote_database();
+            $username = $config->get_remote_username();
+            $password = $config->get_remote_password();
             $charset = "utf8mb4";
 
             $dsn = "mysql:host=$host;dbname=$database;charset=$charset";
@@ -24,7 +24,7 @@ function new_db_conn($config)
         else
         {
             // Use SQLite
-            $database = $config->get_sqlite_database();
+            $database = $config->get_local_database();
             return new PDO("sqlite:$database", NULL, NULL, $options);
         }
     }

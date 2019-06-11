@@ -9,11 +9,14 @@ class Config
 
     private $is_remote;
 
-    private $sqlite_database;
-    private $mysql_host;
-    private $mysql_database;
-    private $mysql_username;
-    private $mysql_password;
+    private $local_database;
+    private $local_camera_dir;
+    private $local_server_py;
+    private $remote_host;
+    private $remote_database;
+    private $remote_username;
+    private $remote_password;
+    private $remote_camera_dir;
 
     function __construct($config_file)
     {
@@ -27,11 +30,14 @@ class Config
 
         $this->is_remote = $config["IsRemote"];
 
-        $this->sqlite_database = $config["SQLiteDatabase"];
-        $this->mysql_host = $config["MySQLHost"];
-        $this->mysql_database = $config["MySQLDatabase"];
-        $this->mysql_username = $config["MySQLUsername"];
-        $this->mysql_password = $config["MySQLPassword"];
+        $this->local_database = $config["LocalDatabase"];
+        $this->local_camera_dir = $config["LocalCameraDir"];
+        $this->local_server_py = $config["LocalServerPy"];
+        $this->remote_host = $config["RemoteHost"];
+        $this->remote_database = $config["RemoteDatabase"];
+        $this->remote_username = $config["RemoteUsername"];
+        $this->remote_password = $config["RemotePassword"];
+        $this->remote_camera_dir = $config["RemoteCameraDir"];
     }
 
     function get_aws_name()
@@ -64,28 +70,43 @@ class Config
         return $this->is_remote;
     }
 
-    function get_sqlite_database()
+    function get_local_database()
     {
-        return $this->sqlite_database;
+        return $this->local_database;
     }
 
-    function get_mysql_host()
+    function get_local_camera_dir()
     {
-        return $this->mysql_host;
+        return $this->local_camera_dir;
     }
 
-    function get_mysql_database()
+    function get_local_server_py()
     {
-        return $this->mysql_database;
+        return $this->local_server_py;
     }
 
-    function get_mysql_username()
+    function get_remote_host()
     {
-        return $this->mysql_username;
+        return $this->remote_host;
     }
 
-    function get_mysql_password()
+    function get_remote_database()
     {
-        return $this->mysql_password;
+        return $this->remote_database;
+    }
+
+    function get_remote_username()
+    {
+        return $this->remote_username;
+    }
+
+    function get_remote_password()
+    {
+        return $this->remote_password;
+    }
+
+    function get_remote_camera_dir()
+    {
+        return $this->remote_camera_dir;
     }
 }
