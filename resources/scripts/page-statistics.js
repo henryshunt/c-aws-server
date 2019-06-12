@@ -1,22 +1,11 @@
 function updateData(restartTimers, absolute) {
     isLoading = true;
     clearTimeout(updaterTimeout);
-    clearTimeout(countTimeout);
-
-    if (restartTimers == true) {
-        document.getElementById("item_update").innerHTML = "0";
-    } else { document.getElementById("item_update").innerHTML = ""; }
-    timeToUpdate = 60;
 
     if (restartTimers == true) {
         updaterTimeout = setInterval(function() {
             updateData(true, false);
         }, 60000);
-            
-        countTimeout = setInterval(function() {
-            document.getElementById("item_update").innerHTML
-                = --timeToUpdate;
-        }, 1000);
     }
 
     getAndProcessData(restartTimers, absolute);
@@ -37,45 +26,47 @@ function getAndProcessData(setTime, absolute) {
 
         error: function() {
             var localTime = moment(requestedTime).tz(awsTimeZone);
-            if (setTime == true) {
-                document.getElementById("item_data_time").innerHTML
-                    = localTime.format("HH:mm");
-            } else { document.getElementById("item_data_time").innerHTML = ""; }
-            document.getElementById("scroller_time").innerHTML
-                = localTime.format("DD/MM/YYYY");
 
-            document.getElementById("item_AirT_Avg").innerHTML = "no data";
-            document.getElementById("item_AirT_Min").innerHTML = "no data";
-            document.getElementById("item_AirT_Max").innerHTML = "no data";
-            document.getElementById("item_RelH_Avg").innerHTML = "no data";
-            document.getElementById("item_RelH_Min").innerHTML = "no data";
-            document.getElementById("item_RelH_Max").innerHTML = "no data";
-            document.getElementById("item_DewP_Avg").innerHTML = "no data";
-            document.getElementById("item_DewP_Min").innerHTML = "no data";
-            document.getElementById("item_DewP_Max").innerHTML = "no data";
-            document.getElementById("item_WSpd_Avg").innerHTML = "no data";
-            document.getElementById("item_WSpd_Min").innerHTML = "no data";
-            document.getElementById("item_WSpd_Max").innerHTML = "no data";
-            document.getElementById("item_WDir_Avg").innerHTML = "no data";
-            document.getElementById("item_WDir_Min").innerHTML = "no data";
-            document.getElementById("item_WDir_Max").innerHTML = "no data";
-            document.getElementById("item_WGst_Avg").innerHTML = "no data";
-            document.getElementById("item_WGst_Min").innerHTML = "no data";
-            document.getElementById("item_WGst_Max").innerHTML = "no data";
-            document.getElementById("item_SunD_Ttl").innerHTML = "no data";
-            document.getElementById("item_Rain_Ttl").innerHTML = "no data";
-            document.getElementById("item_MSLP_Avg").innerHTML = "no data";
-            document.getElementById("item_MSLP_Min").innerHTML = "no data";
-            document.getElementById("item_MSLP_Max").innerHTML = "no data";
-            document.getElementById("item_ST10_Avg").innerHTML = "no data";
-            document.getElementById("item_ST10_Min").innerHTML = "no data";
-            document.getElementById("item_ST10_Max").innerHTML = "no data";
-            document.getElementById("item_ST30_Avg").innerHTML = "no data";
-            document.getElementById("item_ST30_Min").innerHTML = "no data";
-            document.getElementById("item_ST30_Max").innerHTML = "no data";
-            document.getElementById("item_ST00_Avg").innerHTML = "no data";
-            document.getElementById("item_ST00_Min").innerHTML = "no data";
-            document.getElementById("item_ST00_Max").innerHTML = "no data";
+            if (setTime == true) {
+                document.getElementById("scroller_time").innerHTML
+                    = localTime.format("DD/MM/YYYY ([at] HH:mm)");
+            } else {
+                document.getElementById("scroller_time").innerHTML
+                    = localTime.format("DD/MM/YYYY");
+            }
+
+            document.getElementById("item_AirT_Avg").innerHTML = "No Data";
+            document.getElementById("item_AirT_Min").innerHTML = "No Data";
+            document.getElementById("item_AirT_Max").innerHTML = "No Data";
+            document.getElementById("item_RelH_Avg").innerHTML = "No Data";
+            document.getElementById("item_RelH_Min").innerHTML = "No Data";
+            document.getElementById("item_RelH_Max").innerHTML = "No Data";
+            document.getElementById("item_DewP_Avg").innerHTML = "No Data";
+            document.getElementById("item_DewP_Min").innerHTML = "No Data";
+            document.getElementById("item_DewP_Max").innerHTML = "No Data";
+            document.getElementById("item_WSpd_Avg").innerHTML = "No Data";
+            document.getElementById("item_WSpd_Min").innerHTML = "No Data";
+            document.getElementById("item_WSpd_Max").innerHTML = "No Data";
+            document.getElementById("item_WDir_Avg").innerHTML = "No Data";
+            document.getElementById("item_WDir_Min").innerHTML = "No Data";
+            document.getElementById("item_WDir_Max").innerHTML = "No Data";
+            document.getElementById("item_WGst_Avg").innerHTML = "No Data";
+            document.getElementById("item_WGst_Min").innerHTML = "No Data";
+            document.getElementById("item_WGst_Max").innerHTML = "No Data";
+            document.getElementById("item_SunD_Ttl").innerHTML = "No Data";
+            document.getElementById("item_Rain_Ttl").innerHTML = "No Data";
+            document.getElementById("item_MSLP_Avg").innerHTML = "No Data";
+            document.getElementById("item_MSLP_Min").innerHTML = "No Data";
+            document.getElementById("item_MSLP_Max").innerHTML = "No Data";
+            document.getElementById("item_ST10_Avg").innerHTML = "No Data";
+            document.getElementById("item_ST10_Min").innerHTML = "No Data";
+            document.getElementById("item_ST10_Max").innerHTML = "No Data";
+            document.getElementById("item_ST30_Avg").innerHTML = "No Data";
+            document.getElementById("item_ST30_Min").innerHTML = "No Data";
+            document.getElementById("item_ST30_Max").innerHTML = "No Data";
+            document.getElementById("item_ST00_Avg").innerHTML = "No Data";
+            document.getElementById("item_ST00_Min").innerHTML = "No Data";
+            document.getElementById("item_ST00_Max").innerHTML = "No Data";
             isLoading = false;
         }
     });
@@ -86,13 +77,14 @@ function processData(data, showTime) {
     var localTime = moment(utc).tz(awsTimeZone);
 
     if (showTime == true) {
-        document.getElementById("item_data_time").innerHTML
-            = localTime.format("HH:mm");
-    } else { document.getElementById("item_data_time").innerHTML = ""; }
-    document.getElementById("scroller_time").innerHTML
-        = localTime.format("DD/MM/YYYY");
+        document.getElementById("scroller_time").innerHTML
+            = localTime.format("DD/MM/YYYY ([at] HH:mm)");
+    } else {
+        document.getElementById("scroller_time").innerHTML
+            = localTime.format("DD/MM/YYYY");
+    }
+    
     requestedTime = moment(utc);
-
     displayValue(data["AirT_Avg"], "item_AirT_Avg", "°C", 1);
     displayValue(data["AirT_Min"], "item_AirT_Min", "°C", 1);
     displayValue(data["AirT_Max"], "item_AirT_Max", "°C", 1);
