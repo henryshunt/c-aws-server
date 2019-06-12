@@ -66,3 +66,18 @@ function loadGraphData() {
         graph.update({ series: null }, options);
     });
 }
+
+function send_command(command) {
+    var dialog = null;
+    if (command == "shutdown" || command == "restart") {
+        dialog = confirm("Are you sure you wish to send this command?");
+    }
+
+    if (dialog == true) {
+        $.get("routines/station.php?cmd=" + command);
+        
+        if (command == "shutdown" || command == "restart") {
+            alert("Power command will activate between the seconds :35 and :55.");
+        }
+    }
+}

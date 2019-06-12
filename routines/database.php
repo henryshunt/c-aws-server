@@ -36,7 +36,7 @@ function query_database($pdo, $query, $params)
     try
     {
         $query = $pdo->prepare($query);
-        if (!$query) { echo "err"; return false; }
+        if (!$query) return false;
 
         $query->execute($params);
         if (!$query) return false;

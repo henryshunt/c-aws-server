@@ -155,6 +155,45 @@
 
                 <div id="graph_temperature" class="ct-chart" style="margin-top: -10px"></div>
             </div>
+
+            <?php
+                if (!$config->get_is_remote())
+                {
+                    echo "<div class=\"group\">"
+                         . "<div class=\"group_header\">"
+                         . "<p class=\"group_title\">Local Only</p>"
+                         . "<div style=\"padding-right: 10px\">"
+                         . "</div>"
+                         . "</div>"
+                         . "<table class=\"field_table\">"
+                         . "<tr>"
+                         . "<td><p class=\"field_label\">System Start Time:</p></td>"
+                         . "<td><p class=\"field_value\">no data</p></td>"
+                         . "</tr>"
+                         . "<tr>"
+                         . "<td><p class=\"field_label\" style=\"margin-top: 10px\">"
+                         . "Internal Drive Remaining Space:</p></td>"
+                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">no data</p></td>"
+                         . "</tr>"
+                         . "<tr>"
+                         . "<td><p class=\"field_label\">Camera Drive Remaining Space:</p></td>"
+                         . "<td><p class=\"field_value\">no data</p></td>"
+                         . "</tr>"
+                         . "<tr>"
+                         . "<td><p class=\"field_label\" style=\"margin-top: 10px\">"
+                         . "Shutdown Station Computer:</p></td>"
+                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">"
+                         . "<button onclick=\"send_command('shutdown')\">Send Command</button></p></td>"
+                         . "</tr>"
+                         . "<tr>"
+                         . "<td><p class=\"field_label\">Restart Station Computer:</p></td>"
+                         . "<td><p class=\"field_value\">"
+                         . "<button onclick=\"send_command('restart')\">Send Command</button></p></td>"
+                         . "</tr>"
+                         . "</table>"
+                         . "</div>";
+                }
+            ?>
         </div>
 
         <div id="footer">
