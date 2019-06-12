@@ -1,37 +1,37 @@
-function updateData() {
+function updateData(restartTimers, absolute) {
+    isLoading = true;
     clearTimeout(updaterTimeout);
-    clearTimeout(countTimeout);
 
-    document.getElementById("item_update").innerHTML = "0";
-    timeToUpdate = 60;
+    if (restartTimers == true) {
+        updaterTimeout = setInterval(function() {
+            updateData(true, false);
+        }, 60000);
+    }
 
-    updaterTimeout = setInterval(function() {
-        updateData();
-    }, 60000);
-        
-    countTimeout = setInterval(function() {
-        document.getElementById("item_update").innerHTML
-            = --timeToUpdate;
-    }, 1000);
-
-    getAndProcessData();
+    getAndProcessData(restartTimers, absolute);
 }
 
-function getAndProcessData() {
-    requestedTime = moment().utc().millisecond(0).second(0);
+function getAndProcessData(setTime, absolute) {
+    if (setTime == true) {
+        requestedTime = moment().utc().millisecond(0).second(0);
+    }
+
+    var url = "data/station.php?time=" + requestedTime.format(
+        "YYYY-MM-DD[T]HH-mm-00");
+    if (absolute == true) { url += "&abs=1"; }
 
     $.ajax({
-        dataType: "json",
-        url: "data/station.php?time=" + requestedTime.format(
-            "YYYY-MM-DD[T]HH-mm-00"),
-
+        dataType: "json", url: url,
         success: function (data) { processData(data); },
-        error: function() {
-            document.getElementById("item_data_time").innerHTML
-                = moment(requestedTime).tz(awsTimeZone).format("HH:mm");
 
-            document.getElementById("item_EncT").innerHTML = "no data";
-            document.getElementById("item_CPUT").innerHTML = "no data";
+        error: function() {
+            var localTime = moment(requestedTime).tz(awsTimeZone);
+            document.getElementById("scroller_time").innerHTML
+                = localTime.format("DD/MM/YYYY [at] HH:mm");
+
+            document.getElementById("item_EncT").innerHTML = "No Data";
+            document.getElementById("item_CPUT").innerHTML = "No Data";
+            isLoading = false;
         }
     });
 
@@ -40,12 +40,15 @@ function getAndProcessData() {
 
 function processData(data) {
     var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
-    document.getElementById("item_data_time").innerHTML
-        = moment(utc).tz(awsTimeZone).format("HH:mm");
-    requestedTime = moment(utc);
+    var localTime = moment(utc).tz(awsTimeZone);
 
+    document.getElementById("scroller_time").innerHTML
+        = localTime.format("DD/MM/YYYY [at] HH:mm");
+
+    requestedTime = moment(utc);
     displayValue(data["EncT"], "item_EncT", "°C", 1);
     displayValue(data["CPUT"], "item_CPUT", "°C", 1);
+    isLoading = false;
 }
 
 function loadGraphData() {
@@ -80,4 +83,64 @@ function send_command(command) {
             alert("Power command will activate between the seconds :35 and :55.");
         }
     }
+}
+
+function scrollerLeft() {
+    if (datePicker != null) { datePicker.close(); }
+
+    if (isLoading == false) {
+        requestedTime.subtract(5, "minutes");
+        scrollerChange();
+    }
+}
+
+function scrollerRight() {
+    if (datePicker != null) { datePicker.close(); }
+
+    if (isLoading == false) {
+        requestedTime.add(5, "minutes");
+        scrollerChange();
+    }
+}
+
+function scrollerChange() {
+    var utc = moment().utc().millisecond(0).second(0);
+
+    if (utc.toString() == requestedTime.toString()) {
+        updateData(true, true)
+    } else { updateData(false, true); }
+}
+
+function openPicker() {
+    if (datePicker == null) {
+        if (requestedTime != null && isLoading == false) {
+            var localTime = moment(requestedTime).tz(awsTimeZone);
+            var initTime = new Date(localTime.get("year"), localTime.get("month"),
+                localTime.get("date"), localTime.get("hour"), localTime.get("minute"), 0);
+
+            datePicker = flatpickr("#scroller_time", {
+                enableTime: true, time_24hr: true, defaultDate: initTime, disableMobile: true,
+                onClose: function() { datePicker.destroy(); datePicker = null; }
+            });
+            
+            datePicker.open();
+        }
+    } else { datePicker.close(); }
+}
+
+function pickerSubmit() {
+    var selTime = datePicker.selectedDates[0];
+    selTime = moment.utc({
+        year: selTime.getUTCFullYear(), month: selTime.getUTCMonth(), day: 
+        selTime.getUTCDate(), hour: selTime.getUTCHours(), minute:
+        selTime.getUTCMinutes(), second: 0 });
+
+    if (selTime.toString() != requestedTime.toString()) {
+        requestedTime = moment(selTime);
+        scrollerChange();
+    }; datePicker.close();  
+}
+
+function pickerCancel() {
+    datePicker.close();
 }

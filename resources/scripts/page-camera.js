@@ -152,7 +152,7 @@ function pickerSubmit() {
     if (selTime.toString() != requestedTime.toString()) {
         requestedTime = moment(selTime);
         scrollerChange();
-    }; datePicker.close(); 
+    }; datePicker.close();
 }
 
 function pickerCancel() {

@@ -28,7 +28,7 @@ $result = record_for_time($pdo, $url_time, DbTable::ENVREPORTS);
 
 if ($result !== false)
 {
-    if ($result !== NULL)
+    if ($result === NULL)
     {
         // Go back a minute if no record and not in absolute mode
         if (!isset($_GET["abs"]))

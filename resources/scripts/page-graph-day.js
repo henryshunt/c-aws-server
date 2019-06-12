@@ -161,18 +161,20 @@ function scrollerChange() {
 }
 
 function openPicker() {
-    if (requestedTime != null && datePicker == null && isLoading == false) {
-        var localTime = moment(requestedTime).tz(awsTimeZone);
-        var initTime = new Date(localTime.get("year"), localTime.get("month"),
-            localTime.get("date"));
+    if (datePicker == null) {
+        if (requestedTime != null && isLoading == false) {
+            var localTime = moment(requestedTime).tz(awsTimeZone);
+            var initTime = new Date(localTime.get("year"), localTime.get("month"),
+                localTime.get("date"));
 
-        datePicker = flatpickr("#scroller_time", {
-            defaultDate: initTime, disableMobile: true,
-            onClose: function() { datePicker.destroy(); datePicker = null; }
-        });
-        
-        datePicker.open();
-    }
+            datePicker = flatpickr("#scroller_time", {
+                defaultDate: initTime, disableMobile: true,
+                onClose: function() { datePicker.destroy(); datePicker = null; }
+            });
+            
+            datePicker.open();
+        }
+    } else { datePicker.close(); }
 }
 
 function pickerSubmit() {
