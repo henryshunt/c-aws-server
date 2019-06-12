@@ -46,14 +46,8 @@
             var openGraphs = ["temperature"];
             var graphsLoaded = 0;
             var updaterTimeout = null;
-            var countTimeout = null;
-            var timeToUpdate = 0;
 
             $(document).ready(function() {
-                setInterval(function() {
-                    displayLocalTime();
-                }, 250);
-
                 graphs["temperature"] = setupGraph("temperature");
                 graphs["humidity"] = setupGraph("humidity");
                 graphs["wind"] = setupGraph("wind");
@@ -216,21 +210,6 @@
                 </div>
 
                 <div id="graph_soil" class="ct-chart"></div>
-            </div>
-        </div>
-
-        <div id="footer">
-            <div id="footer_items">
-                <p class="footer_label">Local Time:</p>
-                <p id="item_local_time" class="footer_value" style="width: 210px"></p>
-    
-                <div style="float: right; margin-left: 10px">
-                    <p class="footer_label">Data Time:</p>
-                    <p id="item_data_time" class="footer_value" style="width: 60px"></p>
-
-                    <p class="footer_label" style="margin-left: 10px">Update:</p>
-                    <p id="item_update" class="footer_value" style="width: 45px"></p>
-                </div>
             </div>
         </div>
         

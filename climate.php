@@ -37,10 +37,6 @@
             var requestedTime = null;
 
             $(document).ready(function() {
-                setInterval(function() {
-                    displayLocalTime();
-                }, 250);
-
                 updateData(true);
             });
         </script>
@@ -205,13 +201,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <div id="footer">
-            <div id="footer_items">
-                <p class="footer_label">Local Time:</p>
-                <p id="item_local_time" class="footer_value" style="width: 210px"></p>
             </div>
         </div>
 

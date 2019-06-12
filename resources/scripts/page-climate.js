@@ -20,21 +20,21 @@ function getAndProcessData(setTime) {
             document.getElementById("scroller_time").innerHTML
                 = localTime.format("YYYY");
 
-            document.getElementById("item_AirT_Avg_Year").innerHTML = "no data";
-            document.getElementById("item_AirT_Min_Year").innerHTML = "no data";
-            document.getElementById("item_AirT_Max_Year").innerHTML = "no data";
+            document.getElementById("item_AirT_Avg_Year").innerHTML = "No Data";
+            document.getElementById("item_AirT_Min_Year").innerHTML = "No Data";
+            document.getElementById("item_AirT_Max_Year").innerHTML = "No Data";
             
             var table = document.getElementById("climate_months_a");
             for (var i = 1, row; row = table.rows[i]; i++) {
                 for (var j = 1, col; col = row.cells[j]; j++) {
-                    col.innerHTML = "no data";
+                    col.innerHTML = "No Data";
                 }  
             }
 
             table = document.getElementById("climate_months_b");
             for (var i = 1, row; row = table.rows[i]; i++) {
                 for (var j = 1, col; col = row.cells[j]; j++) {
-                    col.innerHTML = "no data";
+                    col.innerHTML = "No Data";
                 }  
             }; isLoading = false;
         }
@@ -77,7 +77,7 @@ function displayMonths(data, row, precision) {
                     .toFixed(0) + " (" + degreesToCompass(data[i]) + ")"
                 col.innerHTML = formatted; 
             } else { col.innerHTML = data[i].toFixed(precision); }
-        } else { col.innerHTML = "no data";}
+        } else { col.innerHTML = "No Data";}
     }
 }
 

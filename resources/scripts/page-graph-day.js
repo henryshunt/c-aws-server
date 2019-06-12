@@ -35,26 +35,11 @@ function setupGraph(graph) {
 function updateData(restartTimers) {
     isLoading = true;
     clearTimeout(updaterTimeout);
-    clearTimeout(countTimeout);
-
-    if (restartTimers == true) {
-        document.getElementById("item_update").innerHTML = "0";
-    } else { document.getElementById("item_update").innerHTML = ""; }
-    timeToUpdate = 300;
-
-    if (restartTimers == false) {
-        document.getElementById("item_data_time").innerHTML = "";
-    }
 
     if (restartTimers == true) {
         updaterTimeout = setInterval(function() {
             updateData(true);
         }, 300000);
-            
-        countTimeout = setInterval(function() {
-            document.getElementById("item_update").innerHTML
-                = --timeToUpdate;
-        }, 1000);
     }
 
     getAndProcessData(restartTimers);
@@ -67,12 +52,13 @@ function getAndProcessData(setTime) {
 
     var localTime = moment(requestedTime).tz(awsTimeZone);
     if (setTime == true) {
-        document.getElementById("item_data_time").innerHTML
-            = localTime.format("HH:mm");
+        document.getElementById("scroller_time").innerHTML
+            = localTime.format("DD/MM/YYYY ([at] HH:mm)");
+    } else {
+        document.getElementById("scroller_time").innerHTML
+            = localTime.format("DD/MM/YYYY");
     }
-    document.getElementById("scroller_time").innerHTML
-        = localTime.format("DD/MM/YYYY");
-    
+
     if ($.inArray("temperature", openGraphs) != -1)
     { loadGraphData("temperature", "AirT,ExpT,DewP"); }
     if ($.inArray("humidity", openGraphs) != -1)
