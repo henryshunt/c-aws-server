@@ -102,19 +102,19 @@ function processData(data, showTime) {
         var formatted = data["WDir_Avg"]
             .toFixed(0) + "° (" + degreesToCompass(data["WDir_Avg"]) + ")"
         document.getElementById("item_WDir_Avg").innerHTML = formatted;
-    } else { document.getElementById("item_WDir_Avg").innerHTML = "no data"; }
+    } else { document.getElementById("item_WDir_Avg").innerHTML = "No Data"; }
 
     if (data["WDir_Min"] != null) {
         var formatted = data["WDir_Min"]
             .toFixed(0) + "° (" + degreesToCompass(data["WDir_Min"]) + ")"
         document.getElementById("item_WDir_Min").innerHTML = formatted;
-    } else { document.getElementById("item_WDir_Min").innerHTML = "no data"; }
+    } else { document.getElementById("item_WDir_Min").innerHTML = "No Data"; }
 
     if (data["WDir_Max"] != null) {
         var formatted = data["WDir_Max"]
             .toFixed(0) + "° (" + degreesToCompass(data["WDir_Max"]) + ")"
         document.getElementById("item_WDir_Max").innerHTML = formatted;
-    } else { document.getElementById("item_WDir_Max").innerHTML = "no data"; }
+    } else { document.getElementById("item_WDir_Max").innerHTML = "No Data"; }
 
     displayValue(data["WGst_Avg"], "item_WGst_Avg", " mph", 1);
     displayValue(data["WGst_Min"], "item_WGst_Min", " mph", 1);
@@ -125,7 +125,7 @@ function processData(data, showTime) {
         var formatted2 = data["SunD_Ttl"] / 60 / 60;
         document.getElementById("item_SunD_Ttl").innerHTML
             = formatted + " (" + formatted2.toFixed(1) + " hrs)";
-    } else { document.getElementById("item_SunD_Ttl").innerHTML = "no data"; }
+    } else { document.getElementById("item_SunD_Ttl").innerHTML = "No Data"; }
 
     displayValue(data["Rain_Ttl"], "item_Rain_Ttl", " mm", 2);
     displayValue(data["MSLP_Avg"], "item_MSLP_Avg", " hPa", 1);

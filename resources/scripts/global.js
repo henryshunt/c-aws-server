@@ -12,7 +12,7 @@ function displayValue(value, id, units, precision) {
         } else {
             document.getElementById(id).innerHTML = value.toFixed(precision) + units;
         }
-    } else { document.getElementById(id).innerHTML = "no data"; }
+    } else { document.getElementById(id).innerHTML = "No Data"; }
 }
 
 function degreesToCompass(degrees) {

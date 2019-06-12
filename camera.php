@@ -38,14 +38,8 @@
             var datePicker = null;
             var requestedTime = null;
             var updaterTimeout = null;
-            var countTimeout = null;
-            var timeToUpdate = 0;
 
             $(document).ready(function() {
-                setInterval(function() {
-                    displayLocalTime();
-                }, 250);
-
                 updateData(true, false);
             });
         </script>
@@ -122,21 +116,6 @@
                 <p id="img_loading">Loading Image...</p>
                 <img id="item_CImg"
                     src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-            </div>
-        </div>
-
-        <div id="footer">
-            <div id="footer_items">
-                <p class="footer_label">Local Time:</p>
-                <p id="item_local_time" class="footer_value" style="width: 210px"></p>
-    
-                <div style="float: right; margin-left: 10px">
-                    <p class="footer_label">Data Time:</p>
-                    <p id="item_data_time" class="footer_value" style="width: 60px"></p>
-
-                    <p class="footer_label" style="margin-left: 10px">Update:</p>
-                    <p id="item_update" class="footer_value" style="width: 45px"></p>
-                </div>
             </div>
         </div>
 

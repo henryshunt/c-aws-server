@@ -1,22 +1,11 @@
 function updateData(restartTimers, absolute) {
     isLoading = true;
     clearTimeout(updaterTimeout);
-    clearTimeout(countTimeout);
-
-    if (restartTimers == true) {
-        document.getElementById("item_update").innerHTML = "0";
-    } else { document.getElementById("item_update").innerHTML = ""; }
-    timeToUpdate = 300;
 
     if (restartTimers == true) {
         updaterTimeout = setInterval(function() {
             updateData(true, false);
         }, 300000);
-            
-        countTimeout = setInterval(function() {
-            document.getElementById("item_update").innerHTML
-                = --timeToUpdate;
-        }, 1000);
     }
 
     getAndProcessData(restartTimers, absolute);
@@ -43,14 +32,12 @@ function getAndProcessData(setTime, absolute) {
 
         error: function() {
             var localTime = moment(requestedTime).tz(awsTimeZone);
-            document.getElementById("item_data_time").innerHTML
-                = localTime.format("HH:mm");
             document.getElementById("scroller_time").innerHTML
                 = localTime.format("DD/MM/YYYY [at] HH:mm");
             
-            document.getElementById("item_SRis").innerHTML = "no data";
-            document.getElementById("item_SSet").innerHTML = "no data";
-            document.getElementById("item_Noon").innerHTML = "no data";
+            document.getElementById("item_SRis").innerHTML = "No Data";
+            document.getElementById("item_SSet").innerHTML = "No Data";
+            document.getElementById("item_Noon").innerHTML = "No Data";
             document.getElementById("item_CImg").src
                 = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
             isLoading = false;
@@ -62,8 +49,6 @@ function processData(data) {
     var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
     var localTime = moment(utc).tz(awsTimeZone);
 
-    document.getElementById("item_data_time").innerHTML
-        = localTime.format("HH:mm");
     document.getElementById("scroller_time").innerHTML
         = localTime.format("DD/MM/YYYY [at] HH:mm");
     requestedTime = moment(utc);
@@ -72,19 +57,19 @@ function processData(data) {
         var utc = moment.utc(data["SRis"], "YYYY-MM-DD HH:mm:ss");
         var formatted = utc.tz(awsTimeZone).format("HH:mm");
         document.getElementById("item_SRis").innerHTML = formatted;
-    } else { document.getElementById("item_SRis").innerHTML = "no data"; }
+    } else { document.getElementById("item_SRis").innerHTML = "No Data"; }
 
     if (data["SSet"] != null) {
         var utc = moment.utc(data["SSet"], "YYYY-MM-DD HH:mm:ss");
         var formatted = utc.tz(awsTimeZone).format("HH:mm");
         document.getElementById("item_SSet").innerHTML = formatted;
-    } else { document.getElementById("item_SSet").innerHTML = "no data"; }
+    } else { document.getElementById("item_SSet").innerHTML = "No Data"; }
 
     if (data["Noon"] != null) {
         var utc = moment.utc(data["Noon"], "YYYY-MM-DD HH:mm:ss");
         var formatted = utc.tz(awsTimeZone).format("HH:mm");
         document.getElementById("item_Noon").innerHTML = formatted;
-    } else { document.getElementById("item_Noon").innerHTML = "no data"; }
+    } else { document.getElementById("item_Noon").innerHTML = "No Data"; }
 
     if (data["CImg"] != null) {
         document.getElementById("item_CImg").src = data["CImg"];
