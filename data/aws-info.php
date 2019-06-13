@@ -5,7 +5,7 @@ $data = array_fill_keys(["Name", "TimeZone", "Latitude",
     "Longitude", "Elevation"], null);
 
 $config = new Config("../config.ini");
-if (!$config) { echo json_encode($data); exit(); }
+if (!$config) { echo "null" exit(); }
 
 $data["Name"] = $config->get_aws_name();
 $data["TimeZone"] = $config->get_aws_time_zone();
