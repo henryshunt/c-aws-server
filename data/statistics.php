@@ -12,8 +12,13 @@ $data = array_fill_keys(["Time", "AirT_Avg", "AirT_Min", "AirT_Max",
     "ST10_Avg", "ST10_Min", "ST10_Max", "ST30_Avg", "ST30_Min",
     "ST30_Max", "ST00_Avg", "ST00_Min", "ST00_Max"], null);
 
-$config = new Config("../config.ini");
-if (!$config) { echo json_encode($data); exit(); }
+try { $config = new Config("../config.ini"); }
+catch (Exception $e)
+{
+    echo json_encode($data);
+    exit(); 
+}
+
 $pdo = new_db_conn($config);
 if (!$pdo) { echo json_encode($data); exit(); }
 

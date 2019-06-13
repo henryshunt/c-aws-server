@@ -6,8 +6,13 @@ include_once("../routines/analysis.php");
 
 $data = [];
 
-$config = new Config("../config.ini");
-if (!$config) { echo json_encode($data); exit(); }
+try { $config = new Config("../config.ini"); }
+catch (Exception $e)
+{
+    echo json_encode($data);
+    exit(); 
+}
+
 $pdo = new_db_conn($config);
 if (!$pdo) { echo json_encode($data); exit(); }
 

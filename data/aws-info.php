@@ -4,8 +4,12 @@ include_once("../routines/config.php");
 $data = array_fill_keys(["Name", "TimeZone", "Latitude",
     "Longitude", "Elevation"], null);
 
-$config = new Config("../config.ini");
-if (!$config) { echo "null" exit(); }
+try { $config = new Config("../config.ini"); }
+catch (Exception $e)
+{
+    echo "null";
+    exit(); 
+}
 
 $data["Name"] = $config->get_aws_name();
 $data["TimeZone"] = $config->get_aws_time_zone();

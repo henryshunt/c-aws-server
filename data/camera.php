@@ -4,8 +4,12 @@ include_once("../routines/config.php");
 
 $data = array_fill_keys(["Time", "CImg", "SRis", "SSet"], null);
 
-$config = new Config("../config.ini");
-if (!$config) { echo json_encode($data); exit(); }
+try { $config = new Config("../config.ini"); }
+catch (Exception $e)
+{
+    echo json_encode($data);
+    exit(); 
+}
 
 // Parse time specified in URL
 if (isset($_GET["time"]))

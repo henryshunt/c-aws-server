@@ -8,8 +8,13 @@ $data = array_fill_keys(["Time", "AirT", "ExpT", "RelH", "DewP",
     "WSpd", "WDir", "WGst", "SunD", "SunD_PHr", "Rain", "Rain_PHr",
      "StaP", "MSLP", "StaP_PTH", "ST10", "ST30", "ST00"], null);
 
-$config = new Config("../config.ini");
-if (!$config) { echo json_encode($data); exit(); }
+try { $config = new Config("../config.ini"); }
+catch (Exception $e)
+{
+    echo json_encode($data);
+    exit(); 
+}
+
 $pdo = new_db_conn($config);
 if (!$pdo) { echo json_encode($data); exit(); }
 

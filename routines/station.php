@@ -3,8 +3,8 @@ include_once("config.php");
 
 function get_startup_time()
 {
-    $config = new Config("../config.ini");
-    if (!$config) return NULL;
+    try { $config = new Config("../config.ini"); }
+    catch (Exception $e) { return NULL; }
 
     $path = $config->get_server_py();
     if (!file_exists($path)) return NULL;
@@ -16,8 +16,8 @@ function get_startup_time()
 
 function get_internal_drive_space()
 {
-    $config = new Config("../config.ini");
-    if (!$config) return NULL;
+    try { $config = new Config("../config.ini"); }
+    catch (Exception $e) { return NULL; }
 
     $path = $config->get_server_py();
     if (!file_exists($path)) return NULL;
@@ -29,8 +29,8 @@ function get_internal_drive_space()
 
 function get_camera_drive_space()
 {
-    $config = new Config("../config.ini");
-    if (!$config) return NULL;
+    try { $config = new Config("../config.ini"); }
+    catch (Exception $e) { return NULL; }
 
     $path = $config->get_server_py();
     if (!file_exists($path)) return NULL;
@@ -42,8 +42,8 @@ function get_camera_drive_space()
 
 if (isset($_GET["cmd"])
 {
-    $config = new Config("../config.ini");
-    if (!$config) return;
+    try { $config = new Config("../config.ini"); }
+    catch (Exception $e) { return; }
 
     $path = $config->get_server_py();
     if (!file_exists($path)) return;
