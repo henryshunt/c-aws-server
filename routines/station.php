@@ -6,7 +6,7 @@ function get_static_info()
     try { $config = new Config("config.ini"); }
     catch (Exception $e) { return NULL; }
 
-    $path = $config->get_local_software();
+    $path = $config->get_local_software_dir();
     if (!file_exists($path)) return NULL;
 
     // Execute the server info gather function in the C-AWS software
@@ -22,29 +22,40 @@ function get_static_info()
     catch (Exception $e) { return NULL; }
 }
 
+// Run power command if cmd parameter specified
 if (isset($_GET["cmd"]))
 {
     try { $config = new Config("../config.ini"); }
-    catch (Exception $e) { exit(1); }
+    catch (Exception $e) { exit(); }
 
-    $path = $config->get_local_software();
-    if (!file_exists($path)) exit(1);
+    $path = $config->get_local_data_dir();
+    if (!file_exists($path)) exit();
 
     try
     {
-        $command = NULL;
+        // Write file to trigger power command in C-AWS software
         if ($_GET["cmd"] == "shutdown")
         {
-            $command = "cd " . $path . " && python3 -c \""
-                . "import routines.server as server; server.operation_shutdown()\"";
+            if (!file_exists($path . "/shutdown.cmd"))
+            {
+                $file = fopen($path . "/shutdown.cmd", "w");
+                if (!$file) throw new Exception();
+
+                fwrite($file, "");
+                fclose($file);
+            }
         }
         else if ($_GET["cmd"] == "restart")
         {
-            $command = "cd " . $path . " && python3 -c \""
-                . "import routines.server as server; server.operation_restart()\"";
-        }
+            if (!file_exists($path . "/restart.cmd"))
+            {
+                $file = fopen($path . "/restart.cmd", "w");
+                if (!$file) throw new Exception();
 
-        exec($command);
+                fwrite($file, "");
+                fclose($file);
+            }
+        }
     }
-    catch (Exception $e) { exit(1); }
+    catch (Exception $e) { exit(); }
 }

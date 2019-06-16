@@ -24,7 +24,7 @@ function new_db_conn($config)
         else
         {
             // Use SQLite
-            $database = $config->get_local_database();
+            $database = $config->get_local_data_dir() . "/records.sq3";
             return new PDO("sqlite:$database", NULL, NULL, $options);
         }
     }

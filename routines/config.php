@@ -9,8 +9,8 @@ class Config
 
     private $is_remote;
 
-    private $local_database;
-    private $local_software;
+    private $local_data_dir;
+    private $local_software_dir;
     private $remote_host;
     private $remote_database;
     private $remote_username;
@@ -28,8 +28,8 @@ class Config
 
         $this->is_remote = $config["IsRemote"];
 
-        $this->local_database = $config["LocalDatabase"];
-        $this->local_software = $config["LocalSoftware"];
+        $this->local_data_dir = $config["LocalDataDir"];
+        $this->local_software_dir = $config["LocalSoftwareDir"];
         $this->remote_host = $config["RemoteHost"];
         $this->remote_database = $config["RemoteDatabase"];
         $this->remote_username = $config["RemoteUsername"];
@@ -86,14 +86,14 @@ class Config
         return $this->is_remote;
     }
 
-    function get_local_database()
+    function get_local_data_dir()
     {
-        return $this->local_database;
+        return $this->local_data_dir;
     }
 
-    function get_local_software()
+    function get_local_software_dir()
     {
-        return $this->local_software;
+        return $this->local_software_dir;
     }
 
     function get_remote_host()
