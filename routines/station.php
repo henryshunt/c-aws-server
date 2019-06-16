@@ -1,55 +1,50 @@
 <?php
 include_once("config.php");
 
-function get_startup_time()
+function get_static_info()
 {
-    try { $config = new Config("../config.ini"); }
+    try { $config = new Config("config.ini"); }
     catch (Exception $e) { return NULL; }
 
-    $path = $config->get_server_py();
+    $path = $config->get_local_software();
     if (!file_exists($path)) return NULL;
 
-    $output = NULL;
-    exec("python3 $path get_startup_time", $output);
-    echo $output;
-}
+    // Execute the server info gather function in the C-AWS software
+    try
+    {
+        $command = "cd " . $path . " && python3 -c \""
+            . "import routines.server as server; server.get_static_info()\"";
 
-function get_internal_drive_space()
-{
-    try { $config = new Config("../config.ini"); }
+        $result = NULL;
+        exec($command, $result);
+        return $result;
+    }
     catch (Exception $e) { return NULL; }
-
-    $path = $config->get_server_py();
-    if (!file_exists($path)) return NULL;
-
-    $output = NULL;
-    exec("python3 $path get_internal_drive_space", $output);
-    echo $output;
 }
 
-function get_camera_drive_space()
+if (isset($_GET["cmd"]))
 {
     try { $config = new Config("../config.ini"); }
-    catch (Exception $e) { return NULL; }
+    catch (Exception $e) { exit(1); }
 
-    $path = $config->get_server_py();
-    if (!file_exists($path)) return NULL;
+    $path = $config->get_local_software();
+    if (!file_exists($path)) exit(1);
 
-    $output = NULL;
-    exec("python3 $path get_camera_drive_space", $output);
-    echo $output;
-}
+    try
+    {
+        $command = NULL;
+        if ($_GET["cmd"] == "shutdown")
+        {
+            $command = "cd " . $path . " && python3 -c \""
+                . "import routines.server as server; server.operation_shutdown()\"";
+        }
+        else if ($_GET["cmd"] == "restart")
+        {
+            $command = "cd " . $path . " && python3 -c \""
+                . "import routines.server as server; server.operation_restart()\"";
+        }
 
-if (isset($_GET["cmd"])
-{
-    try { $config = new Config("../config.ini"); }
-    catch (Exception $e) { return; }
-
-    $path = $config->get_server_py();
-    if (!file_exists($path)) return;
-
-    if ($_GET["cmd"] == "do_shutdown")
-        exec("python3 $path do_shutdown");
-    else if ($_GET["cmd"] == "do_restart")
-        exec("python3 $path do_restart");
+        exec($command);
+    }
+    catch (Exception $e) { exit(1); }
 }

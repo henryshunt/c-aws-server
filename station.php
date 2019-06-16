@@ -177,39 +177,62 @@
             <?php
                 if (!$config->get_is_remote())
                 {
+                    include_once("routines/station.php");
+                    $static_info = get_static_info();
+
+                    if ($static_info == NULL)
+                    {
+                        $startup_time = "No Data";
+                        $internal_drive_space = "No Data";
+                        $camera_drive_space = "No Data";
+                    }
+                    else
+                    {
+                        // System startup time
+                        if ($static_info[0] != NULL && $static_info[0] != "None")
+                        {
+                            $startup_time = $static_info[0];
+                            $startup_time = date_create_from_format("Y-m-d H:i:s", $startup_time);
+                            $startup_time->setTimezone(
+                                new DateTimeZone($config->get_aws_time_zone()));
+                            $startup_time = $startup_time->format("d/m/Y \a\\t H:i");
+                        } else $startup_time = "No Data";
+
+                        // Internal drive space
+                        if ($static_info[1] != NULL && $static_info[1] != "None")
+                        {
+                            $internal_drive_space = $static_info[1];
+                            $internal_drive_space = round(floatval($internal_drive_space), 2) . " GB";
+                        } else $internal_drive_space = "No Data";
+
+                        // Camera drive space
+                        if ($static_info[2] != NULL && $static_info[2] != "None")
+                        {
+                            $camera_drive_space = $static_info[2];
+                            $camera_drive_space = round(floatval($camera_drive_space), 2) . " GB";
+                        } else $camera_drive_space = "No Data";
+                    }
+
                     echo "<div class=\"group\" style=\"margin-bottom: 0px\">"
                          . "<div class=\"group_header\">"
-                         . "<p class=\"group_title\">Local Only</p>"
-                         . "<div style=\"padding-right: 10px\">"
-                         . "</div>"
-                         . "</div>"
+                         . "<p class=\"group_title\">Local Only</p></div>"
                          . "<table class=\"field_table\">"
-                         . "<tr>"
-                         . "<td><p class=\"field_label\">System Start Time:</p></td>"
-                         . "<td><p class=\"field_value\">no data</p></td>"
-                         . "</tr>"
-                         . "<tr>"
-                         . "<td><p class=\"field_label\" style=\"margin-top: 10px\">"
+                         . "<tr><td><p class=\"field_label\">System Start Time:</p></td>"
+                         . "<td><p class=\"field_value\">" . $startup_time . "</p></td></tr>"
+                         . "<tr><td><p class=\"field_label\" style=\"margin-top: 10px\">"
                          . "Internal Drive Remaining Space:</p></td>"
-                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">no data</p></td>"
-                         . "</tr>"
-                         . "<tr>"
-                         . "<td><p class=\"field_label\">Camera Drive Remaining Space:</p></td>"
-                         . "<td><p class=\"field_value\">no data</p></td>"
-                         . "</tr>"
-                         . "<tr>"
-                         . "<td><p class=\"field_label\" style=\"margin-top: 10px\">"
+                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">"
+                         . $internal_drive_space . "</p></td></tr>"
+                         . "<tr><td><p class=\"field_label\">Camera Drive Remaining Space:</p></td>"
+                         . "<td><p class=\"field_value\">" . $camera_drive_space . "</p></td></tr>"
+                         . "<tr><td><p class=\"field_label\" style=\"margin-top: 10px\">"
                          . "Shutdown Station Computer:</p></td>"
                          . "<td><p class=\"field_value\" style=\"margin-top: 10px\">"
                          . "<button onclick=\"send_command('shutdown')\">Send Command</button></p></td>"
-                         . "</tr>"
-                         . "<tr>"
-                         . "<td><p class=\"field_label\">Restart Station Computer:</p></td>"
+                         . "</tr><tr><td><p class=\"field_label\">Restart Station Computer:</p></td>"
                          . "<td><p class=\"field_value\">"
                          . "<button onclick=\"send_command('restart')\">Send Command</button></p></td>"
-                         . "</tr>"
-                         . "</table>"
-                         . "</div>";
+                         . "</tr></table></div>";
                 }
             ?>
         </div>

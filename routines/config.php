@@ -10,7 +10,7 @@ class Config
     private $is_remote;
 
     private $local_database;
-    private $local_server_py;
+    private $local_software;
     private $remote_host;
     private $remote_database;
     private $remote_username;
@@ -29,7 +29,7 @@ class Config
         $this->is_remote = $config["IsRemote"];
 
         $this->local_database = $config["LocalDatabase"];
-        $this->local_server_py = $config["LocalServerPy"];
+        $this->local_software = $config["LocalSoftware"];
         $this->remote_host = $config["RemoteHost"];
         $this->remote_database = $config["RemoteDatabase"];
         $this->remote_username = $config["RemoteUsername"];
@@ -91,9 +91,9 @@ class Config
         return $this->local_database;
     }
 
-    function get_local_server_py()
+    function get_local_software()
     {
-        return $this->local_server_py;
+        return $this->local_software;
     }
 
     function get_remote_host()
