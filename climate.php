@@ -26,9 +26,12 @@
         <title><?php echo $title; ?></title>
         <link href="resources/styles/trebuchet.ttf" type="x-font-ttf">
         <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/climate.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/global.js" type="text/javascript"></script>
         <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+        <script src="resources/scripts/chartist.js" type="text/javascript"></script>
         <script src="resources/scripts/moment.js" type="text/javascript"></script>
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
         <script src="resources/scripts/page-climate.js" type="text/javascript"></script>
@@ -39,8 +42,21 @@
 
             var isLoading = true;
             var requestedTime = null;
+            var graphs = { "temperature": null, "humidity": null, "wind": null,
+                "direction": null, "sunshine": null, "rainfall": null,
+                "pressure": null, "soil": null };
+            var openGraphs = ["temperature"];
+            var graphsLoaded = 0;
 
             $(document).ready(function() {
+                graphs["temperature"] = setupGraph("temperature");
+                graphs["humidity"] = setupGraph("humidity");
+                graphs["wind"] = setupGraph("wind");
+                graphs["sunshine"] = setupGraph("sunshine");
+                graphs["rainfall"] = setupGraph("rainfall");
+                graphs["pressure"] = setupGraph("pressure");
+                graphs["soil"] = setupGraph("soil");
+
                 updateData(true);
             });
         </script>
@@ -205,6 +221,97 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Air Temperature</p>
+
+                    <div>
+                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [°C]</span>
+                        <p class="group_toggle" onclick="toggleGraph('temperature', 'AirT_Avg,AirT_Min,AirT_Max', this)">-</p>
+                    </div>
+                </div>
+
+                <div id="graph_temperature" class="ct-chart"></div>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Relative Humidity</p>
+
+                    <div>
+                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [%]</span>
+                        <p class="group_toggle" onclick="toggleGraph('humidity', 'RelH_Avg,RelH_Min,RelH_Max', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_humidity" class="ct-chart"></div>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Wind Velocity</p>
+
+                    <div>
+                        <span class="group_key">(<span>Average Speed</span>, <span>Maximum Speed</span>, <span>Maximum Gust</span>) [mph]</span>
+                        <p class="group_toggle" onclick="toggleGraph('wind', 'WSpd_Avg,WSpd_Max,WGst_Max', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_wind" class="ct-chart"></div>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Sunshine Duration</p>
+
+                    <div>
+                        <span class="group_key">[hrs]</span>
+                        <p class="group_toggle" onclick="toggleGraph('sunshine', 'SunD_Ttl', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_sunshine" class="ct-chart"></div>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Rainfall</p>
+
+                    <div>
+                        <span class="group_key">[mm]</span>
+                        <p class="group_toggle" onclick="toggleGraph('rainfall', 'Rain_Ttl', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_rainfall" class="ct-chart"></div>
+            </div>
+
+            <div class="group">
+                <div class="group_header">
+                    <p class="group_title">Mean Sea Level Pressure</p>
+
+                    <div>
+                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [hPa]</span>
+                        <p class="group_toggle" onclick="toggleGraph('pressure', 'MSLP_Avg,MSLP_Min,MSLP_Max', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_pressure" class="ct-chart"></div>
+            </div>
+
+            <div class="group" style="margin-bottom: 0px">
+                <div class="group_header">
+                    <p class="group_title">Soil Temperature</p>
+
+                    <div>
+                        <span class="group_key">(<span>10CM Average</span>, <span>30CM Average</span>, <span>1M Average</span>) [°C]</span>
+                        <p class="group_toggle" onclick="toggleGraph('soil', 'ST10_Avg,ST30_Avg,ST00_Avg', this)">+</p>
+                    </div>
+                </div>
+
+                <div id="graph_soil" class="ct-chart"></div>
             </div>
         </div>
 

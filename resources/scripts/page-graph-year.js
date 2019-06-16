@@ -17,7 +17,7 @@ function setupGraph(graph) {
         axisX: {
             type: Chartist.FixedScaleAxis, divisor: 12, offset: 20,    
             labelInterpolationFnc: function(value) {
-                return moment.unix(value).utc().tz(awsTimeZone).format("MMM DD");
+                return moment.unix(value).format("MMM DD");
             }
         }
     };
@@ -64,6 +64,17 @@ function getAndProcessData(setTime) {
     { loadGraphData("pressure", "MSLP_Avg,MSLP_Min,MSLP_Max"); }
     if ($.inArray("soil", openGraphs) != -1)
     { loadGraphData("soil", "ST10_Avg,ST30_Avg,ST00_Avg"); }
+
+    if ($.inArray("temperature", openGraphs) == -1 &&
+        $.inArray("humidity", openGraphs) == -1 &&
+        $.inArray("wind", openGraphs) == -1 &&
+        $.inArray("direction", openGraphs) == -1 &&
+        $.inArray("sunshine", openGraphs) == -1 &&
+        $.inArray("rainfall", openGraphs) == -1 &&
+        $.inArray("pressure", openGraphs) == -1 &&
+        $.inArray("soil", openGraphs) == -1) {
+        isLoading = false;
+    }
 }
 
 function loadGraphData(graph, fields) {
@@ -98,6 +109,8 @@ function loadGraphData(graph, fields) {
 }
 
 function toggleGraph(graph, fields, button) {
+    if (isLoading == true) { return; }
+    
     if (button.innerHTML == "-") {
         document.getElementById("graph_" + graph).style.display = "none";
 

@@ -9,20 +9,20 @@ $data = array_fill_keys(["AirT_Avg_Year", "AirT_Min_Year",
 
 $fill_value = array_fill_keys(["1", "2", "3", "4", "5", "6", "7",
     "8", "9", "10", "11", "12"], null);
-$data["AirT_Avg_Months"] = $fill_value;
-$data["AirT_Min_Months"] = $fill_value;
-$data["AirT_Max_Months"] = $fill_value;
-$data["RelH_Avg_Months"] = $fill_value;
-$data["WSpd_Avg_Months"] = $fill_value;
-$data["WSpd_Max_Months"] = $fill_value;
-$data["WDir_Avg_Months"] = $fill_value;
-$data["WGst_Max_Months"] = $fill_value;
-$data["SunD_Ttl_Months"] = $fill_value;
-$data["Rain_Ttl_Months"] = $fill_value;
-$data["MSLP_Avg_Months"] = $fill_value;
-$data["ST10_Avg_Months"] = $fill_value;
-$data["ST30_Avg_Months"] = $fill_value;
-$data["ST00_Avg_Months"] = $fill_value;
+$data["AirT_Avg_Month"] = $fill_value;
+$data["AirT_Min_Month"] = $fill_value;
+$data["AirT_Max_Month"] = $fill_value;
+$data["RelH_Avg_Month"] = $fill_value;
+$data["WSpd_Avg_Month"] = $fill_value;
+$data["WSpd_Max_Month"] = $fill_value;
+$data["WDir_Avg_Month"] = $fill_value;
+$data["WGst_Max_Month"] = $fill_value;
+$data["SunD_Ttl_Month"] = $fill_value;
+$data["Rain_Ttl_Month"] = $fill_value;
+$data["MSLP_Avg_Month"] = $fill_value;
+$data["ST10_Avg_Month"] = $fill_value;
+$data["ST30_Avg_Month"] = $fill_value;
+$data["ST00_Avg_Month"] = $fill_value;
 
 try { $config = new Config("../config.ini"); }
 catch (Exception $e)

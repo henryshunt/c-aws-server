@@ -86,32 +86,36 @@ function stats_for_months($config, $pdo, $year)
     if ($config->get_is_remote())
     {
         $QUERY = "SELECT MONTH(Date) AS Month, ROUND(AVG(AirT_Avg), 3) AS "
-            . "AirT_Avg_Months, ROUND(MIN(AirT_Min), 3) AS AirT_Min_Months, "
-            . "ROUND(MAX(AirT_Max), 3) AS AirT_Max_Months, ROUND(AVG(RelH_Avg), 3) "
-            . "AS RelH_Avg_Months, ROUND(AVG(WSpd_Avg), 3) AS WSpd_Avg_Months, "
-            . "ROUND(MAX(WSpd_Max), 3) AS WSpd_Max_Months, ROUND(AVG(WDir_Avg), 3) "
-            . "AS WDir_Avg_Months, ROUND(MAX(WGst_Max), 3) AS WGst_Max_Months, "
-            . "ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS SunD_Ttl_Months, "
-            . "ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl_Months, ROUND(AVG(MSLP_Avg), 3) "
-            . "AS MSLP_Avg_Months, ROUND(AVG(ST10_Avg), 3) AS ST10_Avg_Months, "
-            . "ROUND(AVG(ST30_Avg), 3) AS ST30_Avg_Months, ROUND(AVG(ST00_Avg), 3) "
-            . "AS ST00_Avg_Months "
+            . "AirT_Avg_Month, ROUND(MIN(AirT_Min), 3) AS AirT_Min_Month, "
+            . "ROUND(MAX(AirT_Max), 3) AS AirT_Max_Month, ROUND(AVG(RelH_Avg), 3) "
+            . "AS RelH_Avg_Month, ROUND(MIN(RelH_Min), 3) AS RelH_Min_Month, "
+            . "ROUND(MAX(RelH_Max), 3) AS RelH_Max_Month, ROUND(AVG(WSpd_Avg), 3) "
+            . "AS WSpd_Avg_Month, ROUND(MAX(WSpd_Max), 3) AS WSpd_Max_Month, "
+            . "ROUND(AVG(WDir_Avg), 3) AS WDir_Avg_Month, ROUND(MAX(WGst_Max), 3) "
+            . "AS WGst_Max_Month, ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS "
+            . "SunD_Ttl_Month, ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl_Month, "
+            . "ROUND(AVG(MSLP_Avg), 3) AS MSLP_Avg_Month, ROUND(MIN(MSLP_Min), 3) "
+            . "AS MSLP_Min_Month, ROUND(MAX(MSLP_Max), 3) AS MSLP_Max_Month, "
+            . "ROUND(AVG(ST10_Avg), 3) AS ST10_Avg_Month, ROUND(AVG(ST30_Avg), 3) "
+            . "AS ST30_Avg_Month, ROUND(AVG(ST00_Avg), 3) AS ST00_Avg_Month "
             . "FROM dayStats WHERE YEAR(Date) = ? GROUP BY MONTH(Date)";
     }
     else
     {
         $QUERY = "SELECT strftime('%m', Date) AS Month, ROUND(AVG(AirT_Avg), 3) AS "
-            . "AirT_Avg_Months, ROUND(MIN(AirT_Min), 3) AS AirT_Min_Months, "
-            . "ROUND(MAX(AirT_Max), 3) AS AirT_Max_Months, ROUND(AVG(RelH_Avg), 3) "
-            . "AS RelH_Avg_Months, ROUND(AVG(WSpd_Avg), 3) AS WSpd_Avg_Months, "
-            . "ROUND(MAX(WSpd_Max), 3) AS WSpd_Max_Months, ROUND(AVG(WDir_Avg), 3) "
-            . "AS WDir_Avg_Months, ROUND(MAX(WGst_Max), 3) AS WGst_Max_Months, "
-            . "ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS SunD_Ttl_Months, "
-            . "ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl_Months, ROUND(AVG(MSLP_Avg), 3) "
-            . "AS MSLP_Avg_Months, ROUND(AVG(ST10_Avg), 3) AS ST10_Avg_Months, "
-            . "ROUND(AVG(ST30_Avg), 3) AS ST30_Avg_Months, ROUND(AVG(ST00_Avg), 3) "
-            . "AS ST00_Avg_Months FROM dayStats WHERE strftime('%Y', Date) "
-            . "= ? GROUP BY strftime('%m', Date)";
+            . "AirT_Avg_Month, ROUND(MIN(AirT_Min), 3) AS AirT_Min_Month, "
+            . "ROUND(MAX(AirT_Max), 3) AS AirT_Max_Month, ROUND(AVG(RelH_Avg), 3) "
+            . "AS RelH_Avg_Month, ROUND(MIN(RelH_Min), 3) AS RelH_Min_Month, "
+            . "ROUND(MAX(RelH_Max), 3) AS RelH_Max_Month, ROUND(AVG(WSpd_Avg), 3) "
+            . "AS WSpd_Avg_Month, ROUND(MAX(WSpd_Max), 3) AS WSpd_Max_Month, "
+            . "ROUND(AVG(WDir_Avg), 3) AS WDir_Avg_Month, ROUND(MAX(WGst_Max), 3) "
+            . "AS WGst_Max_Month, ROUND(SUM(SunD_Ttl) / 60.0 / 60.0, 3) AS "
+            . "SunD_Ttl_Month, ROUND(SUM(Rain_Ttl), 3) AS Rain_Ttl_Month, "
+            . "ROUND(AVG(MSLP_Avg), 3) AS MSLP_Avg_Month, ROUND(MIN(MSLP_Min), 3) "
+            . "AS MSLP_Min_Month, ROUND(MAX(MSLP_Max), 3) AS MSLP_Max_Month, "
+            . "ROUND(AVG(ST10_Avg), 3) AS ST10_Avg_Month, ROUND(AVG(ST30_Avg), 3) "
+            . "AS ST30_Avg_Month, ROUND(AVG(ST00_Avg), 3) AS ST00_Avg_Month FROM "
+            . "dayStats WHERE strftime('%Y', Date) = ? GROUP BY strftime('%m', Date)";
     }
 
     try

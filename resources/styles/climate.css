@@ -36,3 +36,10 @@
     border-left: 1px solid #2a2a2a;
     border-right: 2px solid #2a2a2a;
 }
+
+.ct-series .ct-bar {
+    stroke-width: 10;
+}
+.ct-chart-bar .ct-label.ct-horizontal.ct-end {
+    justify-content: center;
+}
