@@ -37,11 +37,11 @@ if (!file_exists($image_path))
             . $url_time->format("Y/m/d/Y-m-d\TH-i-s") . ".jpg";
 
         if (file_exists($image_path))
-            $data["CImg"] = $image_path;
+            $data["CImg"] = "data/" . $image_path;
         else $url_time->add(new DateInterval("PT5M"));
     }
 }
-else $data["CImg"] = $image_path;
+else $data["CImg"] = "data/" . $image_path;
 
 $data["Time"] = $url_time->format("Y-m-d H:i:s");
 echo json_encode($data, JSON_NUMERIC_CHECK);
