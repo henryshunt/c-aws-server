@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <?php
+    date_default_timezone_set("UTC");
     include_once("routines/config.php");
     
     try { $config = new Config("config.ini"); }

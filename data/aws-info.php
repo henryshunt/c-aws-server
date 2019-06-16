@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("UTC");
 include_once("../routines/config.php");
 
 $data = array_fill_keys(["Name", "TimeZone", "Latitude",

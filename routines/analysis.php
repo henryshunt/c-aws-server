@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set("UTC");
+
 function record_for_time($pdo, $time, $table)
 {
     $QUERY = "SELECT * FROM %s WHERE %s = ?";

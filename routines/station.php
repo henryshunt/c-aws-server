@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("UTC");
 include_once("config.php");
 
 function get_static_info()
