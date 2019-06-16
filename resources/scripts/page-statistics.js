@@ -24,7 +24,7 @@ function getAndProcessData(setTime, absolute) {
         dataType: "json", url: url,
         success: function (data) { processData(data, setTime); },
 
-        error: function() {
+        error: requestError = function() {
             var localTime = moment(requestedTime).tz(awsTimeZone);
 
             if (setTime == true) {
@@ -73,6 +73,11 @@ function getAndProcessData(setTime, absolute) {
 }
 
 function processData(data, showTime) {
+    if (data["Time"] == null) {
+        requestError();
+        return;
+    }
+
     var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
     var localTime = moment(utc).tz(awsTimeZone);
 

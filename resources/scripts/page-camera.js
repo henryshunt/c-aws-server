@@ -30,7 +30,7 @@ function getAndProcessData(setTime, absolute) {
         dataType: "json", url: url,
         success: function (data) { processData(data); },
 
-        error: function() {
+        error: requestError = function() {
             var localTime = moment(requestedTime).tz(awsTimeZone);
             document.getElementById("scroller_time").innerHTML
                 = localTime.format("DD/MM/YYYY [at] HH:mm");
@@ -46,6 +46,11 @@ function getAndProcessData(setTime, absolute) {
 }
 
 function processData(data) {
+    if (data["Time"] == null) {
+        requestError();
+        return;
+    }
+
     var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
     var localTime = moment(utc).tz(awsTimeZone);
 
@@ -77,6 +82,7 @@ function processData(data) {
         document.getElementById("item_CImg")
             .src = "resources/images/no-camera.png";
     }
+    
     isLoading = false;
 }
 
