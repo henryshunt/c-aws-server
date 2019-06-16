@@ -45,6 +45,11 @@ class Config
     {
         if ($this->get_aws_name() == "") return false;
         if ($this->get_aws_time_zone() == "") return false;
+
+        if (!in_array(
+            $this->get_aws_time_zone(), DateTimeZone::listIdentifiers()))
+            return false;
+    
         if ($this->get_aws_latitude() == "") return false;
         if (!is_numeric($this->get_aws_latitude())) return false;
         if ($this->get_aws_longitude() == "") return false;
