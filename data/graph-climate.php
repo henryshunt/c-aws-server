@@ -41,24 +41,28 @@ if (isset($_GET["fields"]))
 }
 else { echo json_encode($data); exit(); }
 
+// Fill return data with empty array for each field
+$fields = explode(",", $_GET["fields"]);
+
+$fill_array = [];
+for ($i = 0; $i < 12; $i++)
+    $fill_array[$i] = ["x" => $i + 1, "y" => NULL];
+
+$data = array_fill(0, count($fields), $fill_array);
+
 // Get climate data for that year per month
 $result = stats_for_months($config, $pdo, $local_time->format("Y"));
 
 if ($result !== false && $result !== NULL)
 {
-    // Fill return data with empty array for each field
-    $fields = explode(",", $_GET["fields"]);
-    $data = array_fill(0, count($fields), []);
-
     // Generate each series from retrieved records
     foreach ($result as $record)
     {
         // Create point and add to relevant series
         for ($field = 0; $field < count($fields); $field++)
         {
-            $point = array("x" => $record["Month"],
-                "y" => $record[$fields[$field] . "_Month"]);
-            array_push($data[$field], $point);
+            $data[$field][$record["Month"] - 1] = 
+                ["x" => $record["Month"], "y" => $record[$fields[$field] . "_Month"]];
         }
     }
 }

@@ -29,7 +29,7 @@
         <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/climate.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/page-climate.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/global.js" type="text/javascript"></script>
         <script src="resources/scripts/jquery.js" type="text/javascript"></script>
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>

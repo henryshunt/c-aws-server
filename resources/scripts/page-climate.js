@@ -1,25 +1,39 @@
 function setupGraph(graph) {
-    var options = {
-        showPoint: false, lineSmooth: false, height: 350,
-
-        axisY: {
-            offset: 38,
-            labelInterpolationFnc: function(value) {
-                return value.toFixed(1);
-            }
-        },
-
-        axisX: {
-            type: Chartist.FixedScaleAxis, divisor: 11, offset: 20,    
-            labelInterpolationFnc: function(value) {
-                return moment(value, "M").format("MMM");
-            }
-        }
-    };
-
     if (graph == "sunshine" || graph == "rainfall") {
+        var options = {
+            height: 350,
+
+            axisX: {
+                offset: 20,
+                labelInterpolationFnc: function(value) {
+                    return moment(value, "M").format("MMM");
+                }
+            }
+        };
+    
         return new Chartist.Bar("#graph_" + graph, null, options);
-    } else { return new Chartist.Line("#graph_" + graph, null, options); }
+
+    } else {
+        var options = {
+            showPoint: false, lineSmooth: false, height: 350,
+
+            axisY: {
+                offset: 38,
+                labelInterpolationFnc: function(value) {
+                    return value.toFixed(1);
+                }
+            },
+
+            axisX: {
+                type: Chartist.FixedScaleAxis, divisor: 11, offset: 20,    
+                labelInterpolationFnc: function(value) {
+                    return moment(value, "M").format("MMM");
+                }
+            }
+        };
+
+        return new Chartist.Line("#graph_" + graph, null, options);
+    }
 }
 
 function updateData(setTime) {
@@ -138,7 +152,25 @@ function loadGraphData(graph, fields) {
         var options = graphs[graph].options;
         options.axisX.low = 1; options.axisX.high = 12;
         document.getElementById("graph_" + graph).style.display = "block";
-        graphs[graph].update({ series: response }, options);
+        var data = null;
+
+        if (graph == "sunshine" || graph == "rainfall") {
+            var data = {
+                labels: response[0].map(function(element) {
+                    return element.x;
+                }),
+    
+                series: [response[0].map(function(element) {
+                    return element.y;
+                })]
+            };
+
+            graphs[graph].update(data, options);
+
+        } else {
+            data = response;
+            graphs[graph].update({ series: data }, options);
+        }
 
         graphsLoaded += 1;
         if (graphsLoaded == openGraphs.length) {
