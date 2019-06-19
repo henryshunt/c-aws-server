@@ -3,39 +3,55 @@ date_default_timezone_set("UTC");
 
 class Config
 {
-    private $aws_name;
-    private $aws_time_zone;
-    private $aws_latitude;
-    private $aws_longitude;
-    private $aws_elevation;
+    private $aws_name = NULL;
+    private $aws_time_zone = NULL;
+    private $aws_latitude = NULL;
+    private $aws_longitude = NULL;
+    private $aws_elevation = NULL;
 
-    private $is_remote;
+    private $is_remote = NULL;
 
-    private $local_data_dir;
-    private $local_software_dir;
-    private $remote_host;
-    private $remote_database;
-    private $remote_username;
-    private $remote_password;
+    private $local_data_dir = NULL;
+    private $local_software_dir = NULL;
+    private $remote_upload_pass = NULL;
+    private $remote_host = NULL;
+    private $remote_database = NULL;
+    private $remote_username = NULL;
+    private $remote_password = NULL;
 
     function __construct($config_file)
     {
         $config = parse_ini_file($config_file);
+        if (!$config) throw new Exception("Bad configuration file");
 
-        $this->aws_name = $config["Name"];
-        $this->aws_time_zone = $config["TimeZone"];
-        $this->aws_latitude = $config["Latitude"];
-        $this->aws_longitude = $config["Longitude"];
-        $this->aws_elevation = $config["Elevation"];
+        if ($config["Name"] != NULL)
+            $this->aws_name = $config["Name"];
+        if ($config["TimeZone"] != NULL)
+            $this->aws_time_zone = $config["TimeZone"];
+        if ($config["Latitude"] != NULL)
+            $this->aws_latitude = $config["Latitude"];
+        if ($config["Longitude"] != NULL)
+            $this->aws_longitude = $config["Longitude"];
+        if ($config["Elevation"] != NULL)
+            $this->aws_elevation = $config["Elevation"];
 
-        $this->is_remote = $config["IsRemote"];
+        if ($config["IsRemote"] != NULL)
+            $this->is_remote = $config["IsRemote"];
 
-        $this->local_data_dir = $config["LocalDataDir"];
-        $this->local_software_dir = $config["LocalSoftwareDir"];
-        $this->remote_host = $config["RemoteHost"];
-        $this->remote_database = $config["RemoteDatabase"];
-        $this->remote_username = $config["RemoteUsername"];
-        $this->remote_password = $config["RemotePassword"];
+        if ($config["LocalDataDir"] != NULL)
+            $this->local_data_dir = $config["LocalDataDir"];
+        if ($config["LocalSoftwareDir"] != NULL)
+            $this->local_software_dir = $config["LocalSoftwareDir"];
+        if ($config["RemoteUploadPass"] != NULL)
+            $this->remote_upload_pass = $config["RemoteUploadPass"];
+        if ($config["RemoteHost"] != NULL)
+            $this->remote_host = $config["RemoteHost"];
+        if ($config["RemoteDatabase"] != NULL)
+            $this->remote_database = $config["RemoteDatabase"];
+        if ($config["RemoteUsername"] != NULL)
+            $this->remote_username = $config["RemoteUsername"];
+        if ($config["RemotePassword"] != NULL)
+            $this->remote_password = $config["RemotePassword"];
 
         if (!$this->validate()) 
             throw new Exception("Bad configuration file");
@@ -43,18 +59,37 @@ class Config
 
     private function validate()
     {
-        if ($this->get_aws_name() == "") return false;
-        if ($this->get_aws_time_zone() == "") return false;
+        // Convert empty strings to NULL
+        if ($this->get_aws_name() == "") $this->aws_name = NULL;
+        if ($this->get_aws_time_zone() == "") $this->aws_time_zone = NULL;
+        if ($this->get_aws_latitude() == "") $this->aws_latitude = NULL;
+        if ($this->get_aws_longitude() == "") $this->aws_longitude = NULL;
+        if ($this->get_aws_elevation() == "") $this->aws_elevation = NULL;
+        if ($this->get_is_remote() == "") $this->is_remote = NULL;
+        if ($this->get_local_data_dir() == "") $this->local_data_dir = NULL;
+        if ($this->get_local_software_dir() == "")
+            $this->local_software_dir = NULL;
+        if ($this->get_remote_upload_pass() == "")
+            $this->remote_upload_pass = NULL;
+        if ($this->get_remote_host() == "") $this->remote_host = NULL;
+        if ($this->get_remote_database() == "")
+            $this->get_remote_database = NULL;
+        if ($this->get_remote_password() == "")
+            $this->remote_password = NULL;
+
+        // Validate the configuration values
+        if ($this->get_aws_name() == NULL) return false;
+        if ($this->get_aws_time_zone() == NULL) return false;
 
         if (!in_array(
             $this->get_aws_time_zone(), DateTimeZone::listIdentifiers()))
             return false;
     
-        if ($this->get_aws_latitude() == "") return false;
+        if ($this->get_aws_latitude() == NULL) return false;
         if (!is_numeric($this->get_aws_latitude())) return false;
-        if ($this->get_aws_longitude() == "") return false;
+        if ($this->get_aws_longitude() == NULL) return false;
         if (!is_numeric($this->get_aws_longitude())) return false;
-        if ($this->get_aws_elevation() == "") return false;
+        if ($this->get_aws_elevation() == NULL) return false;
         if (!is_numeric($this->get_aws_elevation())) return false;
 
         if ($this->get_is_remote() != "0" &&
@@ -91,6 +126,11 @@ class Config
     function get_is_remote()
     {
         return $this->is_remote;
+    }
+
+    function get_remote_upload_pass()
+    {
+        return $this->get_remote_upload_pass;
     }
 
     function get_local_data_dir()
