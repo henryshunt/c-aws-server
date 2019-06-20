@@ -130,7 +130,7 @@ class Config
 
     function get_remote_upload_pass()
     {
-        return $this->get_remote_upload_pass;
+        return $this->remote_upload_pass;
     }
 
     function get_local_data_dir()
