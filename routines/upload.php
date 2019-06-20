@@ -14,7 +14,7 @@ if ($config->get_remote_upload_pass() != NULL)
 {
     if (isset($_GET["pass"]))
     {
-        if ($_GET["pass"] != $config->get_remote_upload_pass()))
+        if ($_GET["pass"] != $config->get_remote_upload_pass())
         {
             echo "1";
             exit();
