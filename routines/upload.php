@@ -6,7 +6,25 @@ try { $config = new Config("../config.ini"); }
 catch (Exception $e)
 {
     echo "1";
-    exit(); 
+    exit();
+}
+
+// Password check
+if ($config->get_remote_upload_pass() != NULL)
+{
+    if (isset($_GET["pass"]))
+    {
+        if ($_GET["pass"] != $config->get_remote_upload_pass()))
+        {
+            echo "1";
+            exit();
+        }
+    }
+    else
+    {
+        echo "1";
+        exit();
+    }
 }
 
 // Create connection and check for error
