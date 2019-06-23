@@ -25,7 +25,7 @@
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/trebuchet.ttf" type="x-font-ttf">
+        <link href="resources/styles/fire-sans.ttf" type="x-font-ttf">
         <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">

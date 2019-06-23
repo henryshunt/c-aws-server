@@ -40,7 +40,11 @@ Use config.ini to supply station information, data credentials, and parameters c
 |`RemotePassword`|If operating remotely, the password of the above MySQL user|
 
 # Dependencies
+- MySQL
+- PHP MySQL PDO Driver
+- PHP SQLite3 PDO Driver
 - JQuery
 - [Chartist](https://github.com/gionkunz/chartist-js)
-- [Flatpickr](https://github.com/flatpickr/flatpickr)
+- [Flatpickr](https://github.com/flatpickr/flatpickr) (modified)
 - [Moment](https://github.com/moment/moment)
+- [Moment Timezone](https://github.com/moment/moment-timezone) with data
