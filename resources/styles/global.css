@@ -126,7 +126,7 @@ tr {
 #scroller > div:nth-child(2) {
     text-align: center;
     transform: translateY(-1px);
-    margin-top: 12px;
+    margin-top: 13px;
 }
 .scroller_button {
     display: table-cell;
