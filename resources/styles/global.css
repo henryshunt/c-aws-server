@@ -22,8 +22,8 @@ blockquote, q { quotes: "" ""; }
 
 
 @font-face {
-    font-family: "Fira Sans";
-    src: url("fira-sans.ttf");
+    font-family: "Roboto";
+    src: url("roboto.ttf");
 }
 
 body {
@@ -59,11 +59,12 @@ tr {
 }
 #header_right {
     float: right;
-    font-size: 80px;
+    font-size: 78px;
     color: rgb(20, 20, 20);
-    margin-top: -11px;
+    margin-top: -9px;
     font-weight: bold;
     font-style: italic;
+    margin-right: 8px;
 }
 
 #menu {
