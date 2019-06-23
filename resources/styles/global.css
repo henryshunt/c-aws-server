@@ -21,6 +21,11 @@ q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
 
+@font-face {
+    font-family: "Fira Sans";
+    src: url("fira-sans.ttf");
+}
+
 body {
     font-family: "Fira Sans";
     -webkit-text-size-adjust: 100%;
