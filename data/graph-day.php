@@ -86,19 +86,19 @@ if ($result !== false && $result !== NULL)
         {
             if ($fields[$field] == "Rain")
             {
-                if ($record[$fields[$field]] != null)
+                if ($record[$fields[$field]] !== null)
                     $Rain_Ttl += $record[$fields[$field]];
 
                 $point = array("x" => $utc
-                    ->getTimestamp(), "y" => round($Rain_Ttl, 3));
+                    ->getTimestamp(), "y" => round($Rain_Ttl, 2));
             }
             else if ($fields[$field] == "SunD")
             {
-                if ($record[$fields[$field]] != null)
+                if ($record[$fields[$field]] !== null)
                     $SunD_Ttl += $record[$fields[$field]];
 
-                $point = array("x" => $utc
-                    ->getTimestamp(), "y" => $SunD_Ttl);
+                $point = array("x" => $utc->getTimestamp(),
+                    "y" => round($SunD_Ttl / 60 / 60, 2));
             }
             else
             {

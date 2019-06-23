@@ -66,8 +66,22 @@ if ($result !== false && $result !== NULL)
         // Create point and add to relevant series
         for ($field = 0; $field < count($fields); $field++)
         {
-            $point = array("x" => $local
-                ->getTimestamp(), "y" => $record[$fields[$field]]);
+            $value = NULL;
+
+            if ($fields[$field] == "SunD_Ttl")
+            {
+                if ($record[$fields[$field]] !== NULL)
+                    $value = round($record[$fields[$field]] / 60 / 60, 2);
+            }
+            else if ($fields[$field] == "Rain_Ttl")
+            {
+                if ($record[$fields[$field]] !== NULL)
+                    $value = round($record[$fields[$field]], 2);
+            }
+            else $value = $record[$fields[$field]];
+
+            $point = array(
+                "x" => $local->getTimestamp(), "y" => $value);
             array_push($data[$field], $point);
         }
     }

@@ -5,12 +5,10 @@ function setupGraph(graph) {
         axisY: {
             offset: 38,
             labelInterpolationFnc: function(value) {
-                if (graph == "direction") { return value.toFixed(0); }
-                else if (graph == "sunshine") {
-                    return (value / 60 / 60).toFixed(1);
-                }
-                else if (graph == "rainfall") { return value.toFixed(2) }
-                else { return value.toFixed(1); }
+                if (graph == "direction") { return roundPlaces(value, 0); }
+                else if (graph == "sunshine") { return roundPlaces(value, 2); }
+                else if (graph == "rainfall") { return roundPlaces(value, 2); }
+                else { return roundPlaces(value, 1); }
             }
         },
 

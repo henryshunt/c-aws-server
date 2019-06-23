@@ -16,11 +16,11 @@ function setupGraph(graph) {
     } else {
         var options = {
             showPoint: false, lineSmooth: false, height: 350,
-
+            
             axisY: {
                 offset: 38,
                 labelInterpolationFnc: function(value) {
-                    return value.toFixed(1);
+                    return roundPlaces(value, 1);
                 }
             },
 
@@ -136,10 +136,10 @@ function displayMonth(data, row, precision) {
 
         if (data[i] != null) {
             if (precision == -1) {
-                var formatted = data[i]
-                    .toFixed(0) + " (" + degreesToCompass(data[i]) + ")"
+                var formatted = roundPlaces(data[i], 0)
+                    + " (" + degreesToCompass(data[i]) + ")"
                 col.innerHTML = formatted; 
-            } else { col.innerHTML = data[i].toFixed(precision); }
+            } else { col.innerHTML = roundPlaces(data[i], precision); }
         } else { col.innerHTML = "No Data";}
     }
 }

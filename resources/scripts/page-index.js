@@ -71,8 +71,8 @@ function processData(data) {
     displayValue(data["WSpd"], "item_WSpd", " mph", 1);
 
     if (data["WDir"] != null) {
-        var formatted = data["WDir"]
-            .toFixed(0) + "° (" + degreesToCompass(data["WDir"]) + ")"
+        var formatted = roundPlaces(data["WDir"], 0)
+            + "° (" + degreesToCompass(data["WDir"]) + ")"
         document.getElementById("item_WDir").innerHTML = formatted;
     } else { document.getElementById("item_WDir").innerHTML = "No Data"; }
 
@@ -90,7 +90,7 @@ function processData(data) {
     displayValue(data["MSLP"], "item_MSLP", " hPa", 1);
     
     if (data["StaP_PTH"] != null) {
-         var formatted = data["StaP_PTH"].toFixed(1) + " hpa";
+         var formatted = roundPlaces(data["StaP_PTH"], 1) + " hpa";
          if (data["StaP_PTH"] > 0) { formatted = "+" + formatted; }
          document.getElementById("item_StaP_PTH").innerHTML = formatted;
     } else { document.getElementById("item_StaP_PTH").innerHTML = "No Data"; }

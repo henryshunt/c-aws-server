@@ -104,20 +104,20 @@ function processData(data, showTime) {
     displayValue(data["WSpd_Max"], "item_WSpd_Max", " mph", 1);
 
     if (data["WDir_Avg"] != null) {
-        var formatted = data["WDir_Avg"]
-            .toFixed(0) + "° (" + degreesToCompass(data["WDir_Avg"]) + ")"
+        var formatted = roundPlaces(data["WDir_Avg"], 0)
+            + "° (" + degreesToCompass(data["WDir_Avg"]) + ")"
         document.getElementById("item_WDir_Avg").innerHTML = formatted;
     } else { document.getElementById("item_WDir_Avg").innerHTML = "No Data"; }
 
     if (data["WDir_Min"] != null) {
-        var formatted = data["WDir_Min"]
-            .toFixed(0) + "° (" + degreesToCompass(data["WDir_Min"]) + ")"
+        var formatted = roundPlaces(data["WDir_Min"], 0)
+            + "° (" + degreesToCompass(data["WDir_Min"]) + ")"
         document.getElementById("item_WDir_Min").innerHTML = formatted;
     } else { document.getElementById("item_WDir_Min").innerHTML = "No Data"; }
 
     if (data["WDir_Max"] != null) {
-        var formatted = data["WDir_Max"]
-            .toFixed(0) + "° (" + degreesToCompass(data["WDir_Max"]) + ")"
+        var formatted = roundPlaces(data["WDir_Max"], 0)
+            + "° (" + degreesToCompass(data["WDir_Max"]) + ")"
         document.getElementById("item_WDir_Max").innerHTML = formatted;
     } else { document.getElementById("item_WDir_Max").innerHTML = "No Data"; }
 
@@ -129,7 +129,7 @@ function processData(data, showTime) {
         var formatted = moment.utc(data["SunD_Ttl"] * 1000).format("HH:mm:ss");
         var formatted2 = data["SunD_Ttl"] / 60 / 60;
         document.getElementById("item_SunD_Ttl").innerHTML
-            = formatted + " (" + formatted2.toFixed(1) + " hrs)";
+            = formatted + " (" + roundPlaces(formatted2, 1) + " hrs)";
     } else { document.getElementById("item_SunD_Ttl").innerHTML = "No Data"; }
 
     displayValue(data["Rain_Ttl"], "item_Rain_Ttl", " mm", 2);

@@ -10,7 +10,8 @@ function displayValue(value, id, units, precision) {
             document.getElementById(id).innerHTML = value + units;
 
         } else {
-            document.getElementById(id).innerHTML = value.toFixed(precision) + units;
+            document.getElementById(id).innerHTML
+                = roundPlaces(value, precision) + units;
         }
     } else { document.getElementById(id).innerHTML = "No Data"; }
 }
@@ -24,4 +25,9 @@ function degreesToCompass(degrees) {
     else if (degrees >= 203 && degrees < 248) { return "SW"; }
     else if (degrees >= 248 && degrees < 293) { return "W"; }
     else if (degrees >= 293 && degrees < 338) { return "NW"; }
+}
+
+function roundPlaces(value, places) {
+    return Number(
+        Math.round(value + 'e' + places) + 'e-' + places).toFixed(places);
 }
