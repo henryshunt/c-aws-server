@@ -23,6 +23,10 @@ if (isset($_GET["time"]))
     {
         $url_time = date_create_from_format(
             "Y-m-d\TH-i-s", $_GET["time"]);
+
+        $local_time = clone $url_time;
+        $local_time->setTimezone(
+            new DateTimeZone($config->get_aws_time_zone()));
     }
     catch (Exception $e) { echo json_encode($data); exit(); }
 }
@@ -37,8 +41,9 @@ if (isset($_GET["fields"]))
 }
 else { echo json_encode($data); exit(); }
 
-$range_start = clone $url_time;
+$range_start = clone $local_time;
 $range_start->sub(new DateInterval("PT6H"));
+$range_start->setTimezone(new DateTimeZone("UTC"));
 $range_end = clone $url_time;
 
 // Get data in range for specified parameters
