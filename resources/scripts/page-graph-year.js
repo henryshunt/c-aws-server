@@ -1,6 +1,6 @@
 function setupGraph(graph) {
     var options = {
-        showPoint: false, lineSmooth: false, height: 350,
+        showPoint: false, lineSmooth: false, height: 400,
 
         axisY: {
             offset: 38,

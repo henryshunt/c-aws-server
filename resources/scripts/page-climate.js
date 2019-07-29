@@ -1,7 +1,7 @@
 function setupGraph(graph) {
     if (graph == "sunshine" || graph == "rainfall") {
         var options = {
-            height: 350,
+            height: 400,
 
             axisX: {
                 offset: 20,
