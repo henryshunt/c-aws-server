@@ -29,20 +29,20 @@ function record_for_time($pdo, $time, $table)
 
 function fields_in_range($pdo, $start, $end, $fields, $table)
 {
-    $QUERY = "SELECT %s FROM %s WHERE %s BETWEEN ? AND ?";
+    $QUERY = "SELECT %s FROM %s WHERE %s BETWEEN ? AND ? ORDER BY %s";
 
     try
     {
         if ($table == DbTable::DAYSTATS)
         {
             $query = query_database($pdo,
-                sprintf($QUERY, $fields, $table, "Date"),
+                sprintf($QUERY, $fields, $table, "Date", "Date"),
                 [$start->format("Y-m-d"), $end->format("Y-m-d")]);
         }
         else
         {
             $query = query_database($pdo,
-                sprintf($QUERY, $fields, $table, "Time"),
+                sprintf($QUERY, $fields, $table, "Time", "Time"),
                 [$start->format("Y-m-d H:i:s"), $end->format("Y-m-d H:i:s")]);
         }
 
