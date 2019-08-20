@@ -6,9 +6,9 @@ function new_db_conn($config)
     try
     {
         $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         if ($config->get_is_remote())
@@ -26,7 +26,7 @@ function new_db_conn($config)
         else
         {
             // Use SQLite
-            $database = $config->get_local_data_dir() . "/records.sq3";
+            $database = $config->get_local_data_dir() . "/data.sq3";
             return new PDO("sqlite:$database", NULL, NULL, $options);
         }
     }
