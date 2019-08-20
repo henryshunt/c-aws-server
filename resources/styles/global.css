@@ -160,14 +160,15 @@ tr {
     background: #f2f7f8;
     border-bottom: 1px solid #cccccc;
     padding-top: 5px;
+    height: 31px;
 }
 .group_header div {
     float: right;
 }
 .group_title {
     margin-bottom: 7px;
-    font-size: 25px;
-    margin-top: 0;
+    font-size: 20px;
+    margin-top: 3px;
     margin-left: 10px;
     display: inline-block;
 }
