@@ -7,10 +7,10 @@ include_once("../routines/analysis.php");
 $data = array_fill_keys(["Time", "AirT_Avg", "AirT_Min", "AirT_Max",
     "RelH_Avg", "RelH_Min", "RelH_Max", "DewP_Avg", "DewP_Min",
     "DewP_Max", "WSpd_Avg", "WSpd_Min", "WSpd_Max", "WDir_Avg", 
-    "WDir_Min", "WDir_Max", "WGst_Avg", "WGst_Min", "WGst_Max",
-    "SunD_Ttl", "Rain_Ttl", "MSLP_Avg", "MSLP_Min", "MSLP_Max",
-    "ST10_Avg", "ST10_Min", "ST10_Max", "ST30_Avg", "ST30_Min",
-    "ST30_Max", "ST00_Avg", "ST00_Min", "ST00_Max"], null);
+    "WGst_Avg", "WGst_Min", "WGst_Max", "SunD_Ttl", "Rain_Ttl",
+    "MSLP_Avg", "MSLP_Min", "MSLP_Max", "ST10_Avg", "ST10_Min",
+    "ST10_Max", "ST30_Avg", "ST30_Min", "ST30_Max", "ST00_Avg",
+    "ST00_Min", "ST00_Max"], null);
 
 try { $config = new Config("../config.ini"); }
 catch (Exception $e)

@@ -183,8 +183,6 @@
                             <table style="width: 100%; border-collapse: collapse">
                                 <tr>
                                     <td style="width: 33.3%"><p><b>AVG: </b><span id="item_WDir_Avg"></span></p></td>
-                                    <td style="width: 33.3%"><p><b>MIN: </b><span id="item_WDir_Min"></span></p></td>
-                                    <td style="width: 33.3%"><p><b>MAX: </b><span id="item_WDir_Max"></span></p></td>
                                 </tr>
                             </table>
                         </td>

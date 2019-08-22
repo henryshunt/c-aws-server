@@ -48,8 +48,6 @@ function getAndProcessData(setTime, absolute) {
             document.getElementById("item_WSpd_Min").innerHTML = "No Data";
             document.getElementById("item_WSpd_Max").innerHTML = "No Data";
             document.getElementById("item_WDir_Avg").innerHTML = "No Data";
-            document.getElementById("item_WDir_Min").innerHTML = "No Data";
-            document.getElementById("item_WDir_Max").innerHTML = "No Data";
             document.getElementById("item_WGst_Avg").innerHTML = "No Data";
             document.getElementById("item_WGst_Min").innerHTML = "No Data";
             document.getElementById("item_WGst_Max").innerHTML = "No Data";
@@ -108,18 +106,6 @@ function processData(data, showTime) {
             + "° (" + degreesToCompass(data["WDir_Avg"]) + ")"
         document.getElementById("item_WDir_Avg").innerHTML = formatted;
     } else { document.getElementById("item_WDir_Avg").innerHTML = "No Data"; }
-
-    if (data["WDir_Min"] != null) {
-        var formatted = roundPlaces(data["WDir_Min"], 0)
-            + "° (" + degreesToCompass(data["WDir_Min"]) + ")"
-        document.getElementById("item_WDir_Min").innerHTML = formatted;
-    } else { document.getElementById("item_WDir_Min").innerHTML = "No Data"; }
-
-    if (data["WDir_Max"] != null) {
-        var formatted = roundPlaces(data["WDir_Max"], 0)
-            + "° (" + degreesToCompass(data["WDir_Max"]) + ")"
-        document.getElementById("item_WDir_Max").innerHTML = formatted;
-    } else { document.getElementById("item_WDir_Max").innerHTML = "No Data"; }
 
     displayValue(data["WGst_Avg"], "item_WGst_Avg", " mph", 1);
     displayValue(data["WGst_Min"], "item_WGst_Min", " mph", 1);

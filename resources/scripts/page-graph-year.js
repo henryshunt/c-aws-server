@@ -53,7 +53,7 @@ function getAndProcessData(setTime) {
     if ($.inArray("wind", openGraphs) != -1)
     { loadGraphData("wind", "WSpd_Avg,WGst_Max"); }
     if ($.inArray("direction", openGraphs) != -1)
-    { loadGraphData("direction", "WDir_Avg,WDir_Min,WDir_Avg"); }
+    { loadGraphData("direction", "WDir_Avg"); }
     if ($.inArray("sunshine", openGraphs) != -1)
     { loadGraphData("sunshine", "SunD_Ttl"); }
     if ($.inArray("rainfall", openGraphs) != -1)

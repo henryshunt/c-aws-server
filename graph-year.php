@@ -152,8 +152,8 @@
                     <p class="group_title">Wind Direction</p>
 
                     <div>
-                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [°]</span>
-                        <p class="group_toggle" onclick="toggleGraph('direction', 'WDir_Avg,WDir_Min,WDir_Max', this)">+</p>
+                        <span class="group_key">(<span>Average</span>) [°]</span>
+                        <p class="group_toggle" onclick="toggleGraph('direction', 'WDir_Avg', this)">+</p>
                     </div>
                 </div>
 
