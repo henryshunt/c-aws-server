@@ -128,10 +128,6 @@ if ($_POST["has_dayStat"] == "1")
         "dayStat_WSpd_Max"] == "null") ? null : $_POST["dayStat_WSpd_Max"];
     $WDir_Avg = ($_POST[
         "dayStat_WDir_Avg"] == "null") ? null : $_POST["dayStat_WDir_Avg"];
-    $WDir_Min = ($_POST[
-        "dayStat_WDir_Min"] == "null") ? null : $_POST["dayStat_WDir_Min"];
-    $WDir_Max = ($_POST[
-        "dayStat_WDir_Max"] == "null") ? null : $_POST["dayStat_WDir_Max"];
     $WGst_Avg = ($_POST[
         "dayStat_WGst_Avg"] == "null") ? null : $_POST["dayStat_WGst_Avg"];
     $WGst_Min = ($_POST[
@@ -176,16 +172,16 @@ if ($_POST["has_dayStat"] == "1")
         {
             $query = $db_conn->prepare(
                 "INSERT INTO dayStats VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-                    . " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    . " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
             if ($query)
             {
-                $query -> bind_param("sdddddddddddddiidddiddddddddddddd", $Date, $AirT_Avg,
+                $query -> bind_param("sddddddddddddddddiddddddddddddd", $Date, $AirT_Avg,
                     $AirT_Min, $AirT_Max, $RelH_Avg, $RelH_Min, $RelH_Max, $DewP_Avg, $DewP_Min,
-                    $DewP_Max, $WSpd_Avg, $WSpd_Min, $WSpd_Max, $WDir_Avg, $WDir_Min, $WDir_Max,
-                    $WGst_Avg, $WGst_Min, $WGst_Max, $SunD_Ttl, $Rain_Ttl, $MSLP_Avg, $MSLP_Min,
-                    $MSLP_Max, $ST10_Avg, $ST10_Min, $ST10_Max, $ST30_Avg, $ST30_Min, $ST30_Max,
-                    $ST00_Avg, $ST00_Min, $ST00_Max);
+                    $DewP_Max, $WSpd_Avg, $WSpd_Min, $WSpd_Max, $WDir_Avg, $WGst_Avg, $WGst_Min,
+                    $WGst_Max, $SunD_Ttl, $Rain_Ttl, $MSLP_Avg, $MSLP_Min, $MSLP_Max, $ST10_Avg,
+                    $ST10_Min, $ST10_Max, $ST30_Avg, $ST30_Min, $ST30_Max, $ST00_Avg, $ST00_Min,
+                    $ST00_Max);
                 
                 if (!$query->execute())
                 {
@@ -199,20 +195,20 @@ if ($_POST["has_dayStat"] == "1")
             $query = $db_conn->prepare(
                 "UPDATE dayStats SET AirT_Avg = ?, AirT_Min = ?, AirT_Max = ?, RelH_Avg = ?, "
                     . "RelH_Min = ?, RelH_Max = ?, DewP_Avg = ?, DewP_Min = ?, DewP_Max = ?, "
-                    . "WSpd_Avg = ?, WSpd_Min = ?, WSpd_Max = ?, WDir_Avg = ?, WDir_Min = ?, "
-                    . "WDir_Max = ?, WGst_Avg = ?, WGst_Min = ?, WGst_Max = ?, SunD_Ttl = ?, "
-                    . "Rain_Ttl = ?, MSLP_Avg = ?, MSLP_Min = ?, MSLP_Max = ?, ST10_Avg = ?, "
-                    . "ST10_Min = ?, ST10_Max = ?, ST30_Avg = ?, ST30_Min = ?, ST30_Max = ?, "
-                    . "ST00_Avg = ?, ST00_Min = ?, ST00_Max = ? WHERE Date = ?");
+                    . "WSpd_Avg = ?, WSpd_Min = ?, WSpd_Max = ?, WDir_Avg = ?, WGst_Avg = ?, "
+                    . "WGst_Min = ?, WGst_Max = ?, SunD_Ttl = ?, Rain_Ttl = ?, MSLP_Avg = ?, "
+                    . "MSLP_Min = ?, MSLP_Max = ?, ST10_Avg = ?, ST10_Min = ?, ST10_Max = ?, "
+                    . "ST30_Avg = ?, ST30_Min = ?, ST30_Max = ?, ST00_Avg = ?, ST00_Min = ?, "
+                    . "ST00_Max = ? WHERE Date = ?");
             
             if ($query)
             {
-                $query->bind_param("dddddddddddddiidddiddddddddddddds", $AirT_Avg, $AirT_Min,
+                $query->bind_param("ddddddddddddddddiddddddddddddds", $AirT_Avg, $AirT_Min,
                     $AirT_Max, $RelH_Avg, $RelH_Min, $RelH_Max, $DewP_Avg, $DewP_Min, $DewP_Max,
-                    $WSpd_Avg, $WSpd_Min, $WSpd_Max, $WDir_Avg, $WDir_Min, $WDir_Max, $WGst_Avg,
-                    $WGst_Min, $WGst_Max, $SunD_Ttl, $Rain_Ttl, $MSLP_Avg, $MSLP_Min, $MSLP_Max,
-                    $ST10_Avg, $ST10_Min, $ST10_Max, $ST30_Avg, $ST30_Min, $ST30_Max, $ST00_Avg,
-                    $ST00_Min, $ST00_Max, $Date);
+                    $WSpd_Avg, $WSpd_Min, $WSpd_Max, $WDir_Avg, $WGst_Avg, $WGst_Min, $WGst_Max,
+                    $SunD_Ttl, $Rain_Ttl, $MSLP_Avg, $MSLP_Min, $MSLP_Max, $ST10_Avg, $ST10_Min,
+                    $ST10_Max, $ST30_Avg, $ST30_Min, $ST30_Max, $ST00_Avg, $ST00_Min, $ST00_Max,
+                    $Date);
                 
                 if (!$query->execute()) $error_dayStat = true;
             } else $error_dayStat = true;
