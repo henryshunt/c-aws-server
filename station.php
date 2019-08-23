@@ -189,7 +189,7 @@
                     else
                     {
                         // System startup time
-                        if ($static_info[0] != NULL && $static_info[0] != "None")
+                        if ($static_info[0] != NULL && $static_info[0] != "null")
                         {
                             $startup_time = $static_info[0];
                             $startup_time = date_create_from_format("Y-m-d H:i:s", $startup_time);
@@ -199,14 +199,14 @@
                         } else $startup_time = "No Data";
 
                         // Internal drive space
-                        if ($static_info[1] != NULL && $static_info[1] != "None")
+                        if ($static_info[1] != NULL && $static_info[1] != "null")
                         {
                             $internal_drive_space = $static_info[1];
                             $internal_drive_space = round(floatval($internal_drive_space), 2) . " GB";
                         } else $internal_drive_space = "No Data";
 
                         // Camera drive space
-                        if ($static_info[2] != NULL && $static_info[2] != "None")
+                        if ($static_info[2] != NULL && $static_info[2] != "null")
                         {
                             $camera_drive_space = $static_info[2];
                             $camera_drive_space = round(floatval($camera_drive_space), 2) . " GB";
