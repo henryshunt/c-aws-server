@@ -88,8 +88,6 @@ function getAndProcessData(setTime) {
     { loadGraphData("sunshine", "SunD_Ttl"); }
     if ($.inArray("rainfall", openGraphs) != -1)
     { loadGraphData("rainfall", "Rain_Ttl"); }
-    if ($.inArray("pressure", openGraphs) != -1)
-    { loadGraphData("pressure", "MSLP_Avg,MSLP_Min,MSLP_Max"); }
     if ($.inArray("soil", openGraphs) != -1)
     { loadGraphData("soil", "ST10_Avg,ST30_Avg,ST00_Avg"); }
 

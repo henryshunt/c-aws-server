@@ -8,7 +8,7 @@ $data = array_fill_keys(["Name", "TimeZone", "Latitude",
 try { $config = new Config("../config.ini"); }
 catch (Exception $e)
 {
-    echo "null";
+    echo "1";
     exit(); 
 }
 

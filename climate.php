@@ -288,19 +288,6 @@
                 <div id="graph_rainfall" class="ct-chart"></div>
             </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Mean Sea Level Pressure</p>
-
-                    <div>
-                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [hPa]</span>
-                        <p class="group_toggle" onclick="toggleGraph('pressure', 'MSLP_Avg,MSLP_Min,MSLP_Max', this)">+</p>
-                    </div>
-                </div>
-
-                <div id="graph_pressure" class="ct-chart"></div>
-            </div>
-
             <div class="group" style="margin-bottom: 0px">
                 <div class="group_header">
                     <p class="group_title">Soil Temperature</p>
