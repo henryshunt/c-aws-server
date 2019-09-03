@@ -1,3 +1,12 @@
+var isLoading = true;
+var datePicker = null;
+var requestedTime = null;
+var updaterTimeout = null;
+
+$(document).ready(function() {
+    updateData(true, false);
+});
+
 function updateData(restartTimers, absolute) {
     isLoading = true;
     clearTimeout(updaterTimeout);

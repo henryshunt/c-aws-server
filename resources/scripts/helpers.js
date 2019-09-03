@@ -31,3 +31,23 @@ function roundPlaces(value, places) {
     return Number(
         Math.round(value + 'e' + places) + 'e-' + places).toFixed(places);
 }
+
+function toggleGraph(graph, fields, button) {
+    if (isLoading == true) { return; }
+
+    if (button.children[0].children[0].innerHTML == "expand_more") {
+        document.getElementById("graph_" + graph).style.display = "none";
+
+        var options = graphs[graph].options;
+        delete options.axisX.low; delete options.axisX.high;
+        graphs[graph].update({ series: null }, options);
+
+        button.children[0].children[0].innerHTML = "chevron_right";
+        openGraphs.splice(openGraphs.indexOf(graph), 1);
+
+    } else {
+        button.children[0].children[0].innerHTML = "expand_more";
+        openGraphs.push(graph);
+        loadGraphData(graph, fields);
+    }
+}

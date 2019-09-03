@@ -1,3 +1,32 @@
+var isLoading = true;
+var datePicker = null;
+var requestedTime = null;
+var updaterTimeout = null;
+
+$(document).ready(function() {
+    var options = {
+        showPoint: false, lineSmooth: false, height: 400,
+
+        axisY: {
+            offset: 27,
+            labelInterpolationFnc: function(value) {
+                return value.toFixed(1);
+            }
+        },
+
+        axisX: {
+            type: Chartist.FixedScaleAxis, divisor: 6, offset: 20,    
+            labelInterpolationFnc: function(value) {
+                return moment.unix(value).utc().tz(awsTimeZone).format("HH:mm");
+            }
+        }
+    };
+
+    document.getElementById("graph_temperature").style.display = "block";
+    graph = new Chartist.Line("#graph_temperature", null, options);
+    updateData(true, false);
+});
+
 function updateData(restartTimers, absolute) {
     isLoading = true;
     clearTimeout(updaterTimeout);

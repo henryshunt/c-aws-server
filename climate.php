@@ -25,86 +25,60 @@
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/page-climate.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/global.js" type="text/javascript"></script>
+        <link href="resources/styles/defaults.css" rel="stylesheet" type="text/css">
+        <script src="resources/scripts/helpers.js" type="text/javascript"></script>
         <script src="resources/scripts/jquery.js" type="text/javascript"></script>
-        <script src="resources/scripts/chartist.js" type="text/javascript"></script>
+
+        <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/moment.js" type="text/javascript"></script>
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
+        <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
+        <script src="resources/scripts/chartist.js" type="text/javascript"></script>
+        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">        
+        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/page-climate.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-climate.js" type="text/javascript"></script>
 
         <script>
-            const awsTimeZone
-                = "<?php echo $config->get_aws_time_zone(); ?>";
-
-            var isLoading = true;
-            var requestedTime = null;
-            var graphs = { "temperature": null, "humidity": null, "wind": null,
-                "direction": null, "sunshine": null, "rainfall": null,
-                "pressure": null, "soil": null };
-            var openGraphs = ["temperature"];
-            var graphsLoaded = 0;
-
-            $(document).ready(function() {
-                graphs["temperature"] = setupGraph("temperature");
-                graphs["humidity"] = setupGraph("humidity");
-                graphs["wind"] = setupGraph("wind");
-                graphs["sunshine"] = setupGraph("sunshine");
-                graphs["rainfall"] = setupGraph("rainfall");
-                graphs["pressure"] = setupGraph("pressure");
-                graphs["soil"] = setupGraph("soil");
-
-                updateData(true);
-            });
+            const awsTimeZone = "<?php echo $config->get_aws_time_zone(); ?>";
         </script>
     </head>
 
     <body>
-        <div id="header">
-            <div id="header_items">
-                <h1 id="header_left"><?php echo $config->get_aws_name(); ?></h1>
-                <h2 id="header_right">C - AWS</h2>
+        <div class="header">
+            <div class="titles">
+                <h1><?php echo $config->get_aws_name(); ?></h1>
+                <h2>C - AWS</h2>
             </div>
 
-            <div id="menu">
-                <div id="menu_items">
-                    <div>
-                        <a class="menu_item" href=".">Now</a>
-                        <a class="menu_item" href="statistics.php">Statistics</a>
-                        <a class="menu_item" href="camera.php">Camera</a>
-                        <span>|</span>
-    
-                        <span>Graph:</span>
-                        <a class="menu_item" href="graph-day.php">Day</a>
-                        <a class="menu_item" href="graph-year.php">Year</a>
-    
-                        <span>|</span>
-                        <a class="menu_item" id="ami" href="climate.php">Climate</a>
-                        <a class="menu_item" href="station.php">Station</a>
-                    </div>
+            <div class="menu">
+                <div>
+                    <a href=".">Now</a>
+                    <a href="statistics.php">Statistics</a>
+                    <a href="camera.php">Camera</a>
+                    <span>|</span>
 
+                    <span>Graph:</span>
+                    <a href="graph-day.php">Day</a>
+                    <a href="graph-year.php">Year</a>
+                    <span>|</span>
+
+                    <a class="ami" href="climate.php">Climate</a>
+                    <a href="station.php">Station</a>
+                    
                     <span><?php echo $scope; ?></span>
                 </div>
             </div>
         </div>
 
-        <div id="main">
-            <div class="group" id="scroller">
-                <div id="scroller_left" class="scroller_button" onclick="scrollerLeft()">
-                    <svg width="20" height="20" viewBox="0 0 512 512">
-                        <polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256"/>
-                    </svg>
+        <div class="main">
+            <div class="group g_scroller">
+                <div class="scroller_button" onclick="scrollerLeft()">
+                    <i class="material-icons">chevron_left</i>
                 </div>
-
-                <div><p id="scroller_time"></p></div>
-
-                <div id="scroller_right" class="scroller_button" onclick="scrollerRight()">
-                    <svg width="20" height="20" viewBox="0 0 512 512">
-                        <polygon points="160,128.4 192.3,96 352,256 352,256 352,256 192.3,416 160,383.6 287.3,256"/>
-                    </svg>
+                <div class="scroller_time"><p id="scroller_time"></p></div>
+                <div class="scroller_button" onclick="scrollerRight()">
+                    <i class="material-icons">chevron_right</i>
                 </div>
             </div>
 
@@ -224,78 +198,72 @@
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Air Temperature</p>
-
-                    <div>
-                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [°C]</span>
-                        <p class="group_toggle" onclick="toggleGraph('temperature', 'AirT_Avg,AirT_Min,AirT_Max', this)">-</p>
+                <div class="group_header gh_no_separator" onclick="toggleGraph('temperature', 'AirT_Avg,AirT_Min,AirT_Max', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">expand_more</i>
                     </div>
+                    <p class="group_title gt_collapsible">Air Temperature</p>
+                    <span class="group_key">°C (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
                 <div id="graph_temperature" class="ct-chart"></div>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Relative Humidity</p>
-
-                    <div>
-                        <span class="group_key">(<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>) [%]</span>
-                        <p class="group_toggle" onclick="toggleGraph('humidity', 'RelH_Avg,RelH_Min,RelH_Max', this)">+</p>
+                <div class="group_header gh_no_separator" onclick="toggleGraph('humidity', 'RelH_Avg,RelH_Min,RelH_Max', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">chevron_right</i>
                     </div>
+                    <p class="group_title gt_collapsible">Relative Humidity</p>
+                    <span class="group_key">% (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
                 <div id="graph_humidity" class="ct-chart"></div>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Wind Velocity</p>
-
-                    <div>
-                        <span class="group_key">(<span>Average Speed</span>, <span>Maximum Speed</span>, <span>Maximum Gust</span>) [mph]</span>
-                        <p class="group_toggle" onclick="toggleGraph('wind', 'WSpd_Avg,WSpd_Max,WGst_Max', this)">+</p>
+                <div class="group_header gh_no_separator" onclick="toggleGraph('wind', 'WSpd_Avg,WGst_Max', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">chevron_right</i>
                     </div>
+                    <p class="group_title gt_collapsible">Wind Velocity</p>
+                    <span class="group_key">mph (<span>Average Speed</span>, <span>Maximum Gust</span>)</span>
                 </div>
 
                 <div id="graph_wind" class="ct-chart"></div>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Sunshine Duration</p>
-
-                    <div>
-                        <span class="group_key">[hrs]</span>
-                        <p class="group_toggle" onclick="toggleGraph('sunshine', 'SunD_Ttl', this)">+</p>
+                <div class="group_header gh_no_separator" onclick="toggleGraph('sunshine', 'SunD_Ttl', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">chevron_right</i>
                     </div>
+                    <p class="group_title gt_collapsible">Sunshine Duration</p>
+                    <span class="group_key">hrs (<span>Total</span>)</span>
                 </div>
 
                 <div id="graph_sunshine" class="ct-chart"></div>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Rainfall</p>
-
-                    <div>
-                        <span class="group_key">[mm]</span>
-                        <p class="group_toggle" onclick="toggleGraph('rainfall', 'Rain_Ttl', this)">+</p>
+                <div class="group_header gh_no_separator" onclick="toggleGraph('rainfall', 'Rain_Ttl', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">chevron_right</i>
                     </div>
+                    <p class="group_title gt_collapsible">Rainfall</p>
+                    <span class="group_key">mm (<span>Total</span>)</span>
                 </div>
 
                 <div id="graph_rainfall" class="ct-chart"></div>
             </div>
 
-            <div class="group" style="margin-bottom: 0px">
-                <div class="group_header">
-                    <p class="group_title">Soil Temperature</p>
-
-                    <div>
-                        <span class="group_key">(<span>10CM Average</span>, <span>30CM Average</span>, <span>1M Average</span>) [°C]</span>
-                        <p class="group_toggle" onclick="toggleGraph('soil', 'ST10_Avg,ST30_Avg,ST00_Avg', this)">+</p>
+            <div class="group g_last">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('soil', 'ST10_Avg,ST30_Avg,ST00_Avg', this)">
+                    <div class="group_toggle">
+                        <i class="material-icons">chevron_right</i>
                     </div>
+                    <p class="group_title gt_collapsible">Soil Temperature</p>
+                    <span class="group_key">°C (<span>10CM Average</span>, <span>30CM Average</span>, <span>1M Average</span>)</span>
                 </div>
 
                 <div id="graph_soil" class="ct-chart"></div>

@@ -1,0 +1,15 @@
+.image_group {
+    position: relative;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+.image_group p {
+    text-align: center;
+    margin-top: 15px;
+    width: 100%;
+    position: absolute;
+}
+.image_group img {
+    width: 100%;
+    position: relative;
+}

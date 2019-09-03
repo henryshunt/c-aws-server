@@ -1,0 +1,114 @@
+.group {
+    border: 1px solid #cccccc;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    background-color: white;
+    max-width: 1050px;
+}
+.g_wide {
+    max-width: initial;
+}
+.g_last {
+    margin-bottom: 0px;
+}
+.group_header {
+    padding-top: 5px;
+    height: 32px;
+    border-bottom: 1px solid #cccccc;
+}
+.gh_no_separator {
+    border-bottom: initial !important;
+}
+.group_header:last-child {
+    float: right;
+}
+.group_title {
+    margin-bottom: 7px;
+    font-size: 20px;
+    margin-top: 3px;
+    margin-left: 10px;
+    display: inline-block;
+}
+.gt_collapsible {
+    cursor: pointer;
+}
+
+.group_key {
+    margin-right: 10px;
+    font-size: 11px;
+    line-height: 25px;
+    float: right;
+}
+.group_key span:nth-of-type(1) {
+    color: rgb(195, 39, 40);
+}
+.group_key span:nth-of-type(2) {
+    color: rgb(50, 136, 195);
+}
+.group_key span:nth-of-type(3) {
+    color: rgb(55, 145, 109);
+}
+.group_toggle {
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: 100%;
+    -ms-user-select: none;
+    float: left;
+    margin-top: -5px;
+    margin-right: -10px;
+}
+.group_toggle i {
+    margin-top: 7px;
+}
+
+.g_scroller {
+    height: 40px;
+    display: table;
+    width: calc(100% - 2px);
+    background-color: white;
+}
+.scroller_button {
+    display: table-cell;
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: 100%;
+    -ms-user-select: none;
+}
+.scroller_button i {
+    margin-top: 8px;
+}
+.scroller_time {
+    text-align: center;
+}
+.scroller_time p {
+    display: inline-block;
+    transform: translateY(-7px);
+}
+.st_picker {
+    cursor: pointer;
+    text-decoration: underline;
+}
+.flatpickr-calendar {
+    margin-top: 5px;
+}
+
+.field_table {
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.field_label {
+    margin-left: 35px;
+    color: grey;
+}
+.field_value {
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+}

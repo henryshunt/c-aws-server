@@ -1,6 +1,29 @@
+var isLoading = true;
+var datePicker = null;
+var requestedTime = null;
+var graphs = { "temperature": null, "humidity": null, "wind": null,
+    "direction": null, "sunshine": null, "rainfall": null,
+    "pressure": null, "soil": null };
+var openGraphs = ["temperature"];
+var graphsLoaded = 0;
+var updaterTimeout = null;
+
+$(document).ready(function() {
+    graphs["temperature"] = setupGraph("temperature");
+    graphs["humidity"] = setupGraph("humidity");
+    graphs["wind"] = setupGraph("wind");
+    graphs["direction"] = setupGraph("direction");
+    graphs["sunshine"] = setupGraph("sunshine");
+    graphs["rainfall"] = setupGraph("rainfall");
+    graphs["pressure"] = setupGraph("pressure");
+    graphs["soil"] = setupGraph("soil");
+
+    updateData(true);
+});
+            
 function setupGraph(graph) {
     var options = {
-        showPoint: false, lineSmooth: false, height: 400,
+        showPoint: false, lineSmooth: false, height: 500,
 
         axisY: {
             offset: 38,
@@ -115,26 +138,6 @@ function loadGraphData(graph, fields) {
             isLoading = false; graphsLoaded = 0;
         }
     });
-}
-
-function toggleGraph(graph, fields, button) {
-    if (isLoading == true) { return; }
-    
-    if (button.innerHTML == "-") {
-        document.getElementById("graph_" + graph).style.display = "none";
-
-        var options = graphs[graph].options;
-        delete options.axisX.low; delete options.axisX.high;
-        graphs[graph].update({ series: null }, options);
-        
-        button.innerHTML = "+";
-        openGraphs.splice(openGraphs.indexOf(graph), 1);
-
-    } else {
-        button.innerHTML = "-";
-        openGraphs.push(graph);
-        loadGraphData(graph, fields);
-    }
 }
 
 function scrollerLeft() {

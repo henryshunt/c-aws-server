@@ -25,73 +25,61 @@
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/global.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/global.js" type="text/javascript"></script>
+        <link href="resources/styles/defaults.css" rel="stylesheet" type="text/css">
+        <script src="resources/scripts/helpers.js" type="text/javascript"></script>
         <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+
+        <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/moment.js" type="text/javascript"></script>
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
+        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
+        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/page-camera.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-camera.js" type="text/javascript"></script>
 
         <script>
-            const awsTimeZone
-                = "<?php echo $config->get_aws_time_zone(); ?>";
-
-            var isLoading = true;
-            var datePicker = null;
-            var requestedTime = null;
-            var updaterTimeout = null;
-
-            $(document).ready(function() {
-                updateData(true, false);
-            });
+            const awsTimeZone = "<?php echo $config->get_aws_time_zone(); ?>";
         </script>
     </head>
 
     <body>
-        <div id="header">
-            <div id="header_items">
-                <h1 id="header_left"><?php echo $config->get_aws_name(); ?></h1>
-                <h2 id="header_right">C - AWS</h2>
+        <div class="header">
+            <div class="titles">
+                <h1><?php echo $config->get_aws_name(); ?></h1>
+                <h2>C - AWS</h2>
             </div>
 
-            <div id="menu">
-                <div id="menu_items">
-                    <div>
-                        <a class="menu_item" href=".">Now</a>
-                        <a class="menu_item" href="statistics.php">Statistics</a>
-                        <a class="menu_item" id="ami" href="camera.php">Camera</a>
-                        <span>|</span>
-    
-                        <span>Graph:</span>
-                        <a class="menu_item" href="graph-day.php">Day</a>
-                        <a class="menu_item" href="graph-year.php">Year</a>
-    
-                        <span>|</span>
-                        <a class="menu_item" href="climate.php">Climate</a>
-                        <a class="menu_item" href="station.php">Station</a>
-                    </div>
+            <div class="menu">
+                <div>
+                    <a href=".">Now</a>
+                    <a href="statistics.php">Statistics</a>
+                    <a class="ami" href="camera.php">Camera</a>
+                    <span>|</span>
 
+                    <span>Graph:</span>
+                    <a href="graph-day.php">Day</a>
+                    <a href="graph-year.php">Year</a>
+                    <span>|</span>
+
+                    <a href="climate.php">Climate</a>
+                    <a href="station.php">Station</a>
+                    
                     <span><?php echo $scope; ?></span>
                 </div>
             </div>
         </div>
 
-        <div id="main">
-            <div class="group" id="scroller">
-                <div id="scroller_left" class="scroller_button" onclick="scrollerLeft()">
-                    <svg width="20" height="20" viewBox="0 0 512 512">
-                        <polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256"/>
-                    </svg>
+        <div class="main">
+            <div class="group g_scroller">
+                <div class="scroller_button" onclick="scrollerLeft()">
+                    <i class="material-icons">chevron_left</i>
                 </div>
-
-                <div><p id="scroller_time" onclick="openPicker()" style="cursor: pointer; text-decoration: underline"></p></div>
-
-                <div id="scroller_right" class="scroller_button" onclick="scrollerRight()">
-                    <svg width="20" height="20" viewBox="0 0 512 512">
-                        <polygon points="160,128.4 192.3,96 352,256 352,256 352,256 192.3,416 160,383.6 287.3,256"/>
-                    </svg>
+                <div class="scroller_time">
+                    <p id="scroller_time" class="st_picker" onclick="openPicker()"></p>
+                </div>
+                <div class="scroller_button" onclick="scrollerRight()">
+                    <i class="material-icons">chevron_right</i>
                 </div>
             </div>
 
@@ -102,22 +90,22 @@
 
                 <table class="field_table">
                     <tr>
-                        <td><p class="field_label">Today's Sunrise:</p></td>
+                        <td><p class="field_label">Time of Sunrise:</p></td>
                         <td><p id="item_SRis" class="field_value"></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label">Today's Sunset:</p></td>
+                        <td><p class="field_label">Time of Sunset:</p></td>
                         <td><p id="item_SSet" class="field_value"></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label" style="margin-top: 10px">Today's Solar Noon:</p></td>
+                        <td><p class="field_label" style="margin-top: 10px">Time of Solar Noon:</p></td>
                         <td><p id="item_Noon" class="field_value" style="margin-top: 10px"></p></td>
                     </tr>
                 </table>
             </div>
 
-            <div id="img_container">
-                <p id="img_loading">Loading Image...</p>
+            <div class="image_group">
+                <p>Loading Image...</p>
                 <img id="item_CImg"
                     src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
             </div>
