@@ -1,35 +1,48 @@
 var isLoading = true;
 var requestedTime = null;
-var graphs = { "temperature": null, "humidity": null, "wind": null,
-    "direction": null, "sunshine": null, "rainfall": null,
-    "pressure": null, "soil": null };
+
+var graphs = {
+    "temperature": null, "humidity": null, "wind": null, "direction": null,
+    "sunshine": null, "rainfall": null, "pressure": null, "soil": null
+};
+var graphFields = {
+    "temperature": "AirT_Avg,AirT_Min,AirT_Max",
+    "humidity": "RelH_Avg,RelH_Min,RelH_Max", "wind": "WSpd_Avg,WGst_Max",
+    "direction": "WDir_Avg", "sunshine": "SunD_Ttl", "rainfall": "Rain_Ttl",
+    "pressure": "MSLP_Avg,MSLP_Min,MSLP_Max",
+    "soil": "ST10_Avg,ST30_Avg,ST00_Avg"
+};
+
 var openGraphs = ["temperature"];
 var graphsLoaded = 0;
 
 $(document).ready(function() {
-    graphs["temperature"] = setupGraph("temperature");
-    graphs["humidity"] = setupGraph("humidity");
-    graphs["wind"] = setupGraph("wind");
-    graphs["direction"] = setupGraph("direction");
-    graphs["sunshine"] = setupGraph("sunshine");
-    graphs["rainfall"] = setupGraph("rainfall");
-    graphs["pressure"] = setupGraph("pressure");
-    graphs["soil"] = setupGraph("soil");
+    graphs["temperature"] = setUpGraph("temperature");
+    graphs["humidity"] = setUpGraph("humidity");
+    graphs["wind"] = setUpGraph("wind");
+    graphs["direction"] = setUpGraph("direction");
+    graphs["sunshine"] = setUpGraph("sunshine");
+    graphs["rainfall"] = setUpGraph("rainfall");
+    graphs["pressure"] = setUpGraph("pressure");
+    graphs["soil"] = setUpGraph("soil");
 
-    updateData(true);
+    isLoading = true;
+    requestedTime = moment().utc().millisecond(0).second(0);
+    getAndProcessData(true);
 });
 
-function setupGraph(graph) {
+
+function setUpGraph(graph) {
     var options = {
-        showPoint: false, lineSmooth: false, height: 500,
+        showPoint: false, lineSmooth: false, height: 400,
 
         axisY: {
             offset: 38,
             labelInterpolationFnc: function(value) {
-                if (graph == "direction") { return roundPlaces(value, 0); }
-                else if (graph == "sunshine") { return roundPlaces(value, 2); }
-                else if (graph == "rainfall") { return roundPlaces(value, 2); }
-                else { return roundPlaces(value, 1); }
+                if (graph === "direction") return roundPlaces(value, 0);
+                else if (graph === "sunshine") return roundPlaces(value, 2);
+                else if (graph === "rainfall") return roundPlaces(value, 2);
+                else return roundPlaces(value, 1);
             }
         },
 
@@ -41,118 +54,110 @@ function setupGraph(graph) {
         }
     };
 
-    if (graph == "direction") {
+    if (graph === "direction") {
         options.axisY.type = Chartist.FixedScaleAxis;
         options.axisY.divisor = 8;
-        options.axisY.low = 0; options.axisY.high = 360;
-        options.showPoint = true; options.showLine = false;
+        options.axisY.low = 0;
+        options.axisY.high = 360;
+        options.showPoint = true;
+        options.showLine = false;
     }
 
-    if (graph == "sunshine" || graph == "rainfall") {
+    if (graph === "sunshine" || graph === "rainfall")
         return new Chartist.Bar("#graph_" + graph, null, options);
-    } else { return new Chartist.Line("#graph_" + graph, null, options); }
+    else return new Chartist.Line("#graph_" + graph, null, options);
 }
 
-function updateData(setTime) {
-    isLoading = true;
-    getAndProcessData(setTime);
-}
-
-function getAndProcessData(setTime) {
-    if (setTime == true) {
-        requestedTime = moment().utc().millisecond(0).second(0);
-    }; graphsLoaded = 0;
+function getAndProcessData() {
+    graphsLoaded = 0;
 
     document.getElementById("scroller_time").innerHTML
         = moment(requestedTime).tz(
         awsTimeZone).format("[Year Ending] DD/MM/YYYY");
 
-    if ($.inArray("temperature", openGraphs) != -1)
-    { loadGraphData("temperature", "AirT_Avg,AirT_Min,AirT_Max"); }
-    if ($.inArray("humidity", openGraphs) != -1)
-    { loadGraphData("humidity", "RelH_Avg,RelH_Min,RelH_Max"); }
-    if ($.inArray("wind", openGraphs) != -1)
-    { loadGraphData("wind", "WSpd_Avg,WGst_Max"); }
-    if ($.inArray("direction", openGraphs) != -1)
-    { loadGraphData("direction", "WDir_Avg"); }
-    if ($.inArray("sunshine", openGraphs) != -1)
-    { loadGraphData("sunshine", "SunD_Ttl"); }
-    if ($.inArray("rainfall", openGraphs) != -1)
-    { loadGraphData("rainfall", "Rain_Ttl"); }
-    if ($.inArray("pressure", openGraphs) != -1)
-    { loadGraphData("pressure", "MSLP_Avg,MSLP_Min,MSLP_Max"); }
-    if ($.inArray("soil", openGraphs) != -1)
-    { loadGraphData("soil", "ST10_Avg,ST30_Avg,ST00_Avg"); }
+    // Reload data for all open graphs
+    if ($.inArray("temperature", openGraphs) !== -1)
+        loadGraphData("temperature");
+    if ($.inArray("humidity", openGraphs) !== -1)
+        loadGraphData("humidity");
+    if ($.inArray("wind", openGraphs) !== -1)
+        loadGraphData("wind");
+    if ($.inArray("direction", openGraphs) !== -1)
+        loadGraphData("direction");
+    if ($.inArray("sunshine", openGraphs) !== -1)
+        loadGraphData("sunshine");
+    if ($.inArray("rainfall", openGraphs) !== -1)
+        loadGraphData("rainfall");
+    if ($.inArray("pressure", openGraphs) !== -1)
+        loadGraphData("pressure");
+    if ($.inArray("soil", openGraphs) !== -1)
+        loadGraphData("soil");
 
-    if ($.inArray("temperature", openGraphs) == -1 &&
-        $.inArray("humidity", openGraphs) == -1 &&
-        $.inArray("wind", openGraphs) == -1 &&
-        $.inArray("direction", openGraphs) == -1 &&
-        $.inArray("sunshine", openGraphs) == -1 &&
-        $.inArray("rainfall", openGraphs) == -1 &&
-        $.inArray("pressure", openGraphs) == -1 &&
-        $.inArray("soil", openGraphs) == -1) {
-        isLoading = false;
-    }
+    if (openGraphs.length === 0) isLoading = false;
 }
 
-function loadGraphData(graph, fields) {
+function loadGraphData(graph) {
     var url = "data/graph-year.php?time=" + requestedTime.format(
-        "YYYY-MM-DD[T]HH-mm-00") + "&fields=" + fields;
+        "YYYY-MM-DD[T]HH-mm-ss") + "&fields=" + graphFields[graph];
     
     var localTime = moment(requestedTime).tz(awsTimeZone);
     var xEnd = moment(localTime).hour(0).minute(0).unix();
-    var xStart = moment(localTime).subtract(365, "day").hour(0).minute(0).unix();
+    var xStart = moment(
+        localTime).subtract(365, "day").hour(0).minute(0).unix();
 
+    // Draw new graph
     $.getJSON(url, function(response) {
-        var options = graphs[graph].options;
-        options.axisX.low = xStart; options.axisX.high = xEnd;
-        document.getElementById("graph_" + graph).style.display = "block";
-        graphs[graph].update({ series: response }, options);
+        if (response !== "1") {
+            var options = graphs[graph].options;
+            options.axisX.low = xStart; options.axisX.high = xEnd;
+            document.getElementById("graph_" + graph).style.display = "block";
+            graphs[graph].update({ series: response }, options);
 
-        graphsLoaded += 1;
-        if (graphsLoaded == openGraphs.length) {
-            isLoading = false; graphsLoaded = 0;
-        }
+            graphsLoaded += 1;
+            if (graphsLoaded === openGraphs.length) {
+                isLoading = false;
+                graphsLoaded = 0;
+            }
+        } else requestError();
 
-    }).fail(function() {
+    }).fail(requestError = function() {
         var options = graphs[graph].options;
-        delete options.axisX.low; delete options.axisX.high;
+        delete options.axisX.low;
+        delete options.axisX.high;
         graphs[graph].update({ series: null }, options);
         
         graphsLoaded += 1;
-        if (graphsLoaded == openGraphs.length) {
-            isLoading = false; graphsLoaded = 0;
+        if (graphsLoaded === openGraphs.length) {
+            isLoading = false;
+            graphsLoaded = 0;
         }
     });
 }
 
 function scrollerLeft() {
-    if (isLoading == false) {
+    if (isLoading === false) {
+        isLoading = true;
         requestedTime.subtract(1, "months");
         scrollerChange();
     }
 }
 
 function scrollerRight() {
-    if (isLoading == false) {
+    if (isLoading === false) {
+        isLoading = true;
         requestedTime.add(1, "months");
         scrollerChange();
     }
 }
 
 function scrollerChange() {
+    // Clear and reset all open graphs
     for (var graph in graphs) {
         var options = graphs[graph].options;
-        delete options.axisX.low; delete options.axisX.high;
+        delete options.axisX.low;
+        delete options.axisX.high;
         graphs[graph].update({ series: null }, options);
     }
 
-    var utc = moment().utc().millisecond(0).second(0);
-    var localUtc = moment(utc).tz(awsTimeZone);
-    var localReq = moment(requestedTime).tz(awsTimeZone);
-
-    if (localUtc.format("DD/MM/YYYY") == localReq.format("DD/MM/YYYY")) {
-        updateData(true)
-    } else { updateData(false); }
+    getAndProcessData(false);
 }

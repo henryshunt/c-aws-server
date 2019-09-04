@@ -35,7 +35,7 @@
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
         <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">        
-        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/page-climate.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-climate.js" type="text/javascript"></script>
 
@@ -53,7 +53,7 @@
 
             <div class="menu">
                 <div>
-                    <a href=".">Now</a>
+                    <a href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
@@ -198,11 +198,8 @@
             </div>
 
             <div class="group">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('temperature', 'AirT_Avg,AirT_Min,AirT_Max', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">expand_more</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Air Temperature</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Air Temperature</p>
                     <span class="group_key">°C (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
@@ -210,11 +207,8 @@
             </div>
 
             <div class="group">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('humidity', 'RelH_Avg,RelH_Min,RelH_Max', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Relative Humidity</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Relative Humidity</p>
                     <span class="group_key">% (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
@@ -222,11 +216,8 @@
             </div>
 
             <div class="group">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('wind', 'WSpd_Avg,WGst_Max', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Wind Velocity</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Wind Velocity</p>
                     <span class="group_key">mph (<span>Average Speed</span>, <span>Maximum Gust</span>)</span>
                 </div>
 
@@ -234,11 +225,8 @@
             </div>
 
             <div class="group">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('sunshine', 'SunD_Ttl', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Sunshine Duration</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Sunshine Duration</p>
                     <span class="group_key">hrs (<span>Total</span>)</span>
                 </div>
 
@@ -246,11 +234,8 @@
             </div>
 
             <div class="group">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('rainfall', 'Rain_Ttl', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Rainfall</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Rainfall</p>
                     <span class="group_key">mm (<span>Total</span>)</span>
                 </div>
 
@@ -258,11 +243,8 @@
             </div>
 
             <div class="group g_last">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('soil', 'ST10_Avg,ST30_Avg,ST00_Avg', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title gt_collapsible">Soil Temperature</p>
+                <div class="group_header gh_no_separator">
+                    <p class="group_title">Soil Temperature</p>
                     <span class="group_key">°C (<span>10CM Average</span>, <span>30CM Average</span>, <span>1M Average</span>)</span>
                 </div>
 

@@ -51,7 +51,7 @@
 
             <div class="menu">
                 <div>
-                    <a class="ami" href=".">Now</a>
+                    <a class="ami" href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>

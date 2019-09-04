@@ -4,6 +4,24 @@ include_once("../routines/config.php");
 include_once("../routines/database.php");
 include_once("../routines/analysis.php");
 
+try {
+    $config = new Config("../config.ini");
+} catch (Exception $e) { exit("1"); }
+
+$db_conn = new_db_conn($config);
+if ($db_conn === false) exit("1");
+
+if (!isset($_GET["time"])) exit("1");
+
+try
+{
+    $url_time = date_create_from_format("Y-m-d\TH-i-s", $_GET["time"]);
+    $local_time = clone $url_time;
+    $local_time->setTimezone(
+        new DateTimeZone($config->get_aws_time_zone()));
+}
+catch (Exception $e) { exit("1"); }
+
 $data = array_fill_keys(["AirT_Avg_Year", "AirT_Min_Year",
     "AirT_Max_Year"], null);
 
@@ -24,36 +42,12 @@ $data["ST10_Avg_Month"] = $fill_value;
 $data["ST30_Avg_Month"] = $fill_value;
 $data["ST00_Avg_Month"] = $fill_value;
 
-try { $config = new Config("../config.ini"); }
-catch (Exception $e)
-{
-    echo json_encode($data);
-    exit(); 
-}
-
-$pdo = new_db_conn($config);
-if (!$pdo) { echo json_encode($data); exit(); }
-
-// Parse time specified in URL
-if (isset($_GET["time"]))
-{
-    try
-    {
-        $url_time = date_create_from_format(
-            "Y-m-d\TH-i-s", $_GET["time"]);
-
-        $local_time = clone $url_time;
-        $local_time->setTimezone(
-            new DateTimeZone($config->get_aws_time_zone()));
-    }
-    catch (Exception $e) { echo json_encode($data); exit(); }
-}
-else { echo json_encode($data); exit(); }
 
 // Get climate data for that year
-$result = stats_for_year($config, $pdo, $local_time->format("Y"));
+$result = stats_for_year($config, $db_conn, $local_time->format("Y"));
+if ($result === false) exit("1");
 
-if ($result !== false && $result !== NULL)
+if ($result !== NULL)
 {
     // Add record data to return data
     foreach ($result as $key => $value)
@@ -64,9 +58,10 @@ if ($result !== false && $result !== NULL)
 }
 
 // Get climate data for that year per month
-$result = stats_for_months($config, $pdo, $local_time->format("Y"));
+$result = stats_for_months($config, $db_conn, $local_time->format("Y"));
+if ($result === false) exit("1");
 
-if ($result !== false && $result !== NULL)
+if ($result !== NULL)
 {
     // Add record data to return data
     foreach ($result as $row)

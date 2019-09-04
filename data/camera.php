@@ -2,30 +2,23 @@
 date_default_timezone_set("UTC");
 include_once("../routines/config.php");
 
+try {
+    $config = new Config("../config.ini");
+} catch (Exception $e) { exit("1"); }
+
+if (!isset($_GET["time"])) exit("1");
+
+try
+{
+    $url_time = date_create_from_format("Y-m-d\TH-i-s", $_GET["time"]);
+    $local_time = clone $url_time;
+    $local_time->setTimezone(
+        new DateTimeZone($config->get_aws_time_zone()));
+}
+catch (Exception $e) { exit("1"); }
+
 $data = array_fill_keys(["Time", "CImg", "SRis", "SSet", "Noon"], null);
 
-try { $config = new Config("../config.ini"); }
-catch (Exception $e)
-{
-    echo json_encode($data);
-    exit(); 
-}
-
-// Parse time specified in URL
-if (isset($_GET["time"]))
-{
-    try
-    {
-        $url_time = date_create_from_format(
-            "Y-m-d\TH-i-s", $_GET["time"]);
-
-            $local_time = clone $url_time;
-            $local_time->setTimezone(
-                new DateTimeZone($config->get_aws_time_zone()));
-    }
-    catch (Exception $e) { echo json_encode($data); exit(); }
-}
-else { echo json_encode($data); exit(); }
 
 // Get image path for specified time
 $image_path = "camera/"
@@ -56,13 +49,11 @@ if ($solar_info["sunrise"] !== true && $solar_info["sunrise"] !== false)
     $sunrise = $solar_info["sunrise"];
     $data["SRis"] = (new DateTime("@$sunrise"))->format("Y-m-d H:i:s");
 }
-
 if ($solar_info["sunset"] !== true && $solar_info["sunset"] !== false)
 {
     $sunset = $solar_info["sunset"];
     $data["SSet"] = (new DateTime("@$sunset"))->format("Y-m-d H:i:s");
 }
-
 if ($solar_info["transit"] !== true && $solar_info["transit"] !== false)
 {
     $noon = $solar_info["transit"];

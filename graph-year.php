@@ -35,7 +35,7 @@
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
         <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-graph-year.js" type="text/javascript"></script>
 
         <script>
@@ -52,7 +52,7 @@
 
             <div class="menu">
                 <div>
-                    <a href=".">Now</a>
+                    <a href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('temperature', 'AirT_Avg,AirT_Min,AirT_Max', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('temperature', this)">
                     <div class="group_toggle">
                         <i class="material-icons">expand_more</i>
                     </div>
@@ -94,7 +94,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('humidity', 'RelH_Avg,RelH_Min,RelH_Max', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('humidity', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -106,7 +106,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('wind', 'WSpd_Avg,WGst_Max', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('wind', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -118,7 +118,7 @@
             </div>
             
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('direction', 'WDir_Avg', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('direction', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -130,7 +130,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('sunshine', 'SunD_Ttl', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('sunshine', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -142,7 +142,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('rainfall', 'Rain_Ttl', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('rainfall', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -154,7 +154,7 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('pressure', 'MSLP_Avg,MSLP_Min,MSLP_Max', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('pressure', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
@@ -166,7 +166,7 @@
             </div>
 
             <div class="group g_wide g_last">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('soil', 'ST10_Avg,ST30_Avg,ST00_Avg', this)">
+                <div class="group_header gh_no_separator" onclick="toggleGraph('soil', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>

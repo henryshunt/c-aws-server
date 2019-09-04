@@ -4,42 +4,30 @@ include_once("../routines/config.php");
 include_once("../routines/database.php");
 include_once("../routines/analysis.php");
 
-$data = [];
+try {
+    $config = new Config("../config.ini");
+} catch (Exception $e) { exit("1"); }
 
-try { $config = new Config("../config.ini"); }
-catch (Exception $e)
+$db_conn = new_db_conn($config);
+if ($db_conn === false) exit("1");
+
+if (!isset($_GET["time"])) exit("1");
+if (!isset($_GET["fields"])) exit("1");
+
+try
 {
-    echo json_encode($data);
-    exit(); 
+    $url_time = date_create_from_format("Y-m-d\TH-i-s", $_GET["time"]);
+    $local_time = clone $url_time;
+    $local_time->setTimezone(
+        new DateTimeZone($config->get_aws_time_zone()));
 }
-
-$pdo = new_db_conn($config);
-if (!$pdo) { echo json_encode($data); exit(); }
-
-// Parse time specified in URL
-if (isset($_GET["time"]))
-{
-    try
-    {
-        $url_time = date_create_from_format(
-            "Y-m-d\TH-i-s", $_GET["time"]);
-
-        $local_time = clone $url_time;
-        $local_time->setTimezone(
-            new DateTimeZone($config->get_aws_time_zone()));
-    }
-    catch (Exception $e) { echo json_encode($data); exit(); }
-}
-else { echo json_encode($data); exit(); }
+catch (Exception $e) { exit("1"); }
 
 // Validate fields specified in URL
-if (isset($_GET["fields"]))
-{
-    if (!preg_match("/^[a-zA-Z0-9,_]+$/", $_GET["fields"])) {
-        echo json_encode($data); exit();
-    }
-}
-else { echo json_encode($data); exit(); }
+if (!preg_match("/^[a-zA-Z0-9,_]+$/", $_GET["fields"])) exit("1");
+
+$data = [];
+
 
 $range_start = clone $local_time;
 $range_start->sub(new DateInterval("PT6H"));
@@ -47,10 +35,11 @@ $range_start->setTimezone(new DateTimeZone("UTC"));
 $range_end = clone $url_time;
 
 // Get data in range for specified parameters
-$result = fields_in_range($pdo, $range_start,
+$result = fields_in_range($db_conn, $range_start,
     $range_end, "Time," . $_GET["fields"], DbTable::ENVREPORTS);
+if ($result === false) exit("1");
 
-if ($result !== false && $result !== NULL)
+if ($result !== NULL)
 {
     // Fill return data with empty array for each field
     $fields = explode(",", $_GET["fields"]);

@@ -7,11 +7,13 @@ $(document).ready(function() {
     updateData(true, false);
 });
 
+
 function updateData(restartTimers, absolute) {
     isLoading = true;
     clearTimeout(updaterTimeout);
 
-    if (restartTimers == true) {
+    // Create new timeout to handle next refresh
+    if (restartTimers === true) {
         updaterTimeout = setInterval(function() {
             updateData(true, false);
         }, 60000);
@@ -21,13 +23,12 @@ function updateData(restartTimers, absolute) {
 }
 
 function getAndProcessData(setTime, absolute) {
-    if (setTime == true) {
+    if (setTime === true)
         requestedTime = moment().utc().millisecond(0).second(0);
-    }
 
-    var url = "data/now.php?time=" + requestedTime.format(
-        "YYYY-MM-DD[T]HH-mm-00");
-    if (absolute == true) { url += "&abs=1"; }
+    var url = "data/reports.php?time=" + requestedTime.format(
+        "YYYY-MM-DD[T]HH-mm-ss");
+    if (absolute === true) url += "&abs=1";
 
     $.ajax({
         dataType: "json", url: url,
@@ -61,68 +62,63 @@ function getAndProcessData(setTime, absolute) {
 }
 
 function processData(data) {
-    if (data["Time"] == null) {
-        requestError();
-        return;
-    }
-    
-    var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
-    var localTime = moment(utc).tz(awsTimeZone);
+    if (data !== "1") {
+        var utc = moment.utc(data["Time"], "YYYY-MM-DD HH:mm:ss");
+        var localTime = moment(utc).tz(awsTimeZone);
 
-    document.getElementById("scroller_time").innerHTML
-        = localTime.format("DD/MM/YYYY [at] HH:mm");
+        document.getElementById("scroller_time").innerHTML
+            = localTime.format("DD/MM/YYYY [at] HH:mm");
 
-    requestedTime = moment(utc);
-    displayValue(data["AirT"], "item_AirT", "°C", 1);
-    displayValue(data["ExpT"], "item_ExpT", "°C", 1);
-    displayValue(data["RelH"], "item_RelH", "%", 1);
-    displayValue(data["DewP"], "item_DewP", "°C", 1);
-    displayValue(data["WSpd"], "item_WSpd", " mph", 1);
+        requestedTime = moment(utc);
+        displayValue(data["AirT"], "item_AirT", "°C", 1);
+        displayValue(data["ExpT"], "item_ExpT", "°C", 1);
+        displayValue(data["RelH"], "item_RelH", "%", 1);
+        displayValue(data["DewP"], "item_DewP", "°C", 1);
+        displayValue(data["WSpd"], "item_WSpd", " mph", 1);
 
-    if (data["WDir"] != null) {
-        var formatted = roundPlaces(data["WDir"], 0)
-            + "° (" + degreesToCompass(data["WDir"]) + ")"
-        document.getElementById("item_WDir").innerHTML = formatted;
-    } else { document.getElementById("item_WDir").innerHTML = "No Data"; }
+        if (data["WDir"] !== null) {
+            var formatted = roundPlaces(data["WDir"], 0)
+                + "° (" + degreesToCompass(data["WDir"]) + ")"
+            document.getElementById("item_WDir").innerHTML = formatted;
+        } else document.getElementById("item_WDir").innerHTML = "No Data";
 
-    displayValue(data["WGst"], "item_WGst", " mph", 1);
-    displayValue(data["SunD"], "item_SunD", " sec", 0);
+        displayValue(data["WGst"], "item_WGst", " mph", 1);
+        displayValue(data["SunD"], "item_SunD", " sec", 0);
 
-    if (data["SunD_PHr"] != null) {
-        var formatted = moment.utc(data["SunD_PHr"] * 1000).format("HH:mm:ss");
-        document.getElementById("item_SunD_PHr").innerHTML = formatted;
-    } else { document.getElementById("item_SunD_PHr").innerHTML = "No Data"; }
+        if (data["SunD_PHr"] !== null) {
+            var formatted = moment.utc(data["SunD_PHr"] * 1000).format("HH:mm:ss");
+            document.getElementById("item_SunD_PHr").innerHTML = formatted;
+        } else document.getElementById("item_SunD_PHr").innerHTML = "No Data";
 
-    displayValue(data["Rain"], "item_Rain", " mm", 2);
-    displayValue(data["Rain_PHr"], "item_Rain_PHr", " mm", 2);
-    displayValue(data["StaP"], "item_StaP", " hPa", 1);
-    displayValue(data["MSLP"], "item_MSLP", " hPa", 1);
-    
-    if (data["StaP_PTH"] != null) {
-         var formatted = roundPlaces(data["StaP_PTH"], 1) + " hpa";
-         if (data["StaP_PTH"] > 0) { formatted = "+" + formatted; }
-         document.getElementById("item_StaP_PTH").innerHTML = formatted;
-    } else { document.getElementById("item_StaP_PTH").innerHTML = "No Data"; }
-    
-    displayValue(data["ST10"], "item_ST10", "°C", 1);
-    displayValue(data["ST30"], "item_ST30", "°C", 1);
-    displayValue(data["ST00"], "item_ST00", "°C", 1);
-    isLoading = false;
+        displayValue(data["Rain"], "item_Rain", " mm", 2);
+        displayValue(data["Rain_PHr"], "item_Rain_PHr", " mm", 2);
+        displayValue(data["StaP"], "item_StaP", " hPa", 1);
+        displayValue(data["MSLP"], "item_MSLP", " hPa", 1);
+        
+        if (data["StaP_PTH"] !== null) {
+            var formatted = roundPlaces(data["StaP_PTH"], 1) + " hpa";
+            if (data["StaP_PTH"] > 0) formatted = "+" + formatted;
+            document.getElementById("item_StaP_PTH").innerHTML = formatted;
+        } else document.getElementById("item_StaP_PTH").innerHTML = "No Data";
+        
+        displayValue(data["ST10"], "item_ST10", "°C", 1);
+        displayValue(data["ST30"], "item_ST30", "°C", 1);
+        displayValue(data["ST00"], "item_ST00", "°C", 1);
+        isLoading = false;
+    } else requestError();
 }
 
 function scrollerLeft() {
-    if (datePicker != null) { datePicker.close(); }
-
-    if (isLoading == false) {
+    if (datePicker !== null) datePicker.close();
+    if (isLoading === false) {
         requestedTime.subtract(5, "minutes");
         scrollerChange();
     }
 }
 
 function scrollerRight() {
-    if (datePicker != null) { datePicker.close(); }
-
-    if (isLoading == false) {
+    if (datePicker !== null) datePicker.close();
+    if (isLoading === false) {
         requestedTime.add(5, "minutes");
         scrollerChange();
     }
@@ -131,39 +127,49 @@ function scrollerRight() {
 function scrollerChange() {
     var utc = moment().utc().millisecond(0).second(0);
 
-    if (utc.toString() == requestedTime.toString()) {
-        updateData(true, true)
-    } else { updateData(false, true); }
+    // If at current time then load absolute record and restart timers
+    if (utc.toString() === requestedTime.toString())
+        updateData(true, true);
+    else updateData(false, true);
 }
 
 function openPicker() {
-    if (datePicker == null) {
-        if (requestedTime != null && isLoading == false) {
+    if (datePicker === null) {
+        if (requestedTime !== null && isLoading === false) {
             var localTime = moment(requestedTime).tz(awsTimeZone);
-            var initTime = new Date(localTime.get("year"), localTime.get("month"),
-                localTime.get("date"), localTime.get("hour"), localTime.get("minute"), 0);
+            var initTime = new Date(localTime.get("year"),
+                localTime.get("month"), localTime.get("date"),
+                localTime.get("hour"), localTime.get("minute"), 0);
 
             datePicker = flatpickr("#scroller_time", {
-                enableTime: true, time_24hr: true, defaultDate: initTime, disableMobile: true,
-                onClose: function() { datePicker.destroy(); datePicker = null; }
+                enableTime: true, time_24hr: true, defaultDate: initTime,
+                disableMobile: true,
+
+                onClose: function() {
+                    datePicker.destroy();
+                    datePicker = null;
+                }
             });
             
             datePicker.open();
         }
-    } else { datePicker.close(); }
+    } else datePicker.close();
 }
 
 function pickerSubmit() {
     var selTime = datePicker.selectedDates[0];
     selTime = moment.utc({
-        year: selTime.getUTCFullYear(), month: selTime.getUTCMonth(), day: 
-        selTime.getUTCDate(), hour: selTime.getUTCHours(), minute:
-        selTime.getUTCMinutes(), second: 0 });
+        year: selTime.getUTCFullYear(), month: selTime.getUTCMonth(),
+        day: selTime.getUTCDate(), hour: selTime.getUTCHours(),
+        minute: selTime.getUTCMinutes(), second: 0 });
 
-    if (selTime.toString() != requestedTime.toString()) {
+    // Submit if selected time different from currently loaded time
+    if (selTime.toString() !== requestedTime.toString()) {
         requestedTime = moment(selTime);
         scrollerChange();
-    }; datePicker.close();  
+    }
+    
+    datePicker.close();  
 }
 
 function pickerCancel() {

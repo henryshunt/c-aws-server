@@ -52,7 +52,7 @@
 
             <div class="menu">
                 <div>
-                    <a href=".">Now</a>
+                    <a href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a class="ami" href="camera.php">Camera</a>
                     <span>|</span>

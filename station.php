@@ -37,7 +37,7 @@
         <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
         <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/graphs.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-station.js" type="text/javascript"></script>
 
         <script>
@@ -54,7 +54,7 @@
 
             <div class="menu">
                 <div>
-                    <a href=".">Now</a>
+                    <a href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
