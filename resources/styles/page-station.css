@@ -1,0 +1,6 @@
+.main > :nth-child(3) > :last-child {
+    margin-top: -10px;
+}
+.main > :last-child {
+    margin-top: 15px;
+}

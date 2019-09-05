@@ -1,6 +1,9 @@
 .ct-chart {
     display: none;
 }
+.g_open {
+    display: block;
+}
 
 .ct-label.ct-vertical.ct-start {
     transform: translateY(6px);

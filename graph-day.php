@@ -36,7 +36,7 @@
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
-        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-graph-day.js" type="text/javascript"></script>
 
@@ -78,7 +78,7 @@
                     <i class="material-icons">chevron_left</i>
                 </div>
                 <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="openPicker()"></p>
+                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
                 </div>
                 <div class="scroller_button" onclick="scrollerRight()">
                     <i class="material-icons">chevron_right</i>
@@ -86,23 +86,23 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('temperature', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('temperature', this)">
                     <div class="group_toggle">
                         <i class="material-icons">expand_more</i>
                     </div>
-                    <p class="group_title gt_collapsible">Ambient Temperature</p>
+                    <p class="group_title">Ambient Temperature</p>
                     <span class="group_key">°C (<span>Air Temp</span>, <span>Exposed Temp</span>, <span>Dew Point</span>)</span>
                 </div>
 
-                <div id="graph_temperature" class="ct-chart"></div>
+                <div id="graph_temperature" class="ct-chart g_open"></div>
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('humidity', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('humidity', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Relative Humidity</p>
+                    <p class="group_title">Relative Humidity</p>
                     <span class="group_key">% (<span>Relative Humidity</span>)</span>
                 </div>
 
@@ -110,11 +110,11 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('wind', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('wind', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Wind Velocity</p>
+                    <p class="group_title">Wind Velocity</p>
                     <span class="group_key">mph (<span>Wind Speed</span>, <span>Wind Gust</span>)</span>
                 </div>
 
@@ -122,11 +122,11 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('direction', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('direction', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Wind Direction</p>
+                    <p class="group_title">Wind Direction</p>
                     <span class="group_key">° (<span>Wind Direction</span>)</span>
                 </div>
 
@@ -134,11 +134,11 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('sunshine', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('sunshine', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Sunshine Duration</p>
+                    <p class="group_title">Sunshine Duration</p>
                     <span class="group_key">hrs (<span>Accumulation</span>)</span>
                 </div>
 
@@ -146,11 +146,11 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('rainfall', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('rainfall', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Rainfall</p>
+                    <p class="group_title">Rainfall</p>
                     <span class="group_key">mm (<span>Accumulation</span>)</span>
                 </div>
 
@@ -158,11 +158,11 @@
             </div>
 
             <div class="group g_wide">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('pressure', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('pressure', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Mean Sea Level Pressure</p>
+                    <p class="group_title">Mean Sea Level Pressure</p>
                     <span class="group_key">hPa (<span>Mean Sea Level Pressure</span>)</span>
                 </div>
 
@@ -170,11 +170,11 @@
             </div>
 
             <div class="group g_wide g_last">
-                <div class="group_header gh_no_separator" onclick="toggleGraph('soil', this)">
+                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('soil', this)">
                     <div class="group_toggle">
                         <i class="material-icons">chevron_right</i>
                     </div>
-                    <p class="group_title gt_collapsible">Soil Temperature</p>
+                    <p class="group_title">Soil Temperature</p>
                     <span class="group_key">°C (<span>10CM</span>, <span>30CM</span>, <span>1M</span>)</span>
                 </div>
 

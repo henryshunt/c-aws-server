@@ -19,6 +19,9 @@
 .gh_no_separator {
     border-bottom: initial !important;
 }
+.gh_collapsible {
+    cursor: pointer;
+}
 .group_header:last-child {
     float: right;
 }
@@ -28,9 +31,6 @@
     margin-top: 3px;
     margin-left: 10px;
     display: inline-block;
-}
-.gt_collapsible {
-    cursor: pointer;
 }
 
 .group_key {
@@ -102,6 +102,9 @@
     width: 100%;
     margin-top: 12px;
     margin-bottom: 12px;
+}
+.ft_section {
+    margin-top: 10px;
 }
 .field_label {
     margin-left: 35px;

@@ -1,0 +1,10 @@
+.field_table > tbody > tr > :first-child {
+    width: 45%;
+}
+.field_table > tbody > tr > :last-child > table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.field_table > tbody > tr > :last-child > table td {
+    width: 33.3%;
+}

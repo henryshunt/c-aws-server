@@ -34,7 +34,7 @@
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
         <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/page-camera.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-camera.js" type="text/javascript"></script>
 
@@ -76,7 +76,7 @@
                     <i class="material-icons">chevron_left</i>
                 </div>
                 <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="openPicker()"></p>
+                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
                 </div>
                 <div class="scroller_button" onclick="scrollerRight()">
                     <i class="material-icons">chevron_right</i>

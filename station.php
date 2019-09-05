@@ -36,8 +36,9 @@
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
         <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/page-station.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-station.js" type="text/javascript"></script>
 
         <script>
@@ -78,7 +79,7 @@
                     <i class="material-icons">chevron_left</i>
                 </div>
                 <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="openPicker()"></p>
+                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
                 </div>
                 <div class="scroller_button" onclick="scrollerRight()">
                     <i class="material-icons">chevron_right</i>
@@ -135,7 +136,7 @@
                     </tr>
                 </table>
 
-                <div id="graph_temperature" class="ct-chart" style="margin-top: -10px"></div>
+                <div id="graph_temperature" class="ct-chart g_open"></div>
             </div>
 
             <?php
@@ -177,26 +178,38 @@
                         } else $camera_drive_space = "No Data";
                     }
 
-                    echo "<div class=\"group g_last\" style=\"margin-top: 15px\">"
-                         . "<div class=\"group_header\">"
-                         . "<p class=\"group_title\">Station Computer</p></div>"
-                         . "<table class=\"field_table\">"
-                         . "<tr><td><p class=\"field_label\">System Start Time:</p></td>"
-                         . "<td><p class=\"field_value\">" . $startup_time . "</p></td></tr>"
-                         . "<tr><td><p class=\"field_label\" style=\"margin-top: 10px\">"
-                         . "Internal Drive Remaining Space:</p></td>"
-                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">"
-                         . $internal_drive_space . "</p></td></tr>"
-                         . "<tr><td><p class=\"field_label\">Camera Drive Remaining Space:</p></td>"
-                         . "<td><p class=\"field_value\">" . $camera_drive_space . "</p></td></tr>"
-                         . "<tr><td><p class=\"field_label\" style=\"margin-top: 10px\">"
-                         . "Shutdown Station Computer:</p></td>"
-                         . "<td><p class=\"field_value\" style=\"margin-top: 10px\">"
-                         . "<button onclick=\"send_command('shutdown')\">Send Command</button></p></td>"
-                         . "</tr><tr><td><p class=\"field_label\">Restart Station Computer:</p></td>"
-                         . "<td><p class=\"field_value\">"
-                         . "<button onclick=\"send_command('restart')\">Send Command</button></p></td>"
-                         . "</tr></table></div>";
+                    echo "<div class='group g_last'>"
+                        . "<div class='group_header'>"
+                            . "<p class='group_title'>Station Computer</p>"
+                        . "</div>"
+                        . "<table class='field_table'>"
+                            . "<tr>"
+                            . "<td><p class='field_label'>System Start Time:</p></td>"
+                            . "<td><p class='field_value'>" . $startup_time . "</p></td>"
+                            . "</tr>"
+                            . "<tr>"
+                            . "<td><p class='field_label ft_section'>Internal Drive Remaining Space:</p></td>"
+                            . "<td><p class='field_value ft_section'>" . $internal_drive_space . "</p></td>"
+                            . "</tr>"
+                            . "<tr>"
+                            . "<td><p class='field_label'>Camera Drive Remaining Space:</p></td>"
+                            . "<td><p class='field_value'>" . $camera_drive_space . "</p></td>"
+                            . "</tr>"
+                            . "<tr>"
+                            . "<td><p class='field_label ft_section'>Shutdown Station Computer:</p></td>"
+                            . "<td>"
+                                . "<p class='field_value ft_section'>"
+                                . "<button onclick=\"send_command('shutdown')\">Send Command</button></p>"
+                            . "</td>"
+                            . "</tr>"
+                            . "<tr>"
+                            . "<td><p class='field_label'>Restart Station Computer:</p></td>"
+                            . "<td>"
+                                . "<p class='field_value'>"
+                                . "<button onclick=\"send_command('restart')\">Send Command</button></p></td>"
+                            . "</tr>"
+                        . "</table>"
+                        . "</div>";
                 }
             ?>
         </div>

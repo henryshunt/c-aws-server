@@ -34,7 +34,7 @@
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
         <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">
+        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-index.js" type="text/javascript"></script>
 
         <script>
@@ -75,7 +75,7 @@
                     <i class="material-icons">chevron_left</i>
                 </div>
                 <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="openPicker()"></p>
+                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
                 </div>
                 <div class="scroller_button" onclick="scrollerRight()">
                     <i class="material-icons">chevron_right</i>
@@ -131,8 +131,8 @@
                         <td><p id="item_WDir" class="field_value"></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label" style="margin-top: 10px">Wind Gust:</p></td>
-                        <td><p id="item_WGst" class="field_value" style="margin-top: 10px"></p></td>
+                        <td><p class="field_label ft_section">Wind Gust:</p></td>
+                        <td><p id="item_WGst" class="field_value ft_section"></p></td>
                     </tr>
                 </table>
             </div>
@@ -186,8 +186,8 @@
                         <td><p id="item_MSLP" class="field_value"></p></td>
                     </tr>
                     <tr>
-                        <td><p class="field_label" style="margin-top: 10px">3-Hour Pressure Tendency:</p></td>
-                        <td><p id="item_StaP_PTH" class="field_value" style="margin-top: 10px"></p></td>
+                        <td><p class="field_label ft_section">3-Hour Pressure Tendency:</p></td>
+                        <td><p id="item_StaP_PTH" class="field_value ft_section"></p></td>
                     </tr>
                 </table>
             </div>

@@ -35,21 +35,35 @@ function roundPlaces(value, places) {
 function toggleGraph(graph, button) {
     if (isLoading === true) return;
 
+    // Graph collapsed
     if (button.children[0].children[0].innerHTML === "expand_more") {
-        document.getElementById("graph_" + graph).style.display = "none";
-
-        // Clear and reset graph
-        var options = graphs[graph].options;
-        delete options.axisX.low;
-        delete options.axisX.high;
-        graphs[graph].update({ series: null }, options);
-
         button.children[0].children[0].innerHTML = "chevron_right";
+        document.getElementById("graph_" + graph).style.display = "none";
         openGraphs.splice(openGraphs.indexOf(graph), 1);
 
     } else {
         button.children[0].children[0].innerHTML = "expand_more";
-        openGraphs.push(graph);
-        loadGraphData(graph);
+        document.getElementById("graph_" + graph).style.display = "block";
+        loadGraphData(graph, false);
+    }
+}
+
+function graphHeightCheck() {
+    if (typeof openGraphs === "undefined")
+        var _openGraphs = Object.keys(graphs);
+    else var _openGraphs = openGraphs;
+
+    if ($(".main").width() > 1050) {
+        for (var i = 0; i < _openGraphs.length; i++) {
+            var options = graphs[_openGraphs[i]].options;
+            options.height = 500;
+            graphs[_openGraphs[i]].update(null, options);
+        }
+    } else {
+        for (var i = 0; i < _openGraphs.length; i++) {
+            var options = graphs[_openGraphs[i]].options;
+            options.height = 400;
+            graphs[_openGraphs[i]].update(null, options);
+        }
     }
 }

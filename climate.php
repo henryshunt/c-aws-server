@@ -34,7 +34,7 @@
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
-        <link href="resources/styles/groups.css" rel="stylesheet" type="text/css">        
+        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">        
         <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
         <link href="resources/styles/page-climate.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/page-climate.js" type="text/javascript"></script>
@@ -203,7 +203,7 @@
                     <span class="group_key">°C (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
-                <div id="graph_temperature" class="ct-chart"></div>
+                <div id="graph_temperature" class="ct-chart g_open"></div>
             </div>
 
             <div class="group">
@@ -212,7 +212,7 @@
                     <span class="group_key">% (<span>Average</span>, <span>Minimum</span>, <span>Maximum</span>)</span>
                 </div>
 
-                <div id="graph_humidity" class="ct-chart"></div>
+                <div id="graph_humidity" class="ct-chart  g_open"></div>
             </div>
 
             <div class="group">
@@ -221,7 +221,7 @@
                     <span class="group_key">mph (<span>Average Speed</span>, <span>Maximum Gust</span>)</span>
                 </div>
 
-                <div id="graph_wind" class="ct-chart"></div>
+                <div id="graph_wind" class="ct-chart g_open"></div>
             </div>
 
             <div class="group">
@@ -230,7 +230,7 @@
                     <span class="group_key">hrs (<span>Total</span>)</span>
                 </div>
 
-                <div id="graph_sunshine" class="ct-chart"></div>
+                <div id="graph_sunshine" class="ct-chart g_open"></div>
             </div>
 
             <div class="group">
@@ -239,7 +239,7 @@
                     <span class="group_key">mm (<span>Total</span>)</span>
                 </div>
 
-                <div id="graph_rainfall" class="ct-chart"></div>
+                <div id="graph_rainfall" class="ct-chart g_open"></div>
             </div>
 
             <div class="group g_last">
@@ -248,7 +248,7 @@
                     <span class="group_key">°C (<span>10CM Average</span>, <span>30CM Average</span>, <span>1M Average</span>)</span>
                 </div>
 
-                <div id="graph_soil" class="ct-chart"></div>
+                <div id="graph_soil" class="ct-chart g_open"></div>
             </div>
         </div>
 
