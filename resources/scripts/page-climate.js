@@ -89,15 +89,9 @@ function loadNewData() {
             document.getElementById("item_AirT_Min_Year").innerHTML = "No Data";
             document.getElementById("item_AirT_Max_Year").innerHTML = "No Data";
             
-            var table = document.getElementById("climate_months_a");
+            var table = document.getElementById("climate_months");
             for (var i = 1, row; row = table.rows[i]; i++) {
-                for (var j = 1, col; col = row.cells[j]; j++) 
-                    col.innerHTML = "No Data";
-            }
-
-            table = document.getElementById("climate_months_b");
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                for (var j = 1, col; col = row.cells[j]; j++)
+                for (var j = 2, col; col = row.cells[j]; j++) 
                     col.innerHTML = "No Data";
             }
 
@@ -140,13 +134,14 @@ function processData(data) {
 }
 
 function displayMonth(data, row, precision) {
-    for (var i = 1, col; col = document.getElementById(row).cells[i]; i++) {
-        if (data[i] !== null) {
+    console.log(data);
+    for (var i = 2, col; col = document.getElementById(row).cells[i]; i++) {
+        if (data[i - 1] !== null) {
             if (precision === -1) {
-                var formatted = roundPlaces(data[i], 0)
-                    + " (" + degreesToCompass(data[i]) + ")"
+                var formatted = roundPlaces(data[i - 1], 0)
+                    + " (" + degreesToCompass(data[i - 1]) + ")"
                 col.innerHTML = formatted; 
-            } else col.innerHTML = roundPlaces(data[i], precision);
+            } else col.innerHTML = roundPlaces(data[i - 1], precision);
         } else col.innerHTML = "No Data";
     }
 }

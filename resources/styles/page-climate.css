@@ -1,41 +1,32 @@
-.main > :nth-child(3) {
-    min-width: 1050px;
-}
-
 .climate_table {
-    border: 1px solid #2a2a2a;
+    border: 2px solid #2a2a2a;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
     margin: 10px;
 }
-#climate_months_a {
-    border-bottom-width: 0px;
-}
-
-.climate_table thead tr td {
-    border: 1px solid #2a2a2a;
-    border-bottom-width: 2px;
-    font-weight: bold;
+.climate_table td {
+    border-right: 1px solid #2a2a2a;
+    border-bottom: 1px solid #2a2a2a;
+    vertical-align: middle;
     text-align: center;
 }
-.climate_table thead tr td:first-of-type {
-    border-right-width: 2px;
+.climate_table thead td {
+    border-bottom: 2px solid #2a2a2a;
+    font-weight: bold;
 }
-.climate_table thead tr td:nth-of-type(2) {
-    border-left-width: 0px;
+.climate_table tr > :first-child {
+    padding-left: 6px;
+    width: 170px;
+    text-align: left;
 }
-
+.climate_table tr > :nth-child(2) {
+    border-right: 2px solid #2a2a2a;
+    width: 45px;
+}
 .climate_table tbody tr td {
     width: 66px;
-    border-bottom: 1px solid #2a2a2a;
-    border-right: 1px solid #2a2a2a;
     font-size: 13px;
-    text-align: center;
-}
-.climate_table tbody tr td:first-of-type {
-    text-align: left;
-    width: 220px;
-    padding-left: 5px;
-    border-left: 1px solid #2a2a2a;
-    border-right: 2px solid #2a2a2a;
+    line-height: 28px;
 }
 
 .ct-series .ct-bar {
