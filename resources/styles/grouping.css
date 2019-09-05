@@ -3,7 +3,8 @@
     margin: 0 auto;
     margin-bottom: 15px;
     background-color: white;
-    max-width: 1050px;
+    max-width: 1048px;
+    min-width: 500px;
 }
 .g_wide {
     max-width: initial;

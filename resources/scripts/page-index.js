@@ -20,7 +20,7 @@ function updateData(autoUpdate, abs) {
         }, 60000);
     }
 
-    loadNewData(autoUpdate, abs);
+    loadNewData(abs);
 }
 
 function loadNewData(abs) {

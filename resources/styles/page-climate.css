@@ -1,3 +1,7 @@
+.main > :nth-child(3) {
+    min-width: 1050px;
+}
+
 .climate_table {
     border: 1px solid #2a2a2a;
     margin: 10px;
@@ -20,7 +24,7 @@
 }
 
 .climate_table tbody tr td {
-    width: 65px;
+    width: 66px;
     border-bottom: 1px solid #2a2a2a;
     border-right: 1px solid #2a2a2a;
     font-size: 13px;
@@ -28,7 +32,7 @@
 }
 .climate_table tbody tr td:first-of-type {
     text-align: left;
-    width: 240px;
+    width: 220px;
     padding-left: 5px;
     border-left: 1px solid #2a2a2a;
     border-right: 2px solid #2a2a2a;
