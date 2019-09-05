@@ -32,6 +32,8 @@
         <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/moment.js" type="text/javascript"></script>
         <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
+        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
+        <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
         <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
         <script src="resources/scripts/chartist.js" type="text/javascript"></script>
         <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
@@ -56,13 +58,12 @@
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
-
                     <span>Graph:</span>
                     <a href="graph-day.php">Day</a>
                     <a class="ami" href="graph-year.php">Year</a>
                     <span>|</span>
-
                     <a href="climate.php">Climate</a>
+                    <span>|</span>
                     <a href="station.php">Station</a>
                     
                     <span><?php echo $scope; ?></span>
@@ -75,7 +76,9 @@
                 <div class="scroller_button" onclick="scrollerLeft()">
                     <i class="material-icons">chevron_left</i>
                 </div>
-                <div class="scroller_time"><p id="scroller_time"></p></div>
+                <div class="scroller_time">
+                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
+                </div>
                 <div class="scroller_button" onclick="scrollerRight()">
                     <i class="material-icons">chevron_right</i>
                 </div>

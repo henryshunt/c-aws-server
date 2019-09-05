@@ -57,13 +57,12 @@
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
-
                     <span>Graph:</span>
                     <a href="graph-day.php">Day</a>
                     <a href="graph-year.php">Year</a>
                     <span>|</span>
-
                     <a class="ami" href="climate.php">Climate</a>
+                    <span>|</span>
                     <a href="station.php">Station</a>
                     
                     <span><?php echo $scope; ?></span>

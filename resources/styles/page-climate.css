@@ -1,30 +1,30 @@
 .climate_table {
-    border: 2px solid #2a2a2a;
+    border: 2px solid black;
     border-bottom-width: 1px;
     border-right-width: 1px;
     margin: 10px;
 }
 .climate_table td {
-    border-right: 1px solid #2a2a2a;
-    border-bottom: 1px solid #2a2a2a;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
     vertical-align: middle;
     text-align: center;
 }
 .climate_table thead td {
-    border-bottom: 2px solid #2a2a2a;
+    border-bottom: 2px solid black;
     font-weight: bold;
 }
 .climate_table tr > :first-child {
     padding-left: 6px;
-    width: 170px;
+    width: 155px;
     text-align: left;
 }
 .climate_table tr > :nth-child(2) {
-    border-right: 2px solid #2a2a2a;
+    border-right: 2px solid black;
     width: 45px;
 }
 .climate_table tbody tr td {
-    width: 66px;
+    width: 67px;
     font-size: 13px;
     line-height: 28px;
 }

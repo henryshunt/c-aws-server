@@ -1,5 +1,6 @@
 var isLoading = false;
 var requestedTime = null;
+var datePicker = null;
 
 var openGraphs = ["temperature"];
 var graphsLoaded = 0;
@@ -128,6 +129,7 @@ function loadGraphData(graph, check) {
 
 
 function scrollerLeft() {
+    if (datePicker !== null) datePicker.close();
     if (isLoading === false) {
         requestedTime.subtract(1, "months");
         updateData(false);
@@ -135,8 +137,57 @@ function scrollerLeft() {
 }
 
 function scrollerRight() {
+    if (datePicker !== null) datePicker.close();
     if (isLoading === false) {
         requestedTime.add(1, "months");
         updateData(false);
     }
+}
+
+function pickerOpen() {
+    if (datePicker !== null) {
+        datePicker.close();
+        return;
+    }
+
+    if (isLoading === false) {
+        var localTime = moment(requestedTime).tz(awsTimeZone);
+        var initTime = new Date(localTime.get("year"),
+            localTime.get("month"), localTime.get("date"));
+
+        datePicker = flatpickr("#scroller_time", {
+            defaultDate: initTime, disableMobile: true,
+
+            onClose: function() {
+                datePicker.destroy();
+                datePicker = null;
+            }
+        });
+        
+        datePicker.open();
+    }
+}
+
+function pickerSubmit() {
+    var selTime = datePicker.selectedDates[0];
+    selTime = moment.utc({
+        year: selTime.getUTCFullYear(), month: selTime.getUTCMonth(),
+        day: selTime.getUTCDate(), hour: selTime.getUTCHours(),
+        minute: 0, second: 0
+    });
+
+    datePicker.close();
+
+    // Submit if selected date different from loaded date
+    var localSel = moment(selTime).tz(awsTimeZone);
+    var localReq = moment(requestedTime).tz(awsTimeZone);
+
+    if (localSel.format("DD/MM/YYYY") !== localReq.format("DD/MM/YYYY")) {
+        requestedTime = moment(selTime);
+        updateData(false);
+    }
+}
+
+function pickerCancel() {
+    datePicker.close();
 }
