@@ -54,7 +54,7 @@
 
             <div class="menu">
                 <div>
-                    <a href=".">Report</a>
+                    <a href=".">Reports</a>
                     <a href="statistics.php">Statistics</a>
                     <a href="camera.php">Camera</a>
                     <span>|</span>
