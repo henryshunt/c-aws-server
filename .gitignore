@@ -1,1 +1,4 @@
-data/camera/
+composer.*
+vendor
+data/camera
+config.json
