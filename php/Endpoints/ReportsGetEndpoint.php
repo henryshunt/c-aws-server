@@ -8,7 +8,7 @@ use Respect\Validation\Exceptions\ValidationException;
 use Aws\HttpException;
 
 
-class ReportsRangeGetEndpoint extends Endpoint
+class ReportsGetEndpoint extends Endpoint
 {
     public function __invoke(): Response
     {
@@ -27,6 +27,12 @@ class ReportsRangeGetEndpoint extends Endpoint
         {
             throw new HttpException(400, $ex->getMessage());
         }
+
+        $start = \DateTime::createFromFormat("Y-m-d\TH-i-s", $_GET["start"]);
+        $end = \DateTime::createFromFormat("Y-m-d\TH-i-s", $_GET["end"]);
+
+        if ($start >= $end)
+            throw new HttpException(400, "end must be later than start");
     }
 
     private function readReports(): Response

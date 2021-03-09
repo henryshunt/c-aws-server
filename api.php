@@ -29,8 +29,10 @@ try
     $router->addMatchTypes(["dt" => "[0-9]{4}-[0-9]{2}-[0-9]{2}T([0-9]{2}-){2}[0-9]{2}"]);
     $router->addMatchTypes(["da" => "[0-9]{4}-[0-9]{2}-[0-9]{2}"]);
 
+    $router->map("GET", "/reports", Aws\Endpoints\ReportsGetEndpoint::class);
     $router->map("GET", "/reports/[dt:time]", Aws\Endpoints\ReportGetEndpoint::class);
-    $router->map("GET", "/reports/range", Aws\Endpoints\ReportsRangeGetEndpoint::class);
+    $router->map("GET", "/statistics/daily", Aws\Endpoints\StatisticsDailyGetEndpoint::class);
+    $router->map("GET", "/statistics/daily/[da:date]", Aws\Endpoints\StatisticDailyGetEndpoint::class);
 
 
     $match = $router->match();
