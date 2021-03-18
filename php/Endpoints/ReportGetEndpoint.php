@@ -41,7 +41,7 @@ class ReportGetEndpoint extends Endpoint
         $query = database_query($this->pdo, $sql, [$time->format("Y-m-d H:i:s")]);
 
         if (count($query) > 0)
-            return (new Response(200))->setBody(json_encode($query[0]));
+            return (new Response(200))->setBody(json_encode(cast_report($query[0])));
         else
         {
             // Because there can be a delay between data being recorded and being made available,
@@ -53,7 +53,7 @@ class ReportGetEndpoint extends Endpoint
                 $query = database_query($this->pdo, $sql, [$time->format("Y-m-d H:i:s")]);
 
                 if (count($query) > 0)
-                    return (new Response(200))->setBody(json_encode($query[0]));
+                    return (new Response(200))->setBody(json_encode(cast_report($query[0])));
                 else throw new HttpException(404);
             }
             else throw new HttpException(404);

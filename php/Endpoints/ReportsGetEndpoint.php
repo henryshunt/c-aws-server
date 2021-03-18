@@ -44,6 +44,9 @@ class ReportsGetEndpoint extends Endpoint
         $query = database_query($this->pdo, $sql,
             [$start->format("Y-m-d H:i:s"), $end->format("Y-m-d H:i:s")]);
 
+        for ($i = 0; $i < count($query); $i++)
+            $query[$i] = cast_report($query[$i]);
+
         return (new Response(200))->setBody(json_encode($query));
     }
 }

@@ -174,3 +174,35 @@ function key_exists_matches(string $key, $value, array $array): bool
 {
     return array_key_exists($key, $array) && $array[$key] === $value;
 }
+
+/**
+ * Casts the values of a report to their appropriate types.
+ * @param array $report - An associative array containing the attributes found in the reports table
+ * of the database.
+ * @return array $report but with the values cast to their appropriate types.
+ */
+function cast_report(array $report): array
+{
+    if ($report["airTemp"] !== null)
+        $report["airTemp"] = (double)$report["airTemp"];
+    if ($report["relHum"] !== null)
+        $report["relHum"] = (double)$report["relHum"];
+    if ($report["dewPoint"] !== null)
+        $report["dewPoint"] = (double)$report["dewPoint"];
+    if ($report["windSpeed"] !== null)
+        $report["windSpeed"] = (double)$report["windSpeed"];
+    if ($report["windDir"] !== null)
+        $report["windDir"] = (int)$report["windDir"];
+    if ($report["windGust"] !== null)
+        $report["windGust"] = (double)$report["windGust"];
+    if ($report["rainfall"] !== null)
+        $report["rainfall"] = (double)$report["rainfall"];
+    if ($report["sunDur"] !== null)
+        $report["sunDur"] = (int)$report["sunDur"];
+    if ($report["staPres"] !== null)
+        $report["staPres"] = (double)$report["staPres"];
+    if ($report["mslPres"] !== null)
+        $report["mslPres"] = (double)$report["mslPres"];
+
+    return $report;
+}
