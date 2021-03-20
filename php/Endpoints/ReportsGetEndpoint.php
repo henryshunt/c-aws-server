@@ -40,7 +40,7 @@ class ReportsGetEndpoint extends Endpoint
         $start = \DateTime::createFromFormat("Y-m-d\TH-i-s", $_GET["start"]);
         $end = \DateTime::createFromFormat("Y-m-d\TH-i-s", $_GET["end"]);
 
-        $sql = "SELECT * FROM reports WHERE time BETWEEN ? AND ?";
+        $sql = "SELECT * FROM reports WHERE time BETWEEN ? AND ? ORDER BY time";
         $query = database_query($this->pdo, $sql,
             [$start->format("Y-m-d H:i:s"), $end->format("Y-m-d H:i:s")]);
 

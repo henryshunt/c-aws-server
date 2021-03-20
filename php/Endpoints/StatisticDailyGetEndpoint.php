@@ -40,7 +40,10 @@ class StatisticDailyGetEndpoint extends Endpoint
         $query = database_query($this->pdo, $sql, [$date->format("Y-m-d")]);
 
         if (count($query) > 0)
-            return (new Response(200))->setBody(json_encode($query[0]));
+        {
+            return (new Response(200))
+                ->setBody(json_encode(cast_daily_statistic($query[0])));
+        }
         else
         {
             // Because there can be a delay between data being recorded and being made available,
@@ -52,7 +55,10 @@ class StatisticDailyGetEndpoint extends Endpoint
                 $query = database_query($this->pdo, $sql, [$date->format("Y-m-d")]);
 
                 if (count($query) > 0)
-                    return (new Response(200))->setBody(json_encode($query[0]));
+                {
+                    return (new Response(200))
+                        ->setBody(json_encode(cast_daily_statistic($query[0])));
+                }
                 else throw new HttpException(404);
             }
             else throw new HttpException(404);

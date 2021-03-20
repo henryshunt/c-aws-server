@@ -40,9 +40,12 @@ class StatisticsDailyGetEndpoint extends Endpoint
         $start = \DateTime::createFromFormat("Y-m-d", $_GET["start"]);
         $end = \DateTime::createFromFormat("Y-m-d", $_GET["end"]);
 
-        $sql = "SELECT * FROM dayStats WHERE date BETWEEN ? AND ?";
+        $sql = "SELECT * FROM dayStats WHERE date BETWEEN ? AND ? ORDER BY date";
         $query = database_query($this->pdo, $sql,
             [$start->format("Y-m-d"), $end->format("Y-m-d")]);
+
+        for ($i = 0; $i < count($query); $i++)
+            $query[$i] = cast_daily_statistic($query[$i]);
 
         return (new Response(200))->setBody(json_encode($query));
     }
