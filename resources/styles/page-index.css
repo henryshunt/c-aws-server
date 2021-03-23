@@ -1,0 +1,9 @@
+.groups-split {
+    display: flex;
+}
+.column {
+    width: calc(50% - 10px);
+}
+.column0 {
+    margin-right: 20px;
+}

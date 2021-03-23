@@ -1,118 +1,52 @@
 .group {
-    border: 1px solid #cccccc;
-    margin: 0 auto;
-    margin-bottom: 15px;
-    background-color: white;
-    max-width: 1048px;
-    min-width: 500px;
+    margin-bottom: 20px;
+    border: 1px solid var(--accent-colour);
+    background-color: var(--sec-backg-colour);
 }
-.g_wide {
-    max-width: initial;
-}
-.g_last {
-    margin-bottom: 0px;
-}
-.group_header {
-    padding-top: 5px;
+.group-header {
     height: 32px;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid var(--accent-colour);
 }
-.gh_no_separator {
-    border-bottom: initial !important;
-}
-.gh_collapsible {
-    cursor: pointer;
-}
-.group_header:last-child {
-    float: right;
-}
-.group_title {
-    margin-bottom: 7px;
-    font-size: 20px;
-    margin-top: 3px;
+.group-name {
+    display: inline-block;
     margin-left: 10px;
-    display: inline-block;
+    margin-top: 2px;
 }
 
-.group_key {
-    margin-right: 10px;
-    font-size: 11px;
-    line-height: 25px;
-    float: right;
+.scroller {
+    display: flex;
+    height: 38px;
 }
-.group_key span:nth-of-type(1) {
-    color: rgb(195, 39, 40);
+.scroller-btn {
+    width: 39px;
+    height: 38px;
 }
-.group_key span:nth-of-type(2) {
-    color: rgb(50, 136, 195);
-}
-.group_key span:nth-of-type(3) {
-    color: rgb(55, 145, 109);
-}
-.group_toggle {
-    width: 40px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: 100%;
-    -ms-user-select: none;
-    float: left;
-    margin-top: -5px;
-    margin-right: -10px;
-}
-.group_toggle i {
-    margin-top: 7px;
-}
-
-.g_scroller {
-    height: 40px;
-    display: table;
-    width: calc(100% - 2px);
-    background-color: white;
-}
-.scroller_button {
-    display: table-cell;
-    width: 40px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: 100%;
-    -ms-user-select: none;
-}
-.scroller_button i {
-    margin-top: 8px;
-}
-.scroller_time {
+.scroller-centre {
+    flex: 1;
     text-align: center;
 }
-.scroller_time p {
-    display: inline-block;
-    transform: translateY(-7px);
-}
-.st_picker {
-    cursor: pointer;
+.scroller-time {
+    margin-top: 9px;
     text-decoration: underline;
 }
 .flatpickr-calendar {
     margin-top: 5px;
 }
 
-.field_table {
+.field-table {
     width: 100%;
     margin-top: 12px;
     margin-bottom: 12px;
 }
-.ft_section {
+.field-table-break {
     margin-top: 10px;
 }
-.field_label {
+.field-label {
     margin-left: 35px;
-    color: grey;
+    color: var(--sec-text-colour);
 }
-.field_value {
-    text-align: right;
+.field-value {
     padding-right: 15px;
+    text-align: right;
     font-weight: bold;
 }

@@ -67,3 +67,43 @@ function graphHeightCheck() {
         }
     }
 }
+
+/**
+ * Adds the ability to format strings in the following way: "Name: {0}".format(name)
+ */
+if (!String.prototype.format)
+{
+    String.prototype.format = function()
+    {
+        const args = arguments;
+        return this.replace(/{(\d+)}/g, (match, number) =>
+        {
+            return typeof args[number] != "undefined" ? args[number] : match;
+        });
+    };
+}
+
+/**
+ * Requests and parses JSON data from the specified URL.
+ * @param {string} url - The URL to request.
+ * @returns {Promise} A promise that resolves with the JSON on success, or rejects if there is any
+ * error getting the JSON.
+ */
+function getJson(url)
+{
+    return new Promise((resolve, reject) =>
+    {        
+        fetch(url)
+            .then(response =>
+            {
+                if (response.ok)
+                {
+                    response.json()
+                        .then(json => resolve(json))
+                        .catch(reject);
+                }
+                else reject();
+            })
+            .catch(reject);
+    });
+}

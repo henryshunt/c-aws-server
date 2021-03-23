@@ -1,217 +1,189 @@
+<?php
+require_once "php/helpers.php";
+
+$config = load_config("config.json");
+if ($config === false)
+{
+    echo "Failed to load configuration file";
+    error_log("Failed to load configuration file");
+    exit();
+}
+
+$title = "AWS " . $config["stationName"] . " " .
+    ($config["isRemote"] ? "[Remote]" : "[Local]");
+?>
+
 <meta charset="UTF-8">
 <!DOCTYPE html>
-
-<?php
-    date_default_timezone_set("UTC");
-    include_once("routines/config.php");
-    
-    try { $config = new Config("config.ini"); }
-    catch (Exception $e)
-    {
-        echo "Bad configuration file";
-        exit(); 
-    }
-    
-    // Create the page title and scope text
-    $title = "C-AWS " . $config->get_aws_name();
-    $title .= ($config->get_is_remote()
-        ? " [Remote]" : " [Local]");
-
-    $scope = "Accessing <b>"
-        . ($config->get_is_remote() ? "REMOTE" : "LOCAL")
-        . "</b> data stores";
-?>
 
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/defaults.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/helpers.js" type="text/javascript"></script>
-        <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width">
 
-        <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/moment.js" type="text/javascript"></script>
-        <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
-        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/page-index.js" type="text/javascript"></script>
+        <link href="resources/styles/reset.css" rel="stylesheet">
+        <link href="resources/styles/defaults.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="resources/scripts/helpers.js"></script>
 
         <script>
-            const awsTimeZone = "<?php echo $config->get_aws_time_zone(); ?>";
+            const awsTimeZone = "<?php echo $config["timeZone"]; ?>";
         </script>
+
+        <link href="resources/styles/header.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0/build/global/luxon.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <link href="resources/styles/grouping.css" rel="stylesheet">
+        <script src="resources/scripts/page-index.js"></script>
+        <link href="resources/styles/page-index.css" rel="stylesheet">
     </head>
 
     <body>
-        <div class="header">
-            <div class="titles">
-                <h1><?php echo $config->get_aws_name(); ?></h1>
-                <h2>C - AWS</h2>
-            </div>
+        <header>
+            <div class="main-col">
+                <p class="title">AWS - <?php echo $config["stationName"]; ?></p>
 
-            <div class="menu">
-                <div>
-                    <a class="ami" href=".">Reports</a>
-                    <a href="statistics.php">Statistics</a>
-                    <a href="camera.php">Camera</a>
-                    <span>|</span>
-                    <span>Graph:</span>
-                    <a href="graph-day.php">Day</a>
-                    <a href="graph-year.php">Year</a>
-                    <span>|</span>
-                    <a href="climate.php">Climate</a>
-                    <span>|</span>
-                    <a href="station.php">Station</a>
-                    
-                    <span><?php echo $scope; ?></span>
-                </div>
+                <nav>
+                    <a class="menu-item active-menu-item" href=".">Reports</a>
+                    <a class="menu-item" href="statistics.php">Statistics</a>
+                    <a class="menu-item" href="camera.php">Camera</a>
+                    <span class="menu-sep">|</span>
+                    <span class="menu-sep">Graph:</span>
+                    <a class="menu-item" href="graph-day.php">Day</a>
+                    <a class="menu-item" href="graph-year.php">Year</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="climate.php">Climate</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="station.php">Station</a>
+                </nav>
             </div>
-        </div>
+        </header>
 
-        <div class="main">
-            <div class="group g_scroller">
-                <div class="scroller_button" onclick="scrollerLeft()">
+        <main class="main-col">
+            <div class="group scroller">
+                <button class="scroller-btn solid-btn" id="scroller-left-btn">
                     <i class="material-icons">chevron_left</i>
+                </button>
+
+                <div class="scroller-centre">
+                    <button class="scroller-time text-btn" id="scroller-time-btn"></button>
                 </div>
-                <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
-                </div>
-                <div class="scroller_button" onclick="scrollerRight()">
+
+                <button class="scroller-btn solid-btn" id="scroller-right-btn">
                     <i class="material-icons">chevron_right</i>
-                </div>
+                </button>
             </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Ambient Temperature</p>
+            <div id="groups">
+                <div class="group">
+                    <div class="group-header">
+                        <h3 class="group-name">Ambient Temperature</h3>
+                    </div>
+
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Air Temperature:</p></td>
+                            <td><p id="item_AirT" class="field-value"></p></td>
+                        </tr>
+                    </table>
                 </div>
 
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Air Temperature:</p></td>
-                        <td><p id="item_AirT" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Exposed Thermometer (affected by rain/sun):</p></td>
-                        <td><p id="item_ExpT" class="field_value"></p></td>
-                    </tr>
-                </table>
-            </div>
+                <div class="group">
+                    <div class="group-header">
+                        <h3 class="group-name">Moisture</h3>
+                    </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Moisture</p>
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Relative Humidity:</p></td>
+                            <td><p id="item_RelH" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label">Dew Point:</p></td>
+                            <td><p id="item_DewP" class="field-value"></p></td>
+                        </tr>
+                    </table>
                 </div>
 
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Relative Humidity:</p></td>
-                        <td><p id="item_RelH" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Dew Point:</p></td>
-                        <td><p id="item_DewP" class="field_value"></p></td>
-                    </tr>
-                </table>
-            </div>
+                <div class="group">
+                    <div class="group-header">
+                        <h3 class="group-name">Wind</h3>
+                    </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Wind</p>
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Wind Speed:</p></td>
+                            <td><p id="item_WSpd" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label">Wind Direction (blowing from):</p></td>
+                            <td><p id="item_WDir" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label field-table-break">Wind Gust:</p></td>
+                            <td><p id="item_WGst" class="field-value field-table-break"></p></td>
+                        </tr>
+                    </table>
                 </div>
 
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Wind Speed:</p></td>
-                        <td><p id="item_WSpd" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Wind Direction (blowing from):</p></td>
-                        <td><p id="item_WDir" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label ft_section">Wind Gust:</p></td>
-                        <td><p id="item_WGst" class="field_value ft_section"></p></td>
-                    </tr>
-                </table>
-            </div>
+                <div class="group">
+                    <div class="group-header">
+                        <h3 class="group-name">Solar Radiation</h3>
+                    </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Solar Radiation</p>
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Sunshine Duration:</p></td>
+                            <td><p id="item_SunD" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label">Sunshine Duration over Past Hour:</p></td>
+                            <td><p id="item_SunD_PHr" class="field-value"></p></td>
+                        </tr>
+                    </table>
                 </div>
 
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Sunshine Duration:</p></td>
-                        <td><p id="item_SunD" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Sunshine Duration over Past Hour:</p></td>
-                        <td><p id="item_SunD_PHr" class="field_value"></p></td>
-                    </tr>
-                </table>
-            </div>
+                <div class="group">
+                    <div class="group-header">
+                        <h3 class="group-name">Precipitation</h3>
+                    </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Precipitation</p>
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Rainfall:</p></td>
+                            <td><p id="item_Rain" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label">Rainfall over Past Hour:</p></td>
+                            <td><p id="item_Rain_PHr" class="field-value"></p></td>
+                        </tr>
+                    </table>
                 </div>
 
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Rainfall:</p></td>
-                        <td><p id="item_Rain" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Rainfall over Past Hour:</p></td>
-                        <td><p id="item_Rain_PHr" class="field_value"></p></td>
-                    </tr>
-                </table>
-            </div>
+                <div class="group final">
+                    <div class="group-header">
+                        <h3 class="group-name">Barometric Pressure</h3>
+                    </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Barometric Pressure</p>
+                    <table class="field-table">
+                        <tr>
+                            <td><p class="field-label">Station Pressure (at station elevation):</p></td>
+                            <td><p id="item_StaP" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label">Mean Sea Level Pressure:</p></td>
+                            <td><p id="item_MSLP" class="field-value"></p></td>
+                        </tr>
+                        <tr>
+                            <td><p class="field-label field-table-break">3-Hour Pressure Tendency:</p></td>
+                            <td><p id="item_StaP_PTH" class="field-value field-table-break"></p></td>
+                        </tr>
+                    </table>
                 </div>
-
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">Station Pressure (at station elevation):</p></td>
-                        <td><p id="item_StaP" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">Mean Sea Level Pressure:</p></td>
-                        <td><p id="item_MSLP" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label ft_section">3-Hour Pressure Tendency:</p></td>
-                        <td><p id="item_StaP_PTH" class="field_value ft_section"></p></td>
-                    </tr>
-                </table>
             </div>
-
-            <div class="group g_last">
-                <div class="group_header">
-                    <p class="group_title">Soil Temperature</p>
-                </div>
-
-                <table class="field_table">
-                    <tr>
-                        <td><p class="field_label">10 Centimetres Down:</p></td>
-                        <td><p id="item_ST10" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">30 Centimetres Down:</p></td>
-                        <td><p id="item_ST30" class="field_value"></p></td>
-                    </tr>
-                    <tr>
-                        <td><p class="field_label">1 Metre Down:</p></td>
-                        <td><p id="item_ST00" class="field_value"></p></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
+        </main>
     </body>
 </html>
