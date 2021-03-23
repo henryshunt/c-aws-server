@@ -1,312 +1,183 @@
+<?php
+require_once "php/helpers.php";
+
+$config = load_config("config.json");
+if ($config === false)
+{
+    echo "Failed to load configuration file";
+    error_log("Failed to load configuration file");
+    exit();
+}
+
+$title = "AWS " . $config["stationName"] . " " .
+    ($config["isRemote"] ? "[Remote]" : "[Local]");
+?>
+
 <meta charset="UTF-8">
 <!DOCTYPE html>
-
-<?php
-    date_default_timezone_set("UTC");
-    include_once("routines/config.php");
-    
-    try { $config = new Config("config.ini"); }
-    catch (Exception $e)
-    {
-        echo "Bad configuration file";
-        exit(); 
-    }
-
-    // Create the page title and scope text
-    $title = "C-AWS " . $config->get_aws_name();
-    $title .= ($config->get_is_remote()
-        ? " [Remote]" : " [Local]");
-
-    $scope = "Accessing <b>"
-        . ($config->get_is_remote() ? "REMOTE" : "LOCAL")
-        . "</b> data stores";
-?>
 
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/defaults.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/helpers.js" type="text/javascript"></script>
-        <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width">
 
-        <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/moment.js" type="text/javascript"></script>
-        <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
-        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/page-statistics.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/page-statistics.js" type="text/javascript"></script>
+        <link href="resources/styles/reset.css" rel="stylesheet">
+        <link href="resources/styles/defaults.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="resources/scripts/helpers.js"></script>
 
         <script>
-            const awsTimeZone = "<?php echo $config->get_aws_time_zone(); ?>";
+            const awsTimeZone = "<?php echo $config["timeZone"]; ?>";
         </script>
+
+        <link href="resources/styles/header.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0/build/global/luxon.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <link href="resources/styles/grouping.css" rel="stylesheet">
+        <script src="resources/scripts/page-statistics.js"></script>
+        <link href="resources/styles/page-statistics.css" rel="stylesheet">
     </head>
 
     <body>
-        <div class="header">
-            <div class="titles">
-                <h1><?php echo $config->get_aws_name(); ?></h1>
-                <h2>C - AWS</h2>
-            </div>
+        <header>
+            <div class="main-col">
+                <p class="title">AWS - <?php echo $config["stationName"]; ?></p>
 
-            <div class="menu">
-                <div>
-                    <a href=".">Reports</a>
-                    <a class="ami" href="statistics.php">Statistics</a>
-                    <a href="camera.php">Camera</a>
-                    <span>|</span>
-                    <span>Graph:</span>
-                    <a href="graph-day.php">Day</a>
-                    <a href="graph-year.php">Year</a>
-                    <span>|</span>
-                    <a href="climate.php">Climate</a>
-                    <span>|</span>
-                    <a href="station.php">Station</a>
-                    
-                    <span><?php echo $scope; ?></span>
-                </div>
+                <nav>
+                    <a class="menu-item" href=".">Reports</a>
+                    <a class="menu-item active-menu-item" href="statistics.php">Statistics</a>
+                    <a class="menu-item" href="camera.php">Camera</a>
+                    <span class="menu-sep">|</span>
+                    <span class="menu-sep">Graph:</span>
+                    <a class="menu-item" href="graph-day.php">Day</a>
+                    <a class="menu-item" href="graph-year.php">Year</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="climate.php">Climate</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="station.php">Station</a>
+                </nav>
             </div>
-        </div>
+        </header>
 
-        <div class="main">
-            <div class="group g_scroller">
-                <div class="scroller_button" onclick="scrollerLeft()">
+        <main class="main-col">
+            <div class="group scroller">
+                <button class="scroller-btn solid-btn" id="scroller-left-btn">
                     <i class="material-icons">chevron_left</i>
+                </button>
+
+                <div class="scroller-centre">
+                    <button class="scroller-time text-btn" id="scroller-time-btn"></button>
                 </div>
-                <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
-                </div>
-                <div class="scroller_button" onclick="scrollerRight()">
+
+                <button class="scroller-btn solid-btn" id="scroller-right-btn">
                     <i class="material-icons">chevron_right</i>
-                </div>
+                </button>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Ambient Temperature</p>
+                <div class="group-header">
+                    <h3 class="group-name">Ambient Temperature</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Air Temperature:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_AirT_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_AirT_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_AirT_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Air Temperature</td>
+                        <td><span>AVG: </span><span id="item_AirT_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_AirT_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_AirT_Max"></span></td>
                     </tr>
                 </table>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Moisture</p>
+                <div class="group-header">
+                    <h3 class="group-name">Moisture</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Relative Humidity:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_RelH_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_RelH_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_RelH_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Relative Humidity</td>
+                        <td><span>AVG: </span><span id="item_RelH_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_RelH_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_RelH_Max"></span></td>
                     </tr>
                     <tr>
-                        <td>
-                            <p class="field_label">Dew Point:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_DewP_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_DewP_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_DewP_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Dew Point</td>
+                        <td><span>AVG: </span><span id="item_DewP_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_DewP_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_DewP_Max"></span></td>
                     </tr>
                 </table>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Wind</p>
+                <div class="group-header">
+                    <h3 class="group-name">Wind</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Wind Speed:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_WSpd_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_WSpd_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_WSpd_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Wind Speed</td>
+                        <td><span>AVG: </span><span id="item_WSpd_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_WSpd_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_WSpd_Max"></span></td>
                     </tr>
                     <tr>
-                        <td>
-                            <p class="field_label">Wind Direction:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_WDir_Avg"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Wind Direction</td>
+                        <td><span>AVG: </span><span id="item_WDir_Avg"></span></td>
                     </tr>
                     <tr>
-                        <td>
-                            <p class="field_label">Wind Gust:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_WGst_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_WGst_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_WGst_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Wind Gust</td>
+                        <td><span>AVG: </span><span id="item_WGst_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_WGst_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_WGst_Max"></span></td>
                     </tr>
                 </table>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Solar Radiation</p>
+                <div class="group-header">
+                    <h3 class="group-name">Solar Radiation</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Sunshine Duration:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>TTL: </b><span id="item_SunD_Ttl"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Sunshine Duration</td>
+                        <td><span>AVG: </span><span id="item_SunD_Ttl"></span></td>
                     </tr>
                 </table>
             </div>
 
             <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Precipitation</p>
+                <div class="group-header">
+                    <h3 class="group-name">Precipitation</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Rainfall:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>TTL: </b><span id="item_Rain_Ttl"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Rainfall</td>
+                        <td><span>AVG: </span><span id="item_Rain_Ttl"></span></td>
                     </tr>
                 </table>
             </div>
 
-            <div class="group">
-                <div class="group_header">
-                    <p class="group_title">Barometric Pressure</p>
+            <div class="group final">
+                <div class="group-header">
+                    <h3 class="group-name">Barometric Pressure</h3>
                 </div>
 
-                <table class="field_table">
+                <table class="field-table">
                     <tr>
-                        <td>
-                            <p class="field_label">Mean Sea Level Pressure:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_MSLP_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_MSLP_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_MSLP_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <td>Mean Sea Level Pressure</td>
+                        <td><span>AVG: </span><span id="item_MSLP_Avg"></span></td>
+                        <td><span>MIN: </span><span id="item_MSLP_Min"></span></td>
+                        <td><span>MAX: </span><span id="item_MSLP_Max"></span></td>
                     </tr>
                 </table>
             </div>
-
-            <div class="group g_last">
-                <div class="group_header">
-                    <p class="group_title">Soil Temperature</p>
-                </div>
-
-                <table class="field_table">
-                    <tr>
-                        <td>
-                            <p class="field_label">10 Centimetres Down:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_ST10_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_ST10_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_ST10_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="field_label">30 Centimetres Down:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_ST30_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_ST30_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_ST30_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="field_label">1 Metre Down:</p>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td><p><b>AVG: </b><span id="item_ST00_Avg"></span></p></td>
-                                    <td><p><b>MIN: </b><span id="item_ST00_Min"></span></p></td>
-                                    <td><p><b>MAX: </b><span id="item_ST00_Max"></span></p></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
+        </main>
     </body>
 </html>

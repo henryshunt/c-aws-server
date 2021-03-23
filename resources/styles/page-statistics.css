@@ -1,10 +1,8 @@
-.field_table > tbody > tr > :first-child {
+.field-table > tbody > tr > :first-child {
     width: 45%;
 }
-.field_table > tbody > tr > :last-child > table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.field_table > tbody > tr > :last-child > table td {
-    width: 33.3%;
+.field-table > tbody > tr > :nth-child(2) > :first-child,
+.field-table > tbody > tr > :nth-child(3) > :first-child,
+.field-table > tbody > tr > :nth-child(4) > :first-child {
+    font-weight: bold;
 }
