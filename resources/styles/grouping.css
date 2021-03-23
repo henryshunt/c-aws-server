@@ -34,19 +34,10 @@
 }
 
 .field-table {
-    width: 100%;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    width: calc(100% - 50px);
+    margin: 12px 15px 12px 35px;
 }
-.field-table-break {
-    margin-top: 10px;
-}
-.field-label {
+.field-table > tbody > tr > :first-child {
     margin-left: 35px;
     color: var(--sec-text-colour);
-}
-.field-value {
-    padding-right: 15px;
-    text-align: right;
-    font-weight: bold;
 }
