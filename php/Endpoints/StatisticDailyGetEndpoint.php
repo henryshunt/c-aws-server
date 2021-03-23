@@ -16,20 +16,7 @@ class StatisticDailyGetEndpoint extends Endpoint
         if (\DateTime::createFromFormat("Y-m-d", $this->resParams["date"]) === false)
             throw new HttpException(404);
 
-        $this->validateUrlParams();
         return $this->readStatistic();
-    }
-
-    private function validateUrlParams(): void
-    {
-        $validator = V
-            ::key("auto", V::in(["true", "false"], true), false);
-
-        try { $validator->check($_GET); }
-        catch (ValidationException $ex)
-        {
-            throw new HttpException(400, $ex->getMessage());
-        }
     }
 
     private function readStatistic(): Response
@@ -44,24 +31,6 @@ class StatisticDailyGetEndpoint extends Endpoint
             return (new Response(200))
                 ->setBody(json_encode(cast_daily_statistic($query[0])));
         }
-        else
-        {
-            // Because there can be a delay between data being recorded and being made available,
-            // if the requested statistic does not exist and auto is true, try getting the
-            // statistic for one minute earlier
-            if (key_exists_matches("auto", "true", $_GET))
-            {
-                $date->sub(new \DateInterval("PT1M"));
-                $query = database_query($this->pdo, $sql, [$date->format("Y-m-d")]);
-
-                if (count($query) > 0)
-                {
-                    return (new Response(200))
-                        ->setBody(json_encode(cast_daily_statistic($query[0])));
-                }
-                else throw new HttpException(404);
-            }
-            else throw new HttpException(404);
-        }
+        else throw new HttpException(404);
     }
 }
