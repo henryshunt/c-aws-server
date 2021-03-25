@@ -55,7 +55,7 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
 
             elements:
             {
-                line: { borderWidth: 1, lineTension: 0, fill: false },
+                line: { borderWidth: 1, tension: 0, fill: false },
                 point: { hitRadius: 15, hoverRadius: 0 }
             },
 
