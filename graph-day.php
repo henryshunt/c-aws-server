@@ -1,185 +1,110 @@
+<?php
+require_once "php/helpers.php";
+
+$config = load_config("config.json");
+if ($config === false)
+{
+    echo "Failed to load configuration file";
+    error_log("Failed to load configuration file");
+    exit();
+}
+
+$title = "AWS " . $config["stationName"] . " " .
+    ($config["isRemote"] ? "[Remote]" : "[Local]");
+?>
+
 <meta charset="UTF-8">
 <!DOCTYPE html>
-
-<?php
-    date_default_timezone_set("UTC");
-    include_once("routines/config.php");
-    
-    try { $config = new Config("config.ini"); }
-    catch (Exception $e)
-    {
-        echo "Bad configuration file";
-        exit(); 
-    }
-
-    // Create the page title and scope text
-    $title = "C-AWS " . $config->get_aws_name();
-    $title .= ($config->get_is_remote()
-        ? " [Remote]" : " [Local]");
-
-    $scope = "Accessing <b>"
-        . ($config->get_is_remote() ? "REMOTE" : "LOCAL")
-        . "</b> data stores";
-?>
 
 <html>
     <head>
         <title><?php echo $title; ?></title>
-        <link href="resources/styles/defaults.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/helpers.js" type="text/javascript"></script>
-        <script src="resources/scripts/jquery.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width">
 
-        <link href="resources/styles/header.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/moment.js" type="text/javascript"></script>
-        <script src="resources/scripts/moment-tz.js" type="text/javascript"></script>
-        <link href="resources/styles/flatpickr.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/flatpickr.js" type="text/javascript"></script>
-        <link href="resources/styles/chartist.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/chartist.js" type="text/javascript"></script>
-        <link href="resources/styles/grouping.css" rel="stylesheet" type="text/css">
-        <link href="resources/styles/graphing.css" rel="stylesheet" type="text/css">
-        <script src="resources/scripts/page-graph-day.js" type="text/javascript"></script>
+        <link href="resources/styles/reset.css" rel="stylesheet">
+        <link href="resources/styles/defaults.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="resources/scripts/helpers.js"></script>
 
         <script>
-            const awsTimeZone = "<?php echo $config->get_aws_time_zone(); ?>";
+            const awsTimeZone = "<?php echo $config["timeZone"]; ?>";
         </script>
+
+        <link href="resources/styles/header.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0/build/global/luxon.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.2/dist/chartjs-adapter-luxon.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <link href="resources/styles/grouping.css" rel="stylesheet">
+        <script src="resources/scripts/page-graph-day.js"></script>
     </head>
 
     <body>
-        <div class="header">
-            <div class="titles">
-                <h1><?php echo $config->get_aws_name(); ?></h1>
-                <h2>C - AWS</h2>
-            </div>
+        <header>
+            <div class="main-col">
+                <p class="title">AWS - <?php echo $config["stationName"]; ?></p>
 
-            <div class="menu">
-                <div>
-                    <a href=".">Reports</a>
-                    <a href="statistics.php">Statistics</a>
-                    <a href="camera.php">Camera</a>
-                    <span>|</span>
-                    <span>Graph:</span>
-                    <a class="ami" href="graph-day.php">Day</a>
-                    <a href="graph-year.php">Year</a>
-                    <span>|</span>
-                    <a href="climate.php">Climate</a>
-                    <span>|</span>
-                    <a href="station.php">Station</a>
-                    
-                    <span><?php echo $scope; ?></span>
-                </div>
+                <nav>
+                    <a class="menu-item" href=".">Reports</a>
+                    <a class="menu-item" href="statistics.php">Statistics</a>
+                    <a class="menu-item" href="camera.php">Camera</a>
+                    <span class="menu-sep">|</span>
+                    <span class="menu-sep">Graph:</span>
+                    <a class="menu-item active-menu-item" href="graph-day.php">Day</a>
+                    <a class="menu-item" href="graph-year.php">Year</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="climate.php">Climate</a>
+                    <span class="menu-sep">|</span>
+                    <a class="menu-item" href="station.php">Station</a>
+                </nav>
             </div>
-        </div>
+        </header>
 
-        <div class="main">
-            <div class="group g_scroller">
-                <div class="scroller_button" onclick="scrollerLeft()">
+        <main class="main-col">
+            <div class="group scroller">
+                <button class="scroller-btn solid-btn" id="scroller-left-btn">
                     <i class="material-icons">chevron_left</i>
+                </button>
+
+                <div class="scroller-centre">
+                    <button class="scroller-time text-btn" id="scroller-time-btn"></button>
                 </div>
-                <div class="scroller_time">
-                    <p id="scroller_time" class="st_picker" onclick="pickerOpen()"></p>
-                </div>
-                <div class="scroller_button" onclick="scrollerRight()">
+
+                <button class="scroller-btn solid-btn" id="scroller-right-btn">
                     <i class="material-icons">chevron_right</i>
-                </div>
+                </button>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('temperature', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">expand_more</i>
-                    </div>
-                    <p class="group_title">Ambient Temperature</p>
-                    <span class="group_key">°C (<span>Air Temp</span>, <span>Exposed Temp</span>, <span>Dew Point</span>)</span>
-                </div>
-
-                <div id="graph_temperature" class="ct-chart g_open"></div>
+            <div class="group">
+                <canvas id="temp-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('humidity', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Relative Humidity</p>
-                    <span class="group_key">% (<span>Relative Humidity</span>)</span>
-                </div>
-
-                <div id="graph_humidity" class="ct-chart"></div>
+            <div class="group">
+                <canvas id="rel-hum-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('wind', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Wind Velocity</p>
-                    <span class="group_key">mph (<span>Wind Speed</span>, <span>Wind Gust</span>)</span>
-                </div>
-
-                <div id="graph_wind" class="ct-chart"></div>
+            <div class="group">
+                <canvas id="wind-vel-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('direction', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Wind Direction</p>
-                    <span class="group_key">° (<span>Wind Direction</span>)</span>
-                </div>
-
-                <div id="graph_direction" class="ct-chart"></div>
+            <div class="group">
+                <canvas id="wind-dir-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('sunshine', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Sunshine Duration</p>
-                    <span class="group_key">hrs (<span>Accumulation</span>)</span>
-                </div>
-
-                <div id="graph_sunshine" class="ct-chart"></div>
+            <div class="group">
+                <canvas id="rainfall-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('rainfall', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Rainfall</p>
-                    <span class="group_key">mm (<span>Accumulation</span>)</span>
-                </div>
-
-                <div id="graph_rainfall" class="ct-chart"></div>
+            <div class="group">
+                <canvas id="sun-dur-chart"></canvas>
             </div>
 
-            <div class="group g_wide">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('pressure', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Mean Sea Level Pressure</p>
-                    <span class="group_key">hPa (<span>Mean Sea Level Pressure</span>)</span>
-                </div>
-
-                <div id="graph_pressure" class="ct-chart"></div>
+            <div class="group final">
+                <canvas id="msl-pres-chart"></canvas>
             </div>
-
-            <div class="group g_wide g_last">
-                <div class="group_header gh_no_separator gh_collapsible" onclick="toggleGraph('soil', this)">
-                    <div class="group_toggle">
-                        <i class="material-icons">chevron_right</i>
-                    </div>
-                    <p class="group_title">Soil Temperature</p>
-                    <span class="group_key">°C (<span>10CM</span>, <span>30CM</span>, <span>1M</span>)</span>
-                </div>
-
-                <div id="graph_soil" class="ct-chart"></div>
-            </div>
-        </div>
-        
+        </main>
     </body>
 </html>

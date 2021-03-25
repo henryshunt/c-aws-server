@@ -1,208 +1,286 @@
 var isLoading = false;
 var requestedTime = null;
-var updaterTimeout = null;
+var updateTimeout = null;
+const charts = {};
 var datePicker = null;
 
-var openGraphs = ["temperature"];
-var graphsLoaded = 0;
-var graphs = {
-    "temperature": null, "humidity": null, "wind": null,
-    "direction": null, "sunshine": null, "rainfall": null, "pressure": null,
-    "soil": null
-};
-var graphFields = {
-    "temperature": "AirT,ExpT,DewP",
-    "humidity": "RelH", "wind": "WSpd,WGst",
-    "direction": "WDir",
-    "sunshine": "SunD",
-    "rainfall": "Rain",
-    "pressure": "MSLP",
-    "soil": "ST10,ST30,ST00"
-};
+window.addEventListener("load", () =>
+{
+    document.getElementById("scroller-left-btn")
+        .addEventListener("click", onScrollerLeftBtnClick);
+    document.getElementById("scroller-right-btn")
+        .addEventListener("click", onScrollerRightBtnClick);
+    document.getElementById("scroller-time-btn")
+        .addEventListener("click", onScrollerTimeBtnClick);
 
-// Make graphs taller when wider
-$(window).resize(function() {
-    if (isLoading === true) return;
-    graphHeightCheck();
-});
-
-$(document).ready(function() {
-    var graphKeys = Object.keys(graphs);
-    for (var i = 0; i < graphKeys.length; i++)
-        graphs[graphKeys[i]] = setUpGraph(graphKeys[i]);
+    setUpCharts();
     updateData(true);
 });
 
+function setUpCharts()
+{
+    charts.temp = setUpChart("temp-chart", true,
+        ["Air Temperature (°C)", "Dew Point (°C)"]);
 
-function setUpGraph(graph) {
-    var options = {
-        showPoint: false, lineSmooth: false, height: 400,
-        height: $(".main").width() > 1050 ? 500 : 400,
+    charts.relHum = setUpChart("rel-hum-chart", true,
+        ["Relative Humidity (%)"]);
 
-        axisY: {
-            offset: 38,
-            labelInterpolationFnc: function(value) {
-                if (graph === "direction") return roundPlaces(value, 0);
-                else if (graph === "sunshine") return roundPlaces(value, 2);
-                else if (graph === "rainfall") return roundPlaces(value, 2);
-                else return roundPlaces(value, 1);
-            }
-        },
+    charts.windVel = setUpChart("wind-vel-chart", true,
+        ["Wind Speed (mph)", "Wind Gust (mph)"], { ticks: { min: 0 } });
 
-        axisX: {
-            type: Chartist.FixedScaleAxis, divisor: 8, offset: 20,    
-            labelInterpolationFnc: function(value) {
-                return moment.unix(value).utc().tz(awsTimeZone).format("HH:mm");
+    charts.windDir = setUpChart("wind-dir-chart", false,
+        ["Wind Direction (°)"], { ticks: { min: 0, max: 360 } });
+
+    charts.rainfall = setUpChart("rainfall-chart", true,
+        ["Rainfall Accumulated (mm)"], { ticks: { min: 0 } });
+
+    charts.sunDur = setUpChart("sun-dur-chart", true,
+        ["Sunshine Duration Accumulated (hrs)"], { ticks: { min: 0 } });
+
+    charts.mslPres = setUpChart("msl-pres-chart", true,
+        ["Mean Sea Level Pressure (hPa)"]);
+}
+
+function setUpChart(element, line, seriesLabels, yOptions = null)
+{
+    const parameters =
+    {
+        type: "scatter",
+        data: { datasets: [] },
+
+        options:
+        {
+            responsive: true,
+            animation: false,
+
+            elements:
+            {
+                line: { borderWidth: 1, lineTension: 0, fill: false },
+                point: { hitRadius: 15, hoverRadius: 0 }
+            },
+
+            scales:
+            {
+                xAxes:
+                [{
+                    type: "time",
+
+                    time:
+                    {
+                        unit: "hour",
+                        stepSize: 3,
+                        tooltipFormat: "dd/LL/yyyy 'at' HH:mm"
+                    }
+                }],
+
+                yAxes: [{ }]
             }
         }
-    };
-
-    if (graph === "direction") {
-        options.axisY.type = Chartist.FixedScaleAxis;
-        options.axisY.divisor = 8;
-        options.axisY.low = 0;
-        options.axisY.high = 360;
-        options.showPoint = true;
-        options.showLine = false;
     }
 
-    return new Chartist.Line("#graph_" + graph, null, options);
+    if (line)
+        parameters.options.elements.point.radius = 0;
+
+    if (yOptions !== null)
+        Object.assign(parameters.options.scales.yAxes[0], yOptions);
+
+    for (let i = 0; i < seriesLabels.length; i++)
+    {
+        const dataset = { label: seriesLabels[i] };
+        
+        if (line)
+            dataset.showLine = true;
+
+        switch (i)
+        {
+            default:
+            case 0: dataset.borderColor = "rgb(195, 39, 40)"; break;
+            case 1: dataset.borderColor = "rgb(50, 136, 195)"; break;
+            case 2: dataset.borderColor = "rgb(55, 145, 109)"; break;
+        }
+
+        parameters.data.datasets.push(dataset);
+    }
+
+    return new Chart(document.getElementById(element), parameters);
 }
 
-function updateData(autoUpdate) {
+
+function updateData(autoUpdate)
+{
     isLoading = true;
-    clearTimeout(updaterTimeout);
-    graphsLoaded = 0;
+    clearTimeout(updateTimeout);
+
+    document.getElementById("scroller-left-btn").disabled = true;
+    document.getElementById("scroller-right-btn").disabled = true;
+    document.getElementById("scroller-time-btn").disabled = true;
     
-    // Update loaded time and set timeout for next refresh
-    if (autoUpdate === true) {
-        requestedTime = moment().utc().millisecond(0).second(0);
-        updaterTimeout = setInterval(function() {
-            updateData(true);
-        }, 300000);
+    if (autoUpdate === true)
+    {
+        requestedTime = luxon.DateTime.fromObject({ zone: awsTimeZone });
+        updateTimeout = setInterval(() => updateData(true), 60000);
     }
 
-    var localTime = moment(requestedTime).tz(awsTimeZone);
-    document.getElementById("scroller_time").innerHTML = localTime.format(
-        "DD/MM/YYYY" + (autoUpdate === true ? " ([at] HH:mm)" : ""));
+    let timeStr = requestedTime.toFormat("dd/LL/yyyy");
+    if (autoUpdate)
+        timeStr += requestedTime.toFormat(" ('at' HH:mm)");
+    document.getElementById("scroller-time-btn").innerHTML = timeStr;
 
-    // Reload data for open graphs
-    if (openGraphs.length > 0) {
-        for (var i = 0; i < openGraphs.length; i++)
-            loadGraphData(openGraphs[i], true);
-    } else isLoading = false;
-}
-
-function loadGraphData(graph, check) {
-    var url = "data/graph-day.php?time=" + requestedTime.format(
-        "YYYY-MM-DD[T]HH-mm-ss") + "&fields=" + graphFields[graph];
-    
-    var localTime = moment(requestedTime).tz(awsTimeZone);
-    var xEnd = moment(localTime).add(1, "day").hour(0).minute(0).unix();
-    var xStart = moment(localTime).hour(0).minute(0).unix();
-
-    // Draw new graph
-    var options = graphs[graph].options;
-    options.axisX.low = xStart;
-    options.axisX.high = xEnd;
-
-    $.getJSON(url, function(response) {
-        if (response !== "1") {
-            graphs[graph].update({ series: response }, options);
-
-            if (check === true) {
-                graphsLoaded += 1;
-                if (graphsLoaded === openGraphs.length) {
-                    graphHeightCheck();
-                    isLoading = false;
-                }
-            } else openGraphs.push(graph);
-        } else requestError();
-
-    }).fail(requestError = function() {
-        graphs[graph].update({ series: null }, options);
-        
-        if (check === true) {
-            graphsLoaded += 1;
-            if (graphsLoaded === openGraphs.length) {
-                graphHeightCheck();
-                isLoading = false;
-            }
-        } else openGraphs.push(graph);
-    });
-}
-
-
-function scrollerLeft() {
-    if (datePicker !== null) datePicker.close();
-    if (isLoading === false) {
-        requestedTime.subtract(1, "days");
-        scrollerChange();
-    }
-}
-
-function scrollerRight() {
-    if (datePicker !== null) datePicker.close();
-    if (isLoading === false) {
-        requestedTime.add(1, "days");
-        scrollerChange();
-    }
-}
-
-function pickerOpen() {
-    if (datePicker !== null) {
-        datePicker.close();
-        return;
-    }
-
-    if (isLoading === false) {
-        var localTime = moment(requestedTime).tz(awsTimeZone);
-        var initTime = new Date(localTime.get("year"),
-            localTime.get("month"), localTime.get("date"));
-
-        datePicker = flatpickr("#scroller_time", {
-            defaultDate: initTime, disableMobile: true,
-
-            onClose: function() {
-                datePicker.destroy();
-                datePicker = null;
-            }
+    loadData(requestedTime)
+        .then(() =>
+        {
+            document.getElementById("scroller-left-btn").disabled = false;
+            document.getElementById("scroller-right-btn").disabled = false;
+            document.getElementById("scroller-time-btn").disabled = false;
+            isLoading = false;
         });
+}
+
+function loadData()
+{
+    return new Promise(resolve =>
+    {
+        const start = requestedTime.startOf("day").toUTC();
+        const end = requestedTime.endOf("day").plus({ minutes: 1 }).toUTC();
+
+        const url = "api.php/reports?start={0}&end={1}".format(
+            start.toFormat("yyyy-LL-dd'T'HH-mm-ss"),
+            end.toFormat("yyyy-LL-dd'T'HH-mm-ss"));
         
-        datePicker.open();
+        getJson(url)
+            .then(data =>
+            {
+                displayData(data, start, end);
+                resolve();
+            })
+            .catch(() =>
+            {
+                for (const chart of Object.values(charts))
+                {
+                    chart.data.datasets[0].data = null;
+                    chart.update();
+                }
+
+                resolve();
+            });
+    });
+}
+
+function displayData(data, start, end)
+{
+    const airTemp = [];
+    const dewPoint = [];
+    const relHum = [];
+    const windSpeed = [];
+    const windGust = [];
+    const windDir = [];
+    const rainfall = [];
+    let rainfallTtl = 0;
+    const sunDur = [];
+    let sunDurTtl = 0;
+    const mslPres = [];
+
+    for (const report of data)
+    {
+        const time = report.time.replace(" ", "T");
+        airTemp.push({ x: time, y: report.airTemp });
+        dewPoint.push({ x: time, y: report.dewPoint });
+        relHum.push({ x: time, y: report.relHum });
+        windSpeed.push({ x: time, y: report.windSpeed });
+        windGust.push({ x: time, y: report.windGust });
+        windDir.push({ x: time, y: report.windDir });
+
+        if (report.rainfall != null)
+            rainfallTtl += report.rainfall;
+        rainfall.push({ x: time, y: rainfallTtl });
+
+        if (report.sunDur != null)
+            sunDurTtl += report.sunDur;
+        sunDur.push({ x: time, y: sunDurTtl / 3600 });
+
+        mslPres.push({ x: time, y: report.mslPres });
+    }
+
+    charts.temp.data.datasets[0].data = airTemp;
+    charts.temp.data.datasets[1].data = dewPoint;
+    charts.relHum.data.datasets[0].data = relHum;
+    charts.windVel.data.datasets[0].data = windSpeed;
+    charts.windVel.data.datasets[1].data = windGust;
+    charts.windDir.data.datasets[0].data = windDir;
+    charts.rainfall.data.datasets[0].data = rainfall;
+    charts.sunDur.data.datasets[0].data = sunDur;
+    charts.mslPres.data.datasets[0].data = mslPres;
+
+    for (const chart of Object.values(charts))
+    {
+        chart.options.scales.xAxes[0].ticks.min = start;
+        chart.options.scales.xAxes[0].ticks.max = end;
+        chart.update();
     }
 }
 
-function pickerSubmit() {
-    var selTime = datePicker.selectedDates[0];
-    selTime = moment.utc({
-        year: selTime.getUTCFullYear(), month: selTime.getUTCMonth(),
-        day: selTime.getUTCDate(), hour: selTime.getUTCHours(),
-        minute: 0, second: 0
+
+function onScrollerLeftBtnClick()
+{
+    if (isLoading)
+        return;
+    
+    requestedTime = requestedTime.minus({ days: 1 });
+    scrollerChange();
+}
+
+function onScrollerRightBtnClick()
+{
+    if (isLoading)
+        return;
+
+    requestedTime = requestedTime.plus({ days: 1 });
+    scrollerChange();
+}
+
+function onScrollerTimeBtnClick()
+{
+    if (datePicker !== null)
+        return;
+
+    datePicker = flatpickr("#scroller-time-btn",
+    {
+        defaultDate: requestedTime.toJSDate(),
+        disableMobile: true,
+        onClose: onDatePickerClose
     });
+    
+    datePicker.open();
+}
 
-    datePicker.close();
+function onDatePickerClose()
+{
+    const selected = luxon.DateTime.fromJSDate(
+        datePicker.selectedDates[0]).setZone("UTC");
 
-    // Submit if selected date different from loaded date
-    var localSel = moment(selTime).tz(awsTimeZone);
-    var localReq = moment(requestedTime).tz(awsTimeZone);
+    datePicker.destroy();
+    datePicker = null;
 
-    if (localSel.format("DD/MM/YYYY") !== localReq.format("DD/MM/YYYY")) {
-        requestedTime = moment(selTime);
+    const different =
+        selected.day !== requestedTime.day ||
+        selected.month !== requestedTime.month ||
+        selected.year !== requestedTime.year;
+
+    if (different)
+    {
+        requestedTime = selected;
         scrollerChange();
     }
 }
 
-function pickerCancel() {
-    datePicker.close();
-}
+function scrollerChange()
+{
+    const now = luxon.DateTime.utc();
 
-function scrollerChange() {
-    var utc = moment().utc().millisecond(0).second(0);
-    var localUtc = moment(utc).tz(awsTimeZone);
-    var localReq = moment(requestedTime).tz(awsTimeZone);
+    const autoUpdate =
+        requestedTime.day === now.day &&
+        requestedTime.month === now.month &&
+        requestedTime.year === now.year;
 
-    // Load data and start auto update if needed
-    updateData(localUtc.format("DD/MM/YYYY") === localReq.format(
-        "DD/MM/YYYY") ? true : false, true);
+    updateData(autoUpdate);
 }
