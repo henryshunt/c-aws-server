@@ -1,5 +1,5 @@
 <?php
-require_once "php/helpers.php";
+require_once "php/utilities.php";
 
 $config = load_config("config.json");
 if ($config === false)
@@ -21,25 +21,25 @@ $title = "AWS " . $config["stationName"] . " " .
         <title><?php echo $title; ?></title>
         <meta name="viewport" content="width=device-width">
 
-        <link href="resources/styles/reset.css" rel="stylesheet">
-        <link href="resources/styles/defaults.css" rel="stylesheet">
+        <link href="resources/css/reset.css" rel="stylesheet">
+        <link href="resources/css/globals.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="resources/scripts/helpers.js"></script>
+        <script src="resources/js/utilities.js"></script>
 
         <script>
             const awsTimeZone = "<?php echo $config["timeZone"]; ?>";
         </script>
 
-        <link href="resources/styles/header.css" rel="stylesheet">
+        <link href="resources/css/header.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0/build/global/luxon.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.2/dist/chartjs-adapter-luxon.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <link href="resources/styles/grouping.css" rel="stylesheet">
-        <script src="resources/scripts/page-graph-day.js"></script>
+        <link href="resources/css/grouping.css" rel="stylesheet">
+        <script src="resources/js/pages/graph-day.js"></script>
     </head>
 
     <body>

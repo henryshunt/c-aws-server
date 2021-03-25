@@ -1,7 +1,7 @@
 <?php
 require_once "vendor/autoload.php";
 require_once "php/autoload.php";
-require_once "php/helpers.php";
+require_once "php/utilities.php";
 
 use Aws\Response;
 use Aws\HttpException;
