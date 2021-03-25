@@ -85,9 +85,9 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Air Temperature</td>
-                        <td><span>AVG: </span><span id="item_AirT_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_AirT_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_AirT_Max"></span></td>
+                        <td><span>AVG: </span><span id="air-temp-avg"></span></td>
+                        <td><span>MIN: </span><span id="air-temp-min"></span></td>
+                        <td><span>MAX: </span><span id="air-temp-max"></span></td>
                     </tr>
                 </table>
             </div>
@@ -100,15 +100,9 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Relative Humidity</td>
-                        <td><span>AVG: </span><span id="item_RelH_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_RelH_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_RelH_Max"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Dew Point</td>
-                        <td><span>AVG: </span><span id="item_DewP_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_DewP_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_DewP_Max"></span></td>
+                        <td><span>AVG: </span><span id="rel-hum-avg"></span></td>
+                        <td><span>MIN: </span><span id="rel-hum-min"></span></td>
+                        <td><span>MAX: </span><span id="rel-hum-max"></span></td>
                     </tr>
                 </table>
             </div>
@@ -121,19 +115,19 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Wind Speed</td>
-                        <td><span>AVG: </span><span id="item_WSpd_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_WSpd_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_WSpd_Max"></span></td>
+                        <td><span>AVG: </span><span id="wind-speed-avg"></span></td>
+                        <td><span>MIN: </span><span id="wind-speed-min"></span></td>
+                        <td><span>MAX: </span><span id="wind-speed-max"></span></td>
                     </tr>
                     <tr>
                         <td>Wind Direction</td>
-                        <td><span>AVG: </span><span id="item_WDir_Avg"></span></td>
+                        <td><span>AVG: </span><span id="wind-dir-avg"></span></td>
                     </tr>
                     <tr>
                         <td>Wind Gust</td>
-                        <td><span>AVG: </span><span id="item_WGst_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_WGst_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_WGst_Max"></span></td>
+                        <td><span>AVG: </span><span id="wind-gust-avg"></span></td>
+                        <td><span>MIN: </span><span id="wind-gust-min"></span></td>
+                        <td><span>MAX: </span><span id="wind-gust-max"></span></td>
                     </tr>
                 </table>
             </div>
@@ -146,7 +140,7 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Sunshine Duration</td>
-                        <td><span>AVG: </span><span id="item_SunD_Ttl"></span></td>
+                        <td><span>TTL: </span><span id="sun-dur-ttl"></span></td>
                     </tr>
                 </table>
             </div>
@@ -159,7 +153,7 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Rainfall</td>
-                        <td><span>AVG: </span><span id="item_Rain_Ttl"></span></td>
+                        <td><span>TTL: </span><span id="rainfall-ttl"></span></td>
                     </tr>
                 </table>
             </div>
@@ -172,9 +166,9 @@ $title = "AWS " . $config["stationName"] . " " .
                 <table class="field-table">
                     <tr>
                         <td>Mean Sea Level Pressure</td>
-                        <td><span>AVG: </span><span id="item_MSLP_Avg"></span></td>
-                        <td><span>MIN: </span><span id="item_MSLP_Min"></span></td>
-                        <td><span>MAX: </span><span id="item_MSLP_Max"></span></td>
+                        <td><span>AVG: </span><span id="msl-pres-avg"></span></td>
+                        <td><span>MIN: </span><span id="msl-pres-min"></span></td>
+                        <td><span>MAX: </span><span id="msl-pres-max"></span></td>
                     </tr>
                 </table>
             </div>

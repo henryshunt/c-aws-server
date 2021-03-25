@@ -94,43 +94,85 @@ function displayData(data, showTime)
         timeStr += requestedTime.toFormat(" ('at' HH:mm)");
 
     document.getElementById("scroller-time-btn").innerHTML = timeStr;
-    displayValue(data["airTempAvg"], "item_AirT_Avg", "°C", 1);
-    displayValue(data["airTempMin"], "item_AirT_Min", "°C", 1);
-    displayValue(data["airTempMax"], "item_AirT_Max", "°C", 1);
-    displayValue(data["relHumAvg"], "item_RelH_Avg", "%", 1);
-    displayValue(data["relHumMin"], "item_RelH_Min", "%", 1);
-    displayValue(data["relHumMax"], "item_RelH_Max", "%", 1);
-    displayValue(data["dewPointAvg"], "item_DewP_Avg", "°C", 1);
-    displayValue(data["dewPointMin"], "item_DewP_Min", "°C", 1);
-    displayValue(data["dewPointMax"], "item_DewP_Max", "°C", 1);
-    displayValue(data["windSpeedAvg"], "item_WSpd_Avg", " mph", 1);
-    displayValue(data["windSpeedMin"], "item_WSpd_Min", " mph", 1);
-    displayValue(data["windSpeedMax"], "item_WSpd_Max", " mph", 1);
+
+    if (data["airTempAvg"] !== null)
+        document.getElementById("air-temp-avg").innerText = data["airTempAvg"] + "°C";
+    else document.getElementById("air-temp-avg").innerText = "No Data";
+
+    if (data["airTempMin"] !== null)
+        document.getElementById("air-temp-min").innerText = data["airTempMin"] + "°C";
+    else document.getElementById("air-temp-min").innerText = "No Data";
+
+    if (data["airTempMax"] !== null)
+        document.getElementById("air-temp-max").innerText = data["airTempMax"] + "°C";
+    else document.getElementById("air-temp-max").innerText = "No Data";
+
+    if (data["relHumAvg"] !== null)
+        document.getElementById("rel-hum-avg").innerText = data["relHumAvg"] + "%";
+    else document.getElementById("rel-hum-avg").innerText = "No Data";
+
+    if (data["relHumMin"] !== null)
+        document.getElementById("rel-hum-min").innerText = data["relHumMin"] + "%";
+    else document.getElementById("rel-hum-min").innerText = "No Data";
+
+    if (data["relHumMax"] !== null)
+        document.getElementById("rel-hum-max").innerText = data["relHumMax"] + "%";
+    else document.getElementById("rel-hum-max").innerText = "No Data";
+
+    if (data["windSpeedAvg"] !== null)
+        document.getElementById("wind-speed-avg").innerText = data["windSpeedAvg"] + " mph";
+    else document.getElementById("wind-speed-avg").innerText = "No Data";
+
+    if (data["windSpeedMin"] !== null)
+        document.getElementById("wind-speed-min").innerText = data["windSpeedMin"] + " mph";
+    else document.getElementById("wind-speed-min").innerText = "No Data";
+
+    if (data["windSpeedMax"] !== null)
+        document.getElementById("wind-speed-max").innerText = data["windSpeedMax"] + " mph";
+    else document.getElementById("wind-speed-max").innerText = "No Data";
 
     if (data["windDirAvg"] !== null)
     {
-        const formatted = "{0}° ({1})".format(
-            data["windDirAvg"], degreesToCompass(data["windDirAvg"]));
-        document.getElementById("item_WDir_Avg").innerHTML = formatted;
+        const formatted = "{0}° ({1})".format(data["windDirAvg"],
+            degreesToCompass(data["windDirAvg"]));
+        document.getElementById("wind-dir-avg").innerHTML = formatted;
     }
-    else document.getElementById("item_WDir_Avg").innerHTML = "No Data";
+    else document.getElementById("wind-dir-avg").innerHTML = "No Data";
 
-    displayValue(data["windGustAvg"], "item_WGst_Avg", " mph", 1);
-    displayValue(data["windGustMin"], "item_WGst_Min", " mph", 1);
-    displayValue(data["windGustMax"], "item_WGst_Max", " mph", 1);
+    if (data["windGustAvg"] !== null)
+        document.getElementById("wind-gust-avg").innerText = data["windGustAvg"] + " mph";
+    else document.getElementById("wind-gust-avg").innerText = "No Data";
 
-    // if (data["sunDurTtl"] !== null)
-    // {
-    //     var formatted = moment.utc(data["SunD_Ttl"] * 1000).format("HH:mm:ss");
-    //     var formatted2 = data["SunD_Ttl"] / 60 / 60;
-    //     document.getElementById("item_SunD_Ttl").innerHTML
-    //         = formatted + " (" + roundPlaces(formatted2, 1) + " hrs)";
-    // } else document.getElementById("item_SunD_Ttl").innerHTML = "No Data";
+    if (data["windGustMin"] !== null)
+        document.getElementById("wind-gust-min").innerText = data["windGustMin"] + " mph";
+    else document.getElementById("wind-gust-min").innerText = "No Data";
 
-    displayValue(data["rainfallTtl"], "item_Rain_Ttl", " mm", 2);
-    displayValue(data["mslPresAvg"], "item_MSLP_Avg", " hPa", 1);
-    displayValue(data["mslPresMin"], "item_MSLP_Min", " hPa", 1);
-    displayValue(data["mslPresMax"], "item_MSLP_Max", " hPa", 1);
+    if (data["windGustMax"] !== null)
+        document.getElementById("wind-gust-max").innerText = data["windGustMax"] + " mph";
+    else document.getElementById("wind-gust-max").innerText = "No Data";
+
+    if (data["sunDurTtl"] !== null)
+    {
+        document.getElementById("sun-dur-ttl").innerHTML
+            = roundPlaces(data["sunDurTtl"] / 60 / 60, 2) + " hr";
+    }
+    else document.getElementById("sun-dur-ttl").innerHTML = "No Data";
+
+    if (data["rainfallTtl"] !== null)
+        document.getElementById("rainfall-ttl").innerText = data["rainfallTtl"] + " mm";
+    else document.getElementById("rainfall-ttl").innerText = "No Data";
+
+    if (data["mslPresAvg"] !== null)
+        document.getElementById("msl-pres-avg").innerText = data["mslPresAvg"] + " hPa";
+    else document.getElementById("msl-pres-avg").innerText = "No Data";
+
+    if (data["mslPresMin"] !== null)
+        document.getElementById("msl-pres-min").innerText = data["mslPresMin"] + " hPa";
+    else document.getElementById("msl-pres-min").innerText = "No Data";
+
+    if (data["mslPresMax"] !== null)
+        document.getElementById("msl-pres-max").innerText = data["mslPresMax"] + " hPa";
+    else document.getElementById("msl-pres-max").innerText = "No Data";
 }
 
 
