@@ -28,11 +28,10 @@ function updateData(autoUpdate)
     if (autoUpdate)
     {
         requestedTime = luxon.DateTime.fromObject({ zone: awsTimeZone });
-        updateTimeout = setInterval(
-            () => updateData(true), 60000);
+        updateTimeout = setInterval(() => updateData(true), 60000);
     }
 
-    loadData(requestedTime, autoUpdate)
+    loadData(autoUpdate)
         .then(() =>
         {
             document.getElementById("scroller-left-btn").disabled = false;
@@ -42,28 +41,26 @@ function updateData(autoUpdate)
         });
 }
 
-function loadData(time, showTime)
+function loadData(showTime)
 {
     return new Promise(resolve =>
     {
-        let url = "api.php/statistics/daily/" + time.toFormat("yyyy-LL-dd");
+        let url = "api.php/statistics/daily/" +
+            requestedTime.toFormat("yyyy-LL-dd");
 
         getJson(url)
             .then(data =>
             {
-                displayData(data, time, showTime);
+                displayData(data, showTime);
                 resolve();
             })
             .catch(() =>
             {
-                let timeStr = time.toFormat("dd/LL/yyyy");
+                let timeStr = requestedTime.toFormat("dd/LL/yyyy");
                 if (showTime)
-                {
-                    timeStr += luxon.DateTime.fromObject({ zone: awsTimeZone })
-                        .toFormat(" ('at' HH:mm)");
-                }
+                    timeStr += requestedTime.toFormat(" ('at' HH:mm)");
 
-                document.getElementById("scroller-time-btn").innerHTML = timeStr;                
+                document.getElementById("scroller-time-btn").innerHTML = timeStr;
                 document.getElementById("item_AirT_Avg").innerHTML = "No Data";
                 document.getElementById("item_AirT_Min").innerHTML = "No Data";
                 document.getElementById("item_AirT_Max").innerHTML = "No Data";
@@ -90,14 +87,11 @@ function loadData(time, showTime)
     });
 }
 
-function displayData(data, time, showTime)
+function displayData(data, showTime)
 {
-    let timeStr = time.toFormat("dd/LL/yyyy");
+    let timeStr = requestedTime.toFormat("dd/LL/yyyy");
     if (showTime)
-    {
-        timeStr += luxon.DateTime.fromObject({ zone: awsTimeZone })
-            .toFormat(" ('at' HH:mm)");
-    }
+        timeStr += requestedTime.toFormat(" ('at' HH:mm)");
 
     document.getElementById("scroller-time-btn").innerHTML = timeStr;
     displayValue(data["airTempAvg"], "item_AirT_Avg", "°C", 1);

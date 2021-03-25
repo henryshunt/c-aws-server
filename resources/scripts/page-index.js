@@ -59,14 +59,11 @@ function updateData(autoUpdate, auto)
 
     if (autoUpdate)
     {
-        requestedTime = luxon.DateTime.utc()
-            .set({ seconds: 0, milliseconds: 0 });
-
-        updateTimeout = setInterval(
-            () => updateData(true, true), 60000);
+        requestedTime = luxon.DateTime.utc();
+        updateTimeout = setInterval(() => updateData(true, true), 60000);
     }
 
-    loadData(requestedTime, auto)
+    loadData(auto)
         .then(() =>
         {
             document.getElementById("scroller-left-btn").disabled = false;
@@ -76,12 +73,12 @@ function updateData(autoUpdate, auto)
         });
 }
 
-function loadData(time, auto)
+function loadData(auto)
 {
     return new Promise(resolve =>
     {
         let url = "api.php/reports/{0}?extra=true".format(
-            time.toFormat("yyyy-LL-dd'T'HH-mm-ss"));
+            requestedTime.toFormat("yyyy-LL-dd'T'HH-mm-00"));
     
         if (auto)
             url += "&auto=true";
@@ -95,7 +92,7 @@ function loadData(time, auto)
             .catch(() =>
             {
                 document.getElementById("scroller-time-btn").innerHTML
-                    = time.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
+                    = requestedTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
                 
                 document.getElementById("item_AirT").innerHTML = "No Data";
                 document.getElementById("item_RelH").innerHTML = "No Data";
