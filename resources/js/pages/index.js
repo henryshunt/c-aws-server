@@ -77,7 +77,7 @@ function loadData(auto)
 {
     return new Promise(resolve =>
     {
-        let url = "api.php/reports/{0}?extra=true".format(
+        let url = "api.php/reports/{0}?extras=true".format(
             requestedTime.toFormat("yyyy-LL-dd'T'HH-mm-00"));
     
         if (auto)
@@ -119,42 +119,73 @@ function displayData(data)
     document.getElementById("scroller-time-btn").innerHTML = 
         requestedTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
 
-    displayValue(data["airTemp"], "item_AirT", "°C", 1);
-    displayValue(data["relHum"], "item_RelH", "%", 1);
-    displayValue(data["dewPoint"], "item_DewP", "°C", 1);
-    displayValue(data["windSpeed"], "item_WSpd", " mph", 1);
+    if (data["airTemp"] !== null)
+        document.getElementById("air-temp").innerText = data["airTemp"] + "°C";
+    else document.getElementById("air-temp").innerText = "No Data";
+    
+    if (data["relHum"] !== null)
+        document.getElementById("rel-hum").innerText = data["relHum"] + "%";
+    else document.getElementById("rel-hum").innerText = "No Data";
+
+    if (data["dewPoint"] !== null)
+        document.getElementById("dew-point").innerText = data["dewPoint"] + "°C";
+    else document.getElementById("dew-point").innerText = "No Data";
+
+    if (data["windSpeed"] !== null)
+        document.getElementById("wind-speed").innerText = data["windSpeed"] + " mph";
+    else document.getElementById("wind-speed").innerText = "No Data";
 
     if (data["windDir"] !== null)
     {
-        const formatted = "{0}° ({1})".format(
-            data["windDir"], degreesToCompass(data["windDir"]));
-        document.getElementById("item_WDir").innerHTML = formatted;
+        const formatted = "{0}° ({1})".format(data["windDir"],
+            degreesToCompass(data["windDir"]));
+        document.getElementById("wind-dir").innerHTML = formatted;
     }
-    else document.getElementById("item_WDir").innerHTML = "No Data";
+    else document.getElementById("wind-dir").innerHTML = "No Data";
 
-    displayValue(data["windGust"], "item_WGst", " mph", 1);
-    displayValue(data["rainfall"], "item_Rain", " mm", 2);
-    // displayValue(data["rainfall_pth"], "item_Rain_PHr", " mm", 2);
-    displayValue(data["sun_dur"], "item_SunD", " sec", 0);
+    if (data["windGust"] !== null)
+        document.getElementById("wind-gust").innerText = data["windGust"] + " mph";
+    else document.getElementById("wind-gust").innerText = "No Data";
 
-    // if (data["sun_dur_phr"] !== null)
-    // {
-    //     var formatted = moment.utc(
-    //         data["sun_dur_phr"] * 1000).format("HH:mm:ss");
-    //     document.getElementById("item_SunD_PHr").innerHTML = formatted;
-    // }
-    // else document.getElementById("item_SunD_PHr").innerHTML = "No Data";
+    if (data["rainfall"] !== null)
+        document.getElementById("rainfall").innerText = data["rainfall"] + " mm";
+    else document.getElementById("rainfall").innerText = "No Data";
 
-    displayValue(data["staPres"], "item_StaP", " hPa", 1);
-    displayValue(data["mslPres"], "item_MSLP", " hPa", 1);
-    
-    // if (data["sta_pres_pth"] !== null)
-    // {
-    //     var formatted = roundPlaces(data["sta_pres_pth"], 1) + " hpa";
-    //     if (data["sta_pres_pth"] > 0) formatted = "+" + formatted;
-    //     document.getElementById("item_StaP_PTH").innerHTML = formatted;
-    // }
-    // else document.getElementById("item_StaP_PTH").innerHTML = "No Data";
+    if (data["rainfallPastHour"] !== null)
+    {
+        document.getElementById("rainfall-ph").innerText =
+            data["rainfallPastHour"] + " mm";
+    }
+    else document.getElementById("rainfall-ph").innerText = "No Data";
+
+    if (data["sunDur"] !== null)
+        document.getElementById("sun-dur").innerText = data["sunDur"] + " sec";
+    else document.getElementById("sun-dur").innerText = "No Data";
+
+    if (data["sunDurPastHour"] !== null)
+    {
+        document.getElementById("sun-dur-ph").innerHTML =
+            roundPlaces(data["sunDurPastHour"] / 60 / 60, 2) + " hr";
+    }
+    else document.getElementById("sun-dur-ph").innerHTML = "No Data";
+
+    if (data["staPres"] !== null)
+        document.getElementById("sta-pres").innerText = data["staPres"] + " hPa";
+    else document.getElementById("sta-pres").innerText = "No Data";
+
+    if (data["mslPres"] !== null)
+        document.getElementById("msl-pres").innerText = data["mslPres"] + " hPa";
+    else document.getElementById("msl-pres").innerText = "No Data";
+
+    if (data["mslPresTendency"] !== null)
+    {
+        let formatted = data["mslPresTendency"] + " hpa";
+        if (data["mslPresTendency"] > 0)
+            formatted = "+" + formatted;
+            
+        document.getElementById("msl-pres-tend").innerHTML = formatted;
+    }
+    else document.getElementById("msl-pres-tend").innerHTML = "No Data";
 }
 
 

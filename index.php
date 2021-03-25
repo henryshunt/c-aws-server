@@ -86,7 +86,7 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Air Temperature</td>
-                            <td id="item_AirT"></td>
+                            <td id="air-temp"></td>
                         </tr>
                     </table>
                 </div>
@@ -99,11 +99,11 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Relative Humidity</td>
-                            <td id="item_RelH"></td>
+                            <td id="rel-hum"></td>
                         </tr>
                         <tr>
                             <td>Dew Point</td>
-                            <td id="item_DewP"></td>
+                            <td id="dew-point"></td>
                         </tr>
                     </table>
                 </div>
@@ -116,15 +116,15 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Wind Speed</td>
-                            <td id="item_WSpd"></td>
+                            <td id="wind-speed"></td>
                         </tr>
                         <tr>
                             <td>Wind Direction (from)</td>
-                            <td id="item_WDir"></td>
+                            <td id="wind-dir"></td>
                         </tr>
                         <tr>
                             <td>Wind Gust</td>
-                            <td id="item_WGst"></td>
+                            <td id="wind-gust"></td>
                         </tr>
                     </table>
                 </div>
@@ -137,11 +137,11 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Sunshine Duration</td>
-                            <td id="item_SunD"></td>
+                            <td id="sun-dur"></td>
                         </tr>
                         <tr>
                             <td>Sunshine Duration (Past Hour)</td>
-                            <td id="item_SunD_PHr"></td>
+                            <td id="sun-dur-ph"></td>
                         </tr>
                     </table>
                 </div>
@@ -154,11 +154,11 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Rainfall</td>
-                            <td id="item_Rain"></td>
+                            <td id="rainfall"></td>
                         </tr>
                         <tr>
                             <td>Rainfall (Past Hour)</td>
-                            <td id="item_Rain_PHr"></td>
+                            <td id="rainfall-ph"></td>
                         </tr>
                     </table>
                 </div>
@@ -171,15 +171,15 @@ $title = "AWS " . $config["stationName"] . " " .
                     <table class="field-table">
                         <tr>
                             <td>Station Pressure (At Station Elev)</td>
-                            <td id="item_StaP"></td>
+                            <td id="sta-pres"></td>
                         </tr>
                         <tr>
                             <td>Mean Sea Level Pressure</td>
-                            <td id="item_MSLP"></td>
+                            <td id="msl-pres"></td>
                         </tr>
                         <tr>
                             <td>3-Hour Pressure Tendency</td>
-                            <td id="item_StaP_PTH"></td>
+                            <td id="msl-pres-tend"></td>
                         </tr>
                     </table>
                 </div>

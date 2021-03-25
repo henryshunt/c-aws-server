@@ -24,7 +24,7 @@ class ReportGetEndpoint extends Endpoint
     {
         $validator = V
             ::key("auto", V::in(["true", "false"], true), false)
-            ->key("extra", V::in(["true", "false"], true), false);
+            ->key("extras", V::in(["true", "false"], true), false);
 
         try { $validator->check($_GET); }
         catch (ValidationException $ex)
@@ -41,7 +41,13 @@ class ReportGetEndpoint extends Endpoint
         $query = database_query($this->pdo, $sql, [$time->format("Y-m-d H:i:s")]);
 
         if (count($query) > 0)
-            return (new Response(200))->setBody(json_encode(cast_report($query[0])));
+        {
+            if (key_exists_matches("extras", "true", $_GET))
+                $report = $this->addExtras($query[0], clone $time);
+            else $report = $query[0];
+
+            return (new Response(200))->setBody(json_encode(cast_report($report)));
+        }
         else
         {
             // Because there can be a delay between data being recorded and being made available,
@@ -53,10 +59,56 @@ class ReportGetEndpoint extends Endpoint
                 $query = database_query($this->pdo, $sql, [$time->format("Y-m-d H:i:s")]);
 
                 if (count($query) > 0)
-                    return (new Response(200))->setBody(json_encode(cast_report($query[0])));
+                {
+                    if (key_exists_matches("extras", "true", $_GET))
+                        $report = $this->addExtras($query[0], clone $time);
+                    else $report = $query[0];
+
+                    return (new Response(200))->setBody(json_encode(cast_report($report)));
+                }
                 else throw new HttpException(404);
             }
             else throw new HttpException(404);
         }
+    }
+
+    private function addExtras(array $report, \DateTime $time): array
+    {
+        $hourAgo = clone $time;
+        $hourAgo->sub(new \DateInterval("PT1H"));
+
+        // Past hour rainfall
+        $sql = "SELECT SUM(rainfall) FROM reports WHERE time BETWEEN ? AND ?";
+        $query = database_query($this->pdo, $sql,
+            [$hourAgo->format("Y-m-d H:i:s"), $time->format("Y-m-d H:i:s")]);
+
+        $report["rainfallPastHour"] = (double)$query[0]["SUM(rainfall)"];
+
+        // Past hour sunshine duration
+        $sql = "SELECT SUM(sunDur) FROM reports WHERE time BETWEEN ? AND ?";
+        $query = database_query($this->pdo, $sql,
+            [$hourAgo->format("Y-m-d H:i:s"), $time->format("Y-m-d H:i:s")]);
+
+        $report["sunDurPastHour"] = (int)$query[0]["SUM(sunDur)"];
+
+        // Pressure tendency
+        if ($report["mslPres"] !== null)
+        {
+            $sql = "SELECT mslPres FROM reports WHERE time = ? LIMIT 1";
+            $tendTime = (clone $time)->sub(new \DateInterval("PT3H"));
+
+            $query = database_query($this->pdo, $sql,
+                [$tendTime->format("Y-m-d H:i:s")]);
+
+            if (count($query) > 0 && $query[0]["mslPres"] !== null)
+            {
+                $report["mslPresTendency"] =
+                    round($query[0]["mslPres"] - $report["mslPres"], 1);
+            }
+            else $report["mslPresTendency"] = null;
+        }
+        else $report["mslPresTendency"] = null;
+
+        return $report;
     }
 }
