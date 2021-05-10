@@ -94,19 +94,19 @@ function loadData(auto)
                 document.getElementById("scroller-time-btn").innerHTML
                     = requestedTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
                 
-                document.getElementById("item_AirT").innerHTML = "No Data";
-                document.getElementById("item_RelH").innerHTML = "No Data";
-                document.getElementById("item_DewP").innerHTML = "No Data";
-                document.getElementById("item_WSpd").innerHTML = "No Data";
-                document.getElementById("item_WDir").innerHTML = "No Data";
-                document.getElementById("item_WGst").innerHTML = "No Data";
-                document.getElementById("item_Rain").innerHTML = "No Data";
-                document.getElementById("item_Rain_PHr").innerHTML = "No Data";
-                document.getElementById("item_SunD").innerHTML = "No Data";
-                document.getElementById("item_SunD_PHr").innerHTML = "No Data";
-                document.getElementById("item_StaP").innerHTML = "No Data";
-                document.getElementById("item_MSLP").innerHTML = "No Data";
-                document.getElementById("item_StaP_PTH").innerHTML = "No Data";
+                document.getElementById("air-temp").innerHTML = "No Data";
+                document.getElementById("rel-hum").innerHTML = "No Data";
+                document.getElementById("dew-point").innerHTML = "No Data";
+                document.getElementById("wind-speed").innerHTML = "No Data";
+                document.getElementById("wind-dir").innerHTML = "No Data";
+                document.getElementById("wind-gust").innerHTML = "No Data";
+                document.getElementById("rainfall").innerHTML = "No Data";
+                document.getElementById("rainfall-ph").innerHTML = "No Data";
+                document.getElementById("sun-dur").innerHTML = "No Data";
+                document.getElementById("sun-dur-ph").innerHTML = "No Data";
+                document.getElementById("sta-pres").innerHTML = "No Data";
+                document.getElementById("msl-pres").innerHTML = "No Data";
+                document.getElementById("msl-pres-tend").innerHTML = "No Data";
                 resolve();
             });
     });
