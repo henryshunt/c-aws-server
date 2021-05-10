@@ -132,7 +132,10 @@ function displayData(data)
     else document.getElementById("dew-point").innerText = "No Data";
 
     if (data["windSpeed"] !== null)
-        document.getElementById("wind-speed").innerText = data["windSpeed"] + " mph";
+    {
+        document.getElementById("wind-speed").innerText =
+            roundPlaces(data["windSpeed"] * 2.237, 1) + " mph";
+    }
     else document.getElementById("wind-speed").innerText = "No Data";
 
     if (data["windDir"] !== null)
@@ -144,7 +147,10 @@ function displayData(data)
     else document.getElementById("wind-dir").innerHTML = "No Data";
 
     if (data["windGust"] !== null)
-        document.getElementById("wind-gust").innerText = data["windGust"] + " mph";
+    {
+        document.getElementById("wind-gust").innerText =
+            roundPlaces(data["windGust"] * 2.237, 1) + " mph";
+    }
     else document.getElementById("wind-gust").innerText = "No Data";
 
     if (data["rainfall"] !== null)
