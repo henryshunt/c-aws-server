@@ -17,7 +17,7 @@ try
     $pdo = database_connect($config);
 
     if ($_SERVER["REQUEST_METHOD"] !== "GET" &&
-        !api_check_auth($config["transmitUsername"], $config["transmitPassword"]))
+        !api_check_auth($config["uploadUsername"], $config["uploadPassword"]))
     {
         header("WWW-Authenticate: Basic");
         throw new HttpException(401);
