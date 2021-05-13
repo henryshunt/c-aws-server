@@ -8,7 +8,7 @@ use Respect\Validation\Exceptions\ValidationException;
 use Aws\HttpException;
 
 
-class ReportGetEndpoint extends Endpoint
+class ObservationGetEndpoint extends Endpoint
 {
     public function __invoke(): Response
     {
@@ -17,7 +17,7 @@ class ReportGetEndpoint extends Endpoint
             throw new HttpException(404);
 
         $this->validateUrlParams();
-        return $this->readReport();
+        return $this->readObservation();
     }
 
     private function validateUrlParams(): void
@@ -33,26 +33,26 @@ class ReportGetEndpoint extends Endpoint
         }
     }
 
-    private function readReport(): Response
+    private function readObservation(): Response
     {
         $time = \DateTime::createFromFormat("Y-m-d\TH-i-s", $this->resParams["time"]);
 
-        $sql = "SELECT * FROM reports WHERE time = ? LIMIT 1";
+        $sql = "SELECT * FROM observations WHERE time = ? LIMIT 1";
         $query = database_query($this->pdo, $sql, [$time->format("Y-m-d H:i:s")]);
 
         if (count($query) > 0)
         {
             if (key_exists_matches("extras", "true", $_GET))
-                $report = $this->addExtras($query[0], clone $time);
-            else $report = $query[0];
+                $observation = $this->addExtras($query[0], clone $time);
+            else $observation = $query[0];
 
-            return (new Response(200))->setBody(json_encode(cast_report($report)));
+            return (new Response(200))->setBody(json_encode(cast_observation($observation)));
         }
         else
         {
             // Because there can be a delay between data being recorded and being made available,
-            // if the requested report does not exist and auto is true, try getting the report for
-            // one minute earlier
+            // if the requested observation does not exist and auto is true, try getting the
+            // observation for one minute earlier
             if (key_exists_matches("auto", "true", $_GET))
             {
                 $time->sub(new \DateInterval("PT1M"));
@@ -61,10 +61,10 @@ class ReportGetEndpoint extends Endpoint
                 if (count($query) > 0)
                 {
                     if (key_exists_matches("extras", "true", $_GET))
-                        $report = $this->addExtras($query[0], clone $time);
-                    else $report = $query[0];
+                        $observation = $this->addExtras($query[0], clone $time);
+                    else $observation = $query[0];
 
-                    return (new Response(200))->setBody(json_encode(cast_report($report)));
+                    return (new Response(200))->setBody(json_encode(cast_observation($observation)));
                 }
                 else throw new HttpException(404);
             }
@@ -72,29 +72,33 @@ class ReportGetEndpoint extends Endpoint
         }
     }
 
-    private function addExtras(array $report, \DateTime $time): array
+    private function addExtras(array $observation, \DateTime $time): array
     {
         $hourAgo = clone $time;
         $hourAgo->sub(new \DateInterval("PT1H"));
 
         // Past hour rainfall
-        $sql = "SELECT SUM(rainfall) FROM reports WHERE time BETWEEN ? AND ?";
+        $sql = "SELECT SUM(rainfall) FROM observations WHERE time BETWEEN ? AND ?";
         $query = database_query($this->pdo, $sql,
             [$hourAgo->format("Y-m-d H:i:s"), $time->format("Y-m-d H:i:s")]);
 
-        $report["rainfallPastHour"] = (double)$query[0]["SUM(rainfall)"];
+        if ($query[0]["SUM(rainfall)"] !== null)
+            $observation["rainfallPastHour"] = (double)$query[0]["SUM(rainfall)"];
+        else $observation["rainfallPastHour"] = null;
 
         // Past hour sunshine duration
-        $sql = "SELECT SUM(sunDur) FROM reports WHERE time BETWEEN ? AND ?";
+        $sql = "SELECT SUM(sunDur) FROM observations WHERE time BETWEEN ? AND ?";
         $query = database_query($this->pdo, $sql,
             [$hourAgo->format("Y-m-d H:i:s"), $time->format("Y-m-d H:i:s")]);
 
-        $report["sunDurPastHour"] = (int)$query[0]["SUM(sunDur)"];
+        if ($query[0]["SUM(sunDur)"] !== null)
+            $observation["sunDurPastHour"] = (int)$query[0]["SUM(sunDur)"];
+        else $observation["sunDurPastHour"] = null;
 
         // Pressure tendency
-        if ($report["mslPres"] !== null)
+        if ($observation["mslPres"] !== null)
         {
-            $sql = "SELECT mslPres FROM reports WHERE time = ? LIMIT 1";
+            $sql = "SELECT mslPres FROM observations WHERE time = ? LIMIT 1";
             $tendTime = (clone $time)->sub(new \DateInterval("PT3H"));
 
             $query = database_query($this->pdo, $sql,
@@ -102,13 +106,13 @@ class ReportGetEndpoint extends Endpoint
 
             if (count($query) > 0 && $query[0]["mslPres"] !== null)
             {
-                $report["mslPresTendency"] =
-                    round($query[0]["mslPres"] - $report["mslPres"], 1);
+                $observation["mslPresTendency"] =
+                    round($query[0]["mslPres"] - $observation["mslPres"], 1);
             }
-            else $report["mslPresTendency"] = null;
+            else $observation["mslPresTendency"] = null;
         }
-        else $report["mslPresTendency"] = null;
+        else $observation["mslPresTendency"] = null;
 
-        return $report;
+        return $observation;
     }
 }

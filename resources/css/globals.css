@@ -10,7 +10,7 @@
 }
 
 body {
-    min-width: 556px;
+    min-width: 590px;
     background-color: var(--prim-backg-colour);
     color: var(--prim-text-colour);
 }

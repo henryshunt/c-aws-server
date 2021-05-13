@@ -26,11 +26,11 @@ try
 
     $router = new AltoRouter();
     $router->setBasePath($_SERVER["SCRIPT_NAME"]);
-    $router->addMatchTypes(["dt" => "[0-9]{4}-[0-9]{2}-[0-9]{2}T([0-9]{2}-){2}[0-9]{2}"]);
-    $router->addMatchTypes(["da" => "[0-9]{4}-[0-9]{2}-[0-9]{2}"]);
+    $router->addMatchTypes(["dt" => "[0-9]{4}-[0-9]{2}-[0-9]{2}T([0-9]{2}-){2}[0-9]{2}"]); // DateTime
+    $router->addMatchTypes(["da" => "[0-9]{4}-[0-9]{2}-[0-9]{2}"]); // Date
 
-    $router->map("GET", "/reports", Aws\Endpoints\ReportsGetEndpoint::class);
-    $router->map("GET", "/reports/[dt:time]", Aws\Endpoints\ReportGetEndpoint::class);
+    $router->map("GET", "/observations", Aws\Endpoints\ObservationsGetEndpoint::class);
+    $router->map("GET", "/observations/[dt:time]", Aws\Endpoints\ObservationGetEndpoint::class);
     $router->map("GET", "/statistics/daily", Aws\Endpoints\StatisticsDailyGetEndpoint::class);
     $router->map("GET", "/statistics/daily/[da:date]", Aws\Endpoints\StatisticDailyGetEndpoint::class);
 

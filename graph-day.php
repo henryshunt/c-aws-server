@@ -48,7 +48,7 @@ $title = "AWS " . $config["stationName"] . " " .
                 <p class="title">AWS - <?php echo $config["stationName"]; ?></p>
 
                 <nav>
-                    <a class="menu-item" href=".">Reports</a>
+                    <a class="menu-item" href=".">Observations</a>
                     <a class="menu-item" href="statistics.php">Statistics</a>
                     <a class="menu-item" href="camera.php">Camera</a>
                     <span class="menu-sep">|</span>

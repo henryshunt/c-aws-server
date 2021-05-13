@@ -77,7 +77,7 @@ function loadData(auto)
 {
     return new Promise(resolve =>
     {
-        let url = "api.php/reports/{0}?extras=true".format(
+        let url = "api.php/observations/{0}?extras=true".format(
             requestedTime.toFormat("yyyy-LL-dd'T'HH-mm-00"));
     
         if (auto)

@@ -176,35 +176,35 @@ function key_exists_matches(string $key, $value, array $array): bool
 }
 
 /**
- * Casts the values of a report to their appropriate types.
- * @param array $report - An associative array containing the attributes found in the reports table
- * of the database.
- * @return array $report but with the values cast to their appropriate types.
+ * Casts the values of an observation to their appropriate types.
+ * @param array $observation - An associative array containing the attributes found in the
+ * observations table of the database.
+ * @return array $observation but with the values cast to their appropriate types.
  */
-function cast_report(array $report): array
+function cast_observation(array $observation): array
 {
-    if ($report["airTemp"] !== null)
-        $report["airTemp"] = (double)$report["airTemp"];
-    if ($report["relHum"] !== null)
-        $report["relHum"] = (double)$report["relHum"];
-    if ($report["dewPoint"] !== null)
-        $report["dewPoint"] = (double)$report["dewPoint"];
-    if ($report["windSpeed"] !== null)
-        $report["windSpeed"] = (double)$report["windSpeed"];
-    if ($report["windDir"] !== null)
-        $report["windDir"] = (int)$report["windDir"];
-    if ($report["windGust"] !== null)
-        $report["windGust"] = (double)$report["windGust"];
-    if ($report["rainfall"] !== null)
-        $report["rainfall"] = (double)$report["rainfall"];
-    if ($report["sunDur"] !== null)
-        $report["sunDur"] = (int)$report["sunDur"];
-    if ($report["staPres"] !== null)
-        $report["staPres"] = (double)$report["staPres"];
-    if ($report["mslPres"] !== null)
-        $report["mslPres"] = (double)$report["mslPres"];
+    if ($observation["airTemp"] !== null)
+        $observation["airTemp"] = (double)$observation["airTemp"];
+    if ($observation["relHum"] !== null)
+        $observation["relHum"] = (double)$observation["relHum"];
+    if ($observation["dewPoint"] !== null)
+        $observation["dewPoint"] = (double)$observation["dewPoint"];
+    if ($observation["windSpeed"] !== null)
+        $observation["windSpeed"] = (double)$observation["windSpeed"];
+    if ($observation["windDir"] !== null)
+        $observation["windDir"] = (int)$observation["windDir"];
+    if ($observation["windGust"] !== null)
+        $observation["windGust"] = (double)$observation["windGust"];
+    if ($observation["rainfall"] !== null)
+        $observation["rainfall"] = (double)$observation["rainfall"];
+    if ($observation["sunDur"] !== null)
+        $observation["sunDur"] = (int)$observation["sunDur"];
+    if ($observation["staPres"] !== null)
+        $observation["staPres"] = (double)$observation["staPres"];
+    if ($observation["mslPres"] !== null)
+        $observation["mslPres"] = (double)$observation["mslPres"];
 
-    return $report;
+    return $observation;
 }
 
 /**
