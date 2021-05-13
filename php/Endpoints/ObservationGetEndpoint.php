@@ -75,7 +75,7 @@ class ObservationGetEndpoint extends Endpoint
     private function addExtras(array $observation, \DateTime $time): array
     {
         $hourAgo = clone $time;
-        $hourAgo->sub(new \DateInterval("PT1H"));
+        $hourAgo->sub(new \DateInterval("PT59M"));
 
         // Past hour rainfall
         $sql = "SELECT SUM(rainfall) FROM observations WHERE time BETWEEN ? AND ?";
