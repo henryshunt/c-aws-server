@@ -69,8 +69,18 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
                     {
                         unit: "hour",
                         stepSize: 3,
-                        tooltipFormat: "dd/LL/yyyy 'at' HH:mm"
-                    }
+                        tooltipFormat: "dd/LL/yyyy 'at' HH:mm",
+
+                        parser: function (time)
+                        {
+                            if (typeof time === "string")
+                            {
+                                return luxon.DateTime.fromSQL(time.replace("T", " "), { zone: "UTC" })
+                                    .setZone(awsTimeZone);
+                            }
+                            else return time.setZone(awsTimeZone);
+                        }
+                    },
                 }],
 
                 yAxes: [{ }]
@@ -143,7 +153,7 @@ function loadData()
         const start = requestedTime.startOf("day").toUTC();
         const end = requestedTime.endOf("day").plus({ minutes: 1 }).toUTC();
 
-        const url = "api.php/reports?start={0}&end={1}".format(
+        const url = "api.php/observations?start={0}&end={1}".format(
             start.toFormat("yyyy-LL-dd'T'HH-mm-ss"),
             end.toFormat("yyyy-LL-dd'T'HH-mm-ss"));
         
@@ -180,25 +190,25 @@ function displayData(data, start, end)
     let sunDurTtl = 0;
     const mslPres = [];
 
-    for (const report of data)
+    for (const observation of data)
     {
-        const time = report.time.replace(" ", "T");
-        airTemp.push({ x: time, y: report.airTemp });
-        dewPoint.push({ x: time, y: report.dewPoint });
-        relHum.push({ x: time, y: report.relHum });
-        windSpeed.push({ x: time, y: report.windSpeed });
-        windGust.push({ x: time, y: report.windGust });
-        windDir.push({ x: time, y: report.windDir });
+        const time = observation.time.replace(" ", "T");
+        airTemp.push({ x: time, y: observation.airTemp });
+        dewPoint.push({ x: time, y: observation.dewPoint });
+        relHum.push({ x: time, y: observation.relHum });
+        windSpeed.push({ x: time, y: roundPlaces(observation.windSpeed * 2.237, 1) });
+        windGust.push({ x: time, y: roundPlaces(observation.windGust * 2.237, 1) });
+        windDir.push({ x: time, y: observation.windDir });
 
-        if (report.rainfall != null)
-            rainfallTtl += report.rainfall;
+        if (observation.rainfall != null)
+            rainfallTtl += observation.rainfall;
         rainfall.push({ x: time, y: rainfallTtl });
 
-        if (report.sunDur != null)
-            sunDurTtl += report.sunDur;
+        if (observation.sunDur != null)
+            sunDurTtl += observation.sunDur;
         sunDur.push({ x: time, y: sunDurTtl / 3600 });
 
-        mslPres.push({ x: time, y: report.mslPres });
+        mslPres.push({ x: time, y: observation.mslPres });
     }
 
     charts.temp.data.datasets[0].data = airTemp;
