@@ -41,7 +41,7 @@ class MonthlyStatisticsGetEndpoint extends Endpoint
         $end = \DateTime::createFromFormat("Y-m", $_GET["end"]);
 
         $sql = "SELECT * FROM monthlyStats " .
-            "WHERE (year * 1000 + month) BETWEEN (? * 1000 + ?) AND (? * 1000 + ?)" . 
+            "WHERE (year + month) BETWEEN (? + ?) AND (? + ?)" . 
             "ORDER BY year, month";
 
         $values = [$start->format("Y"), $start->format("m"), $end->format("Y"),
