@@ -176,7 +176,7 @@ function key_exists_matches(string $key, $value, array $array): bool
 }
 
 /**
- * Casts the values of an observation to their appropriate types.
+ * Casts the values of an observation record to their appropriate types.
  * @param array $observation - An associative array containing the attributes found in the
  * observations table of the database.
  * @return array $observation but with the values cast to their appropriate types.
@@ -208,62 +208,128 @@ function cast_observation(array $observation): array
 }
 
 /**
- * Casts the values of a daily statistic to their appropriate types.
- * @param array $statistic - An associative array containing the attributes found in the dayStats
+ * Casts the values of a dailyStats record to their appropriate types.
+ * @param array $statistics - An associative array containing the attributes found in the dailyStats
  * table of the database.
- * @return array $statistic but with the values cast to their appropriate types.
+ * @return array $statistics but with the values cast to their appropriate types.
  */
-function cast_daily_statistic(array $statistic): array
+function cast_daily_statistics(array $statistics): array
 {
-    if ($statistic["airTempAvg"] !== null)
-        $statistic["airTempAvg"] = (double)$statistic["airTempAvg"];
-    if ($statistic["airTempMin"] !== null)
-        $statistic["airTempMin"] = (double)$statistic["airTempMin"];
-    if ($statistic["airTempMax"] !== null)
-        $statistic["airTempMax"] = (double)$statistic["airTempMax"];
+    if ($statistics["airTempAvg"] !== null)
+        $statistics["airTempAvg"] = (double)$statistics["airTempAvg"];
+    if ($statistics["airTempMin"] !== null)
+        $statistics["airTempMin"] = (double)$statistics["airTempMin"];
+    if ($statistics["airTempMax"] !== null)
+        $statistics["airTempMax"] = (double)$statistics["airTempMax"];
 
-    if ($statistic["relHumAvg"] !== null)
-        $statistic["relHumAvg"] = (double)$statistic["relHumAvg"];
-    if ($statistic["relHumMin"] !== null)
-        $statistic["relHumMin"] = (double)$statistic["relHumMin"];
-    if ($statistic["relHumMax"] !== null)
-        $statistic["relHumMax"] = (double)$statistic["relHumMax"];
+    if ($statistics["relHumAvg"] !== null)
+        $statistics["relHumAvg"] = (double)$statistics["relHumAvg"];
+    if ($statistics["relHumMin"] !== null)
+        $statistics["relHumMin"] = (double)$statistics["relHumMin"];
+    if ($statistics["relHumMax"] !== null)
+        $statistics["relHumMax"] = (double)$statistics["relHumMax"];
 
-    if ($statistic["dewPointAvg"] !== null)
-        $statistic["dewPointAvg"] = (double)$statistic["dewPointAvg"];
-    if ($statistic["dewPointMin"] !== null)
-        $statistic["dewPointMin"] = (double)$statistic["dewPointMin"];
-    if ($statistic["dewPointMax"] !== null)
-        $statistic["dewPointMax"] = (double)$statistic["dewPointMax"];
+    if ($statistics["dewPointAvg"] !== null)
+        $statistics["dewPointAvg"] = (double)$statistics["dewPointAvg"];
+    if ($statistics["dewPointMin"] !== null)
+        $statistics["dewPointMin"] = (double)$statistics["dewPointMin"];
+    if ($statistics["dewPointMax"] !== null)
+        $statistics["dewPointMax"] = (double)$statistics["dewPointMax"];
 
-    if ($statistic["windSpeedAvg"] !== null)
-        $statistic["windSpeedAvg"] = (double)$statistic["windSpeedAvg"];
-    if ($statistic["windSpeedMin"] !== null)
-        $statistic["windSpeedMin"] = (double)$statistic["windSpeedMin"];
-    if ($statistic["windSpeedMax"] !== null)
-        $statistic["windSpeedMax"] = (double)$statistic["windSpeedMax"];
+    if ($statistics["windSpeedAvg"] !== null)
+        $statistics["windSpeedAvg"] = (double)$statistics["windSpeedAvg"];
+    if ($statistics["windSpeedMin"] !== null)
+        $statistics["windSpeedMin"] = (double)$statistics["windSpeedMin"];
+    if ($statistics["windSpeedMax"] !== null)
+        $statistics["windSpeedMax"] = (double)$statistics["windSpeedMax"];
 
-    if ($statistic["windDirAvg"] !== null)
-        $statistic["windDirAvg"] = (int)$statistic["windDirAvg"];
+    if ($statistics["windDirAvg"] !== null)
+        $statistics["windDirAvg"] = (int)$statistics["windDirAvg"];
 
-    if ($statistic["windGustAvg"] !== null)
-        $statistic["windGustAvg"] = (double)$statistic["windGustAvg"];
-    if ($statistic["windGustMin"] !== null)
-        $statistic["windGustMin"] = (double)$statistic["windGustMin"];
-    if ($statistic["windGustMax"] !== null)
-        $statistic["windGustMax"] = (double)$statistic["windGustMax"];
+    if ($statistics["windGustAvg"] !== null)
+        $statistics["windGustAvg"] = (double)$statistics["windGustAvg"];
+    if ($statistics["windGustMin"] !== null)
+        $statistics["windGustMin"] = (double)$statistics["windGustMin"];
+    if ($statistics["windGustMax"] !== null)
+        $statistics["windGustMax"] = (double)$statistics["windGustMax"];
 
-    if ($statistic["rainfallTtl"] !== null)
-        $statistic["rainfallTtl"] = (double)$statistic["rainfallTtl"];
-    if ($statistic["sunDurTtl"] !== null)
-        $statistic["sunDurTtl"] = (int)$statistic["sunDurTtl"];
+    if ($statistics["rainfallTtl"] !== null)
+        $statistics["rainfallTtl"] = (double)$statistics["rainfallTtl"];
+    if ($statistics["sunDurTtl"] !== null)
+        $statistics["sunDurTtl"] = (int)$statistics["sunDurTtl"];
 
-    if ($statistic["mslPresAvg"] !== null)
-        $statistic["mslPresAvg"] = (double)$statistic["mslPresAvg"];
-    if ($statistic["mslPresMin"] !== null)
-        $statistic["mslPresMin"] = (double)$statistic["mslPresMin"];
-    if ($statistic["mslPresMax"] !== null)
-        $statistic["mslPresMax"] = (double)$statistic["mslPresMax"];
+    if ($statistics["mslPresAvg"] !== null)
+        $statistics["mslPresAvg"] = (double)$statistics["mslPresAvg"];
+    if ($statistics["mslPresMin"] !== null)
+        $statistics["mslPresMin"] = (double)$statistics["mslPresMin"];
+    if ($statistics["mslPresMax"] !== null)
+        $statistics["mslPresMax"] = (double)$statistics["mslPresMax"];
 
-    return $statistic;
+    return $statistics;
+}
+
+/**
+ * Casts the values of a monthlyStats record to their appropriate types.
+ * @param array $statistics - An associative array containing the attributes found in the
+ * monthlyStats table of the database.
+ * @return array $statistics but with the values cast to their appropriate types.
+ */
+function cast_monthly_statistics(array $statistics): array
+{
+    if ($statistics["year"] !== null)
+        $statistics["year"] = (int)$statistics["year"];
+    if ($statistics["month"] !== null)
+        $statistics["month"] = (int)$statistics["month"];
+
+    if ($statistics["airTempAvg"] !== null)
+        $statistics["airTempAvg"] = (double)$statistics["airTempAvg"];
+    if ($statistics["airTempMin"] !== null)
+        $statistics["airTempMin"] = (double)$statistics["airTempMin"];
+    if ($statistics["airTempMax"] !== null)
+        $statistics["airTempMax"] = (double)$statistics["airTempMax"];
+
+    if ($statistics["relHumAvg"] !== null)
+        $statistics["relHumAvg"] = (double)$statistics["relHumAvg"];
+    if ($statistics["relHumMin"] !== null)
+        $statistics["relHumMin"] = (double)$statistics["relHumMin"];
+    if ($statistics["relHumMax"] !== null)
+        $statistics["relHumMax"] = (double)$statistics["relHumMax"];
+
+    if ($statistics["dewPointAvg"] !== null)
+        $statistics["dewPointAvg"] = (double)$statistics["dewPointAvg"];
+    if ($statistics["dewPointMin"] !== null)
+        $statistics["dewPointMin"] = (double)$statistics["dewPointMin"];
+    if ($statistics["dewPointMax"] !== null)
+        $statistics["dewPointMax"] = (double)$statistics["dewPointMax"];
+
+    if ($statistics["windSpeedAvg"] !== null)
+        $statistics["windSpeedAvg"] = (double)$statistics["windSpeedAvg"];
+    if ($statistics["windSpeedMin"] !== null)
+        $statistics["windSpeedMin"] = (double)$statistics["windSpeedMin"];
+    if ($statistics["windSpeedMax"] !== null)
+        $statistics["windSpeedMax"] = (double)$statistics["windSpeedMax"];
+
+    if ($statistics["windDirAvg"] !== null)
+        $statistics["windDirAvg"] = (int)$statistics["windDirAvg"];
+
+    if ($statistics["windGustAvg"] !== null)
+        $statistics["windGustAvg"] = (double)$statistics["windGustAvg"];
+    if ($statistics["windGustMin"] !== null)
+        $statistics["windGustMin"] = (double)$statistics["windGustMin"];
+    if ($statistics["windGustMax"] !== null)
+        $statistics["windGustMax"] = (double)$statistics["windGustMax"];
+
+    if ($statistics["rainfallTtl"] !== null)
+        $statistics["rainfallTtl"] = (double)$statistics["rainfallTtl"];
+    if ($statistics["sunDurTtl"] !== null)
+        $statistics["sunDurTtl"] = (int)$statistics["sunDurTtl"];
+
+    if ($statistics["mslPresAvg"] !== null)
+        $statistics["mslPresAvg"] = (double)$statistics["mslPresAvg"];
+    if ($statistics["mslPresMin"] !== null)
+        $statistics["mslPresMin"] = (double)$statistics["mslPresMin"];
+    if ($statistics["mslPresMax"] !== null)
+        $statistics["mslPresMax"] = (double)$statistics["mslPresMax"];
+
+    return $statistics;
 }

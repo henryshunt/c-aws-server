@@ -28,11 +28,18 @@ try
     $router->setBasePath($_SERVER["SCRIPT_NAME"]);
     $router->addMatchTypes(["dt" => "[0-9]{4}-[0-9]{2}-[0-9]{2}T([0-9]{2}-){2}[0-9]{2}"]); // DateTime
     $router->addMatchTypes(["da" => "[0-9]{4}-[0-9]{2}-[0-9]{2}"]); // Date
+    $router->addMatchTypes(["ym" => "[0-9]{4}-[0-9]{2}"]); // yyyy-mm
 
     $router->map("GET", "/observations", Aws\Endpoints\ObservationsGetEndpoint::class);
     $router->map("GET", "/observations/[dt:time]", Aws\Endpoints\ObservationGetEndpoint::class);
-    $router->map("GET", "/statistics/daily", Aws\Endpoints\StatisticsDailyGetEndpoint::class);
-    $router->map("GET", "/statistics/daily/[da:date]", Aws\Endpoints\StatisticDailyGetEndpoint::class);
+
+    $router->map("GET", "/statistics/daily", Aws\Endpoints\DailyStatisticsGetEndpoint::class);
+    $router->map("GET", "/statistics/daily/[da:date]",
+        Aws\Endpoints\DailyStatisticGetEndpoint::class);
+
+    $router->map("GET", "/statistics/monthly", Aws\Endpoints\MonthlyStatisticsGetEndpoint::class);
+    $router->map("GET", "/statistics/monthly/[ym:date]",
+        Aws\Endpoints\MonthlyStatisticGetEndpoint::class);
 
 
     $match = $router->match();

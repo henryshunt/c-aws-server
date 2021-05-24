@@ -8,12 +8,12 @@ use Respect\Validation\Exceptions\ValidationException;
 use Aws\HttpException;
 
 
-class StatisticsDailyGetEndpoint extends Endpoint
+class DailyStatisticsGetEndpoint extends Endpoint
 {
     public function __invoke(): Response
     {
         $this->validateUrlParams();
-        return $this->readStatistics();
+        return $this->readDailyStatistics();
     }
 
     private function validateUrlParams(): void
@@ -35,17 +35,17 @@ class StatisticsDailyGetEndpoint extends Endpoint
             throw new HttpException(400, "end must be later than start");
     }
 
-    private function readStatistics(): Response
+    private function readDailyStatistics(): Response
     {
         $start = \DateTime::createFromFormat("Y-m-d", $_GET["start"]);
         $end = \DateTime::createFromFormat("Y-m-d", $_GET["end"]);
 
-        $sql = "SELECT * FROM dayStats WHERE date BETWEEN ? AND ? ORDER BY date";
+        $sql = "SELECT * FROM dailyStats WHERE date BETWEEN ? AND ? ORDER BY date";
         $query = database_query($this->pdo, $sql,
             [$start->format("Y-m-d"), $end->format("Y-m-d")]);
 
         for ($i = 0; $i < count($query); $i++)
-            $query[$i] = cast_daily_statistic($query[$i]);
+            $query[$i] = cast_daily_statistics($query[$i]);
 
         return (new Response(200))->setBody(json_encode($query));
     }

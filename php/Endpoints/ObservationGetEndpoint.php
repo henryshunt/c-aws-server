@@ -12,7 +12,7 @@ class ObservationGetEndpoint extends Endpoint
 {
     public function __invoke(): Response
     {
-        // The format is already valid but it could still be an impossible date/time
+        // Format is already valid but it could still be an impossible date/time
         if (\DateTime::createFromFormat("Y-m-d\TH-i-s", $this->resParams["time"]) === false)
             throw new HttpException(404);
 
