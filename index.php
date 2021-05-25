@@ -63,16 +63,16 @@ $title = "AWS " . $config["stationName"] . " " .
         </header>
 
         <main class="main-col">
-            <div class="group scroller">
-                <button class="scroller-btn solid-btn" id="scroller-left-btn">
+            <div class="group browser">
+                <button class="browser-btn solid-btn" id="browser-left-btn">
                     <i class="material-icons">chevron_left</i>
                 </button>
 
-                <div class="scroller-centre">
-                    <button class="scroller-time text-btn" id="scroller-time-btn"></button>
+                <div class="browser-centre">
+                    <button class="browser-time text-btn" id="browser-time-btn"></button>
                 </div>
 
-                <button class="scroller-btn solid-btn" id="scroller-right-btn">
+                <button class="browser-btn solid-btn" id="browser-right-btn">
                     <i class="material-icons">chevron_right</i>
                 </button>
             </div>

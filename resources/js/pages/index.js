@@ -8,12 +8,12 @@ let datePicker = null;
 
 window.addEventListener("load", () =>
 {
-    document.getElementById("scroller-left-btn")
-        .addEventListener("click", onScrollerLeftBtnClick);
-    document.getElementById("scroller-right-btn")
-        .addEventListener("click", onScrollerRightBtnClick);
-    document.getElementById("scroller-time-btn")
-        .addEventListener("click", onScrollerTimeBtnClick);
+    document.getElementById("browser-left-btn")
+        .addEventListener("click", onBrowserLeftBtnClick);
+    document.getElementById("browser-right-btn")
+        .addEventListener("click", onBrowserRightBtnClick);
+    document.getElementById("browser-time-btn")
+        .addEventListener("click", onBrowserTimeBtnClick);
 
     for (const dataGroup of document.getElementById("groups").children)
         dataGroups.push(dataGroup);
@@ -74,9 +74,9 @@ function updateData(time, auto, autoUpdate)
     isLoading = true;
     clearTimeout(updateTimeout);
 
-    document.getElementById("scroller-left-btn").disabled = true;
-    document.getElementById("scroller-right-btn").disabled = true;
-    document.getElementById("scroller-time-btn").disabled = true;
+    document.getElementById("browser-left-btn").disabled = true;
+    document.getElementById("browser-right-btn").disabled = true;
+    document.getElementById("browser-time-btn").disabled = true;
 
     dataTime = time;
 
@@ -89,9 +89,9 @@ function updateData(time, auto, autoUpdate)
     loadData(auto)
         .then(() =>
         {
-            document.getElementById("scroller-left-btn").disabled = false;
-            document.getElementById("scroller-right-btn").disabled = false;
-            document.getElementById("scroller-time-btn").disabled = false;
+            document.getElementById("browser-left-btn").disabled = false;
+            document.getElementById("browser-right-btn").disabled = false;
+            document.getElementById("browser-time-btn").disabled = false;
             isLoading = false;
         });
 }
@@ -117,7 +117,7 @@ function loadData(auto)
             })
             .catch(() =>
             {
-                document.getElementById("scroller-time-btn").innerHTML
+                document.getElementById("browser-time-btn").innerHTML
                     = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
                 
                 document.getElementById("air-temp").innerHTML = "No Data";
@@ -140,7 +140,7 @@ function loadData(auto)
 
 function displayData(data)
 {
-    document.getElementById("scroller-time-btn").innerHTML = 
+    document.getElementById("browser-time-btn").innerHTML = 
         dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
 
     if (data["airTemp"] !== null)
@@ -217,24 +217,24 @@ function displayData(data)
 }
 
 
-function onScrollerLeftBtnClick()
+function onBrowserLeftBtnClick()
 {
     if (!isLoading)
-        scrollerChange(dataTime.minus({ minutes: 10 }));
+        browserChange(dataTime.minus({ minutes: 10 }));
 }
 
-function onScrollerRightBtnClick()
+function onBrowserRightBtnClick()
 {
     if (!isLoading)
-        scrollerChange(dataTime.plus({ minutes: 10 }));
+        browserChange(dataTime.plus({ minutes: 10 }));
 }
 
-function onScrollerTimeBtnClick()
+function onBrowserTimeBtnClick()
 {
     if (datePicker !== null)
         return;
 
-    datePicker = flatpickr("#scroller-time-btn",
+    datePicker = flatpickr("#browser-time-btn",
     {
         defaultDate: dataTime.toJSDate(),
         enableTime: true,
@@ -262,10 +262,10 @@ function onDatePickerClose()
         selected.minute !== dataTime.minute;
 
     if (different)
-        scrollerChange(selected);
+        browserChange(selected);
 }
 
-function scrollerChange(time)
+function browserChange(time)
 {
     const now = luxon.DateTime.utc();
 

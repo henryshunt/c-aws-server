@@ -5,12 +5,12 @@ var datePicker = null;
 
 window.addEventListener("load", () =>
 {
-    document.getElementById("scroller-left-btn")
-        .addEventListener("click", onScrollerLeftBtnClick);
-    document.getElementById("scroller-right-btn")
-        .addEventListener("click", onScrollerRightBtnClick);
-    document.getElementById("scroller-time-btn")
-        .addEventListener("click", onScrollerTimeBtnClick);
+    document.getElementById("browser-left-btn")
+        .addEventListener("click", onBrowserLeftBtnClick);
+    document.getElementById("browser-right-btn")
+        .addEventListener("click", onBrowserRightBtnClick);
+    document.getElementById("browser-time-btn")
+        .addEventListener("click", onBrowserTimeBtnClick);
 
     updateData(luxon.DateTime.utc(), true);
 });
@@ -21,9 +21,9 @@ function updateData(time, autoUpdate)
     isLoading = true;
     clearTimeout(updateTimeout);
 
-    document.getElementById("scroller-left-btn").disabled = true;
-    document.getElementById("scroller-right-btn").disabled = true;
-    document.getElementById("scroller-time-btn").disabled = true;
+    document.getElementById("browser-left-btn").disabled = true;
+    document.getElementById("browser-right-btn").disabled = true;
+    document.getElementById("browser-time-btn").disabled = true;
 
     dataTime = time;
 
@@ -36,9 +36,9 @@ function updateData(time, autoUpdate)
     loadData(autoUpdate)
         .then(() =>
         {
-            document.getElementById("scroller-left-btn").disabled = false;
-            document.getElementById("scroller-right-btn").disabled = false;
-            document.getElementById("scroller-time-btn").disabled = false;
+            document.getElementById("browser-left-btn").disabled = false;
+            document.getElementById("browser-right-btn").disabled = false;
+            document.getElementById("browser-time-btn").disabled = false;
             isLoading = false;
         });
 }
@@ -60,7 +60,7 @@ function loadData(showTime)
                 let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
                 if (showTime)
                     timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
-                document.getElementById("scroller-time-btn").innerHTML = timeString;
+                document.getElementById("browser-time-btn").innerHTML = timeString;
 
                 document.getElementById("air-temp-avg").innerHTML = "No Data";
                 document.getElementById("air-temp-min").innerHTML = "No Data";
@@ -93,7 +93,7 @@ function displayData(data, showTime)
     let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
     if (showTime)
         timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
-    document.getElementById("scroller-time-btn").innerHTML = timeString;
+    document.getElementById("browser-time-btn").innerHTML = timeString;
 
     if (data["airTempAvg"] !== null)
         document.getElementById("air-temp-avg").innerText = data["airTempAvg"] + "°C";
@@ -205,24 +205,24 @@ function displayData(data, showTime)
 }
 
 
-function onScrollerLeftBtnClick()
+function onBrowserLeftBtnClick()
 {
     if (!isLoading)
-        scrollerChange(dataTime.minus({ days: 1 }));
+        browserChange(dataTime.minus({ days: 1 }));
 }
 
-function onScrollerRightBtnClick()
+function onBrowserRightBtnClick()
 {
     if (!isLoading)
-        scrollerChange(dataTime.plus({ days: 1 }));
+        browserChange(dataTime.plus({ days: 1 }));
 }
 
-function onScrollerTimeBtnClick()
+function onBrowserTimeBtnClick()
 {
     if (datePicker !== null)
         return;
 
-    datePicker = flatpickr("#scroller-time-btn",
+    datePicker = flatpickr("#browser-time-btn",
     {
         defaultDate: dataTime.toJSDate(),
         disableMobile: true,
@@ -248,10 +248,10 @@ function onDatePickerClose()
         selected.year !== dataTimeLocal.year;
 
     if (different)
-        scrollerChange(selected);
+        browserChange(selected);
 }
 
-function scrollerChange(time)
+function browserChange(time)
 {
     const timeLocal = time.setZone(awsTimeZone);
     const now = luxon.DateTime.utc();

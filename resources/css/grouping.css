@@ -13,19 +13,19 @@
     margin-top: 2px;
 }
 
-.scroller {
+.browser {
     display: flex;
     height: 38px;
 }
-.scroller-btn {
+.browser-btn {
     width: 39px;
     height: 38px;
 }
-.scroller-centre {
+.browser-centre {
     flex: 1;
     text-align: center;
 }
-.scroller-time {
+.browser-time {
     margin-top: 9px;
     text-decoration: underline;
 }
