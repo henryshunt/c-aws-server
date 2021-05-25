@@ -47,7 +47,8 @@ function loadData(showTime)
 {
     return new Promise(resolve =>
     {
-        const url = "api.php/statistics/daily/" + dataTime.toFormat("yyyy-LL-dd");
+        const url = "api.php/statistics/daily/" +
+            dataTime.setZone(awsTimeZone).toFormat("yyyy-LL-dd");
 
         getJson(url)
             .then(data =>
