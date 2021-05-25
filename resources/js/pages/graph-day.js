@@ -1,8 +1,8 @@
 var isLoading = false;
-var requestedTime = null;
+var dataTime = null;
 var updateTimeout = null;
-const charts = {};
 var datePicker = null;
+const charts = {};
 
 window.addEventListener("load", () =>
 {
@@ -14,28 +14,28 @@ window.addEventListener("load", () =>
         .addEventListener("click", onScrollerTimeBtnClick);
 
     setUpCharts();
-    updateData(true);
+    updateData(luxon.DateTime.utc(), true);
 });
 
 function setUpCharts()
 {
-    charts.temp = setUpChart("temp-chart", true,
+    charts.airTemp = setUpChart("air-temp-chart", true,
         ["Air Temperature (°C)", "Dew Point (°C)"]);
 
     charts.relHum = setUpChart("rel-hum-chart", true,
         ["Relative Humidity (%)"]);
 
-    charts.windVel = setUpChart("wind-vel-chart", true,
+    charts.windSpeed = setUpChart("wind-speed-chart", true,
         ["Wind Speed (mph)", "Wind Gust (mph)"], { ticks: { min: 0 } });
 
     charts.windDir = setUpChart("wind-dir-chart", false,
-        ["Wind Direction (°)"], { ticks: { min: 0, max: 360 } });
+        ["Wind Direction (from) (°)"], { ticks: { min: 0, max: 360, stepSize: 90 } });
 
     charts.rainfall = setUpChart("rainfall-chart", true,
-        ["Rainfall Accumulated (mm)"], { ticks: { min: 0 } });
+        ["Rainfall (mm)"], { ticks: { min: 0 } });
 
     charts.sunDur = setUpChart("sun-dur-chart", true,
-        ["Sunshine Duration Accumulated (hrs)"], { ticks: { min: 0 } });
+        ["Sunshine Duration (hr)"], { ticks: { min: 0 } });
 
     charts.mslPres = setUpChart("msl-pres-chart", true,
         ["Mean Sea Level Pressure (hPa)"]);
@@ -50,13 +50,10 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
 
         options:
         {
-            responsive: true,
-            animation: false,
-
             elements:
             {
                 line: { borderWidth: 1, tension: 0, fill: false },
-                point: { hitRadius: 15, hoverRadius: 0 }
+                point: { hitRadius: 15, radius: 2, hoverRadius: 2 }
             },
 
             scales:
@@ -71,11 +68,11 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
                         stepSize: 3,
                         tooltipFormat: "dd/LL/yyyy 'at' HH:mm",
 
-                        parser: function (time)
+                        parser: (time) =>
                         {
                             if (typeof time === "string")
                             {
-                                return luxon.DateTime.fromSQL(time.replace("T", " "), { zone: "UTC" })
+                                return luxon.DateTime.fromSQL(time, { zone: "UTC" })
                                     .setZone(awsTimeZone);
                             }
                             else return time.setZone(awsTimeZone);
@@ -84,7 +81,10 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
                 }],
 
                 yAxes: [{ }]
-            }
+            },
+
+            responsive: true,
+            animation: false
         }
     }
 
@@ -103,7 +103,6 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
 
         switch (i)
         {
-            default:
             case 0: dataset.borderColor = "rgb(195, 39, 40)"; break;
             case 1: dataset.borderColor = "rgb(50, 136, 195)"; break;
             case 2: dataset.borderColor = "rgb(55, 145, 109)"; break;
@@ -116,7 +115,7 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
 }
 
 
-function updateData(autoUpdate)
+function updateData(time, autoUpdate)
 {
     isLoading = true;
     clearTimeout(updateTimeout);
@@ -124,19 +123,16 @@ function updateData(autoUpdate)
     document.getElementById("scroller-left-btn").disabled = true;
     document.getElementById("scroller-right-btn").disabled = true;
     document.getElementById("scroller-time-btn").disabled = true;
+
+    dataTime = time;
     
-    if (autoUpdate === true)
+    if (autoUpdate)
     {
-        requestedTime = luxon.DateTime.fromObject({ zone: awsTimeZone });
-        updateTimeout = setInterval(() => updateData(true), 60000);
+        updateTimeout = setInterval(() =>
+            updateData(luxon.DateTime.utc(), true), 60000);
     }
 
-    let timeStr = requestedTime.toFormat("dd/LL/yyyy");
-    if (autoUpdate)
-        timeStr += requestedTime.toFormat(" ('at' HH:mm)");
-    document.getElementById("scroller-time-btn").innerHTML = timeStr;
-
-    loadData(requestedTime)
+    loadData(autoUpdate)
         .then(() =>
         {
             document.getElementById("scroller-left-btn").disabled = false;
@@ -146,12 +142,13 @@ function updateData(autoUpdate)
         });
 }
 
-function loadData()
+function loadData(showTime)
 {
     return new Promise(resolve =>
     {
-        const start = requestedTime.startOf("day").toUTC();
-        const end = requestedTime.endOf("day").plus({ minutes: 1 }).toUTC();
+        const start = dataTime.setZone(awsTimeZone).startOf("day").toUTC();
+        const end = dataTime.setZone(awsTimeZone).endOf("day").toUTC()
+            .plus({ minutes: 1 });
 
         const url = "api.php/observations?start={0}&end={1}".format(
             start.toFormat("yyyy-LL-dd'T'HH-mm-ss"),
@@ -160,11 +157,16 @@ function loadData()
         getJson(url)
             .then(data =>
             {
-                displayData(data, start, end);
+                displayData(data, start, end, showTime);
                 resolve();
             })
             .catch(() =>
             {
+                let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
+                if (showTime)
+                    timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
+                document.getElementById("scroller-time-btn").innerHTML = timeString;
+
                 for (const chart of Object.values(charts))
                 {
                     chart.data.datasets[0].data = null;
@@ -176,29 +178,33 @@ function loadData()
     });
 }
 
-function displayData(data, start, end)
+function displayData(data, start, end, showTime)
 {
-    const airTemp = [];
-    const dewPoint = [];
-    const relHum = [];
-    const windSpeed = [];
-    const windGust = [];
-    const windDir = [];
-    const rainfall = [];
-    let rainfallTtl = 0;
-    const sunDur = [];
-    let sunDurTtl = 0;
-    const mslPres = [];
+    let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
+    if (showTime)
+        timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
+    document.getElementById("scroller-time-btn").innerHTML = timeString;
+
+    const airTemp = [], dewPoint = [], relHum = [], windSpeed = [], mslPres = [],
+        windGust = [], windDir = [], rainfall = [], sunDur = [];
+    let rainfallTtl = 0, sunDurTtl = 0;
 
     for (const observation of data)
     {
-        const time = observation.time.replace(" ", "T");
-        airTemp.push({ x: time, y: observation.airTemp });
-        dewPoint.push({ x: time, y: observation.dewPoint });
-        relHum.push({ x: time, y: observation.relHum });
-        windSpeed.push({ x: time, y: roundPlaces(observation.windSpeed * 2.237, 1) });
-        windGust.push({ x: time, y: roundPlaces(observation.windGust * 2.237, 1) });
-        windDir.push({ x: time, y: observation.windDir });
+        const time = observation.time;
+
+        if (observation.airTemp !== null)
+            airTemp.push({ x: time, y: observation.airTemp });
+        if (observation.dewPoint !== null)
+            dewPoint.push({ x: time, y: observation.dewPoint });
+        if (observation.relHum !== null)
+            relHum.push({ x: time, y: observation.relHum });
+        if (observation.windSpeed !== null)
+            windSpeed.push({ x: time, y: roundPlaces(observation.windSpeed * 2.237, 1) }); // m/s to mph
+        if (observation.windGust !== null)
+            windGust.push({ x: time, y: roundPlaces(observation.windGust * 2.237, 1) }); // m/s to mph
+        if (observation.windDir !== null)
+            windDir.push({ x: time, y: observation.windDir });
 
         if (observation.rainfall != null)
             rainfallTtl += observation.rainfall;
@@ -206,16 +212,17 @@ function displayData(data, start, end)
 
         if (observation.sunDur != null)
             sunDurTtl += observation.sunDur;
-        sunDur.push({ x: time, y: sunDurTtl / 3600 });
+        sunDur.push({ x: time, y: roundPlaces(sunDurTtl / 60 / 60, 2) }); // sec to hr
 
-        mslPres.push({ x: time, y: observation.mslPres });
+        if (observation.mslPres !== null)
+            mslPres.push({ x: time, y: observation.mslPres });
     }
 
-    charts.temp.data.datasets[0].data = airTemp;
-    charts.temp.data.datasets[1].data = dewPoint;
+    charts.airTemp.data.datasets[0].data = airTemp;
+    charts.airTemp.data.datasets[1].data = dewPoint;
     charts.relHum.data.datasets[0].data = relHum;
-    charts.windVel.data.datasets[0].data = windSpeed;
-    charts.windVel.data.datasets[1].data = windGust;
+    charts.windSpeed.data.datasets[0].data = windSpeed;
+    charts.windSpeed.data.datasets[1].data = windGust;
     charts.windDir.data.datasets[0].data = windDir;
     charts.rainfall.data.datasets[0].data = rainfall;
     charts.sunDur.data.datasets[0].data = sunDur;
@@ -232,20 +239,14 @@ function displayData(data, start, end)
 
 function onScrollerLeftBtnClick()
 {
-    if (isLoading)
-        return;
-    
-    requestedTime = requestedTime.minus({ days: 1 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.minus({ days: 1 }));
 }
 
 function onScrollerRightBtnClick()
 {
-    if (isLoading)
-        return;
-
-    requestedTime = requestedTime.plus({ days: 1 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.plus({ days: 1 }));
 }
 
 function onScrollerTimeBtnClick()
@@ -255,7 +256,7 @@ function onScrollerTimeBtnClick()
 
     datePicker = flatpickr("#scroller-time-btn",
     {
-        defaultDate: requestedTime.toJSDate(),
+        defaultDate: dataTime.toJSDate(),
         disableMobile: true,
         onClose: onDatePickerClose
     });
@@ -266,31 +267,34 @@ function onScrollerTimeBtnClick()
 function onDatePickerClose()
 {
     const selected = luxon.DateTime.fromJSDate(
-        datePicker.selectedDates[0]).setZone("UTC");
+        datePicker.selectedDates[0]);
 
     datePicker.destroy();
     datePicker = null;
 
+    const dataTimeLocal = dataTime.setZone(awsTimeZone);
+
     const different =
-        selected.day !== requestedTime.day ||
-        selected.month !== requestedTime.month ||
-        selected.year !== requestedTime.year;
+        selected.day !== dataTimeLocal.day ||
+        selected.month !== dataTimeLocal.month ||
+        selected.year !== dataTimeLocal.year;
 
     if (different)
-    {
-        requestedTime = selected;
-        scrollerChange();
-    }
+        scrollerChange(selected);
 }
 
-function scrollerChange()
+function scrollerChange(time)
 {
+    const timeLocal = time.setZone(awsTimeZone);
     const now = luxon.DateTime.utc();
+    const nowLocal = now.setZone(awsTimeZone);
 
-    const autoUpdate =
-        requestedTime.day === now.day &&
-        requestedTime.month === now.month &&
-        requestedTime.year === now.year;
+    const theSame =
+        timeLocal.day === nowLocal.day &&
+        timeLocal.month === nowLocal.month &&
+        timeLocal.year === nowLocal.year;
 
-    updateData(autoUpdate);
+    if (theSame)
+        updateData(now, true);
+    else updateData(time, false);
 }

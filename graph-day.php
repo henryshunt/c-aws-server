@@ -79,7 +79,7 @@ $title = "AWS " . $config["stationName"] . " " .
             </div>
 
             <div class="group">
-                <canvas id="temp-chart"></canvas>
+                <canvas id="air-temp-chart"></canvas>
             </div>
 
             <div class="group">
@@ -87,7 +87,7 @@ $title = "AWS " . $config["stationName"] . " " .
             </div>
 
             <div class="group">
-                <canvas id="wind-vel-chart"></canvas>
+                <canvas id="wind-speed-chart"></canvas>
             </div>
 
             <div class="group">

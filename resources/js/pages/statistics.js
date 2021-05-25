@@ -60,8 +60,8 @@ function loadData(showTime)
                 let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
                 if (showTime)
                     timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
-
                 document.getElementById("scroller-time-btn").innerHTML = timeString;
+
                 document.getElementById("air-temp-avg").innerHTML = "No Data";
                 document.getElementById("air-temp-min").innerHTML = "No Data";
                 document.getElementById("air-temp-max").innerHTML = "No Data";
@@ -93,7 +93,6 @@ function displayData(data, showTime)
     let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
     if (showTime)
         timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
-
     document.getElementById("scroller-time-btn").innerHTML = timeString;
 
     if (data["airTempAvg"] !== null)
