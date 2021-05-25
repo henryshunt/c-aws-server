@@ -77,7 +77,7 @@ $title = "AWS " . $config["stationName"] . " " .
                 </button>
             </div>
 
-            <div id="groups">
+            <div id="groups" class="groups">
                 <div class="group">
                     <div class="group-header">
                         <h3 class="group-name">Ambient Temperature</h3>
@@ -170,7 +170,7 @@ $title = "AWS " . $config["stationName"] . " " .
 
                     <table class="field-table">
                         <tr>
-                            <td>Station Pressure (at station elev)</td>
+                            <td>Station Pressure</td>
                             <td id="sta-pres"></td>
                         </tr>
                         <tr>
@@ -178,8 +178,8 @@ $title = "AWS " . $config["stationName"] . " " .
                             <td id="msl-pres"></td>
                         </tr>
                         <tr>
-                            <td>3-Hour Pressure Tendency</td>
-                            <td id="msl-pres-tend"></td>
+                            <td>Pressure Tendency</td>
+                            <td id="pres-tend"></td>
                         </tr>
                     </table>
                 </div>

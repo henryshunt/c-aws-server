@@ -1,5 +1,8 @@
+let isColumned = false;
+let dataGroups = [];
+let resizeObserver = null;
 let isLoading = false;
-let requestedTime = null;
+let dataTime = null;
 let updateTimeout = null;
 let datePicker = null;
 
@@ -12,43 +15,61 @@ window.addEventListener("load", () =>
     document.getElementById("scroller-time-btn")
         .addEventListener("click", onScrollerTimeBtnClick);
 
-    setColumns();
-    updateData(true, true);
+    for (const dataGroup of document.getElementById("groups").children)
+        dataGroups.push(dataGroup);
+
+    resizeObserver = new ResizeObserver(entries => setColumns(entries[0]));
+    resizeObserver.observe(document.getElementById("groups"));
+
+    updateData(luxon.DateTime.utc(), true, true);
 });
 
-function setColumns()
+function setColumns(entry)
 {
-    const column0 = document.createElement("div");
-    column0.className = "column column0";
-    const column1 = document.createElement("div");
-    column1.className = "column";
-    
-    let column = 0;
-    while (document.getElementById("groups").children.length > 0)
+    if ((entry.contentRect.width >= 690 && isColumned) ||
+        (entry.contentRect.width < 690 && !isColumned))
     {
-        const group = document.getElementById("groups").children[0];
-
-        if (column === 0)
-        {
-            column0.appendChild(group);
-            column = 1;
-        }
-        else
-        {
-            column1.appendChild(group);
-            column = 0;
-        }
+        return;
     }
 
-    column0.children[column0.children.length - 1].classList.add("final");
-    document.getElementById("groups").appendChild(column0);
-    column1.children[column1.children.length - 1].classList.add("final");
-    document.getElementById("groups").appendChild(column1);
-    document.getElementById("groups").classList.add("groups-split");
+    while (document.getElementById("groups").children.length > 0)
+        document.getElementById("groups").children[0].remove();
+
+    document.getElementById("groups").classList.remove("groups-columned");
+    
+    if (entry.contentRect.width >= 690)
+    {
+        const column0 = document.createElement("div");
+        column0.className = "groups-column";
+        document.getElementById("groups").appendChild(column0);
+        const column1 = document.createElement("div");
+        column1.className = "groups-column";
+        document.getElementById("groups").appendChild(column1);
+        
+        for (const group of dataGroups)
+        {
+            if (column0.children.length === 0 ||
+                column0.offsetHeight <= column1.offsetHeight)
+            {
+                column0.appendChild(group);
+            }
+            else column1.appendChild(group);
+        }
+
+        document.getElementById("groups").classList.add("groups-columned");
+        isColumned = true;
+    }
+    else
+    {
+        for (const group of dataGroups)
+            document.getElementById("groups").append(group);
+
+        isColumned = false;
+    }
 }
 
 
-function updateData(autoUpdate, auto)
+function updateData(time, auto, autoUpdate)
 {
     isLoading = true;
     clearTimeout(updateTimeout);
@@ -57,10 +78,12 @@ function updateData(autoUpdate, auto)
     document.getElementById("scroller-right-btn").disabled = true;
     document.getElementById("scroller-time-btn").disabled = true;
 
+    dataTime = time;
+
     if (autoUpdate)
     {
-        requestedTime = luxon.DateTime.utc();
-        updateTimeout = setInterval(() => updateData(true, true), 60000);
+        updateTimeout = setInterval(() =>
+            updateData(luxon.DateTime.utc(), true, true), 60000);
     }
 
     loadData(auto)
@@ -78,7 +101,7 @@ function loadData(auto)
     return new Promise(resolve =>
     {
         let url = "api.php/observations/{0}?extras=true".format(
-            requestedTime.toFormat("yyyy-LL-dd'T'HH-mm-00"));
+            dataTime.toFormat("yyyy-LL-dd'T'HH-mm-00"));
     
         if (auto)
             url += "&auto=true";
@@ -86,13 +109,16 @@ function loadData(auto)
         getJson(url)
             .then(data =>
             {
+                if (auto)
+                    dataTime = luxon.DateTime.fromSQL(data["time"], { zone: "UTC" });
+
                 displayData(data);
                 resolve();
             })
             .catch(() =>
             {
                 document.getElementById("scroller-time-btn").innerHTML
-                    = requestedTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
+                    = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
                 
                 document.getElementById("air-temp").innerHTML = "No Data";
                 document.getElementById("rel-hum").innerHTML = "No Data";
@@ -106,7 +132,7 @@ function loadData(auto)
                 document.getElementById("sun-dur-ph").innerHTML = "No Data";
                 document.getElementById("sta-pres").innerHTML = "No Data";
                 document.getElementById("msl-pres").innerHTML = "No Data";
-                document.getElementById("msl-pres-tend").innerHTML = "No Data";
+                document.getElementById("pres-tend").innerHTML = "No Data";
                 resolve();
             });
     });
@@ -114,10 +140,8 @@ function loadData(auto)
 
 function displayData(data)
 {
-    requestedTime = luxon.DateTime.fromSQL(data["time"], { zone: "UTC" });
-
     document.getElementById("scroller-time-btn").innerHTML = 
-        requestedTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
+        dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy 'at' HH:mm");
 
     if (data["airTemp"] !== null)
         document.getElementById("air-temp").innerText = data["airTemp"] + "°C";
@@ -134,22 +158,21 @@ function displayData(data)
     if (data["windSpeed"] !== null)
     {
         document.getElementById("wind-speed").innerText =
-            roundPlaces(data["windSpeed"] * 2.237, 1) + " mph";
+            roundPlaces(data["windSpeed"] * 2.237, 1) + " mph"; // m/s to mph
     }
     else document.getElementById("wind-speed").innerText = "No Data";
 
     if (data["windDir"] !== null)
     {
-        const formatted = "{0}° ({1})".format(data["windDir"],
-            degreesToCompass(data["windDir"]));
-        document.getElementById("wind-dir").innerHTML = formatted;
+        document.getElementById("wind-dir").innerHTML = 
+            "{0}° ({1})".format(data["windDir"], degreesToCompass(data["windDir"]));
     }
     else document.getElementById("wind-dir").innerHTML = "No Data";
 
     if (data["windGust"] !== null)
     {
         document.getElementById("wind-gust").innerText =
-            roundPlaces(data["windGust"] * 2.237, 1) + " mph";
+            roundPlaces(data["windGust"] * 2.237, 1) + " mph"; // m/s to mph
     }
     else document.getElementById("wind-gust").innerText = "No Data";
 
@@ -183,34 +206,27 @@ function displayData(data)
         document.getElementById("msl-pres").innerText = data["mslPres"] + " hPa";
     else document.getElementById("msl-pres").innerText = "No Data";
 
-    if (data["mslPresTendency"] !== null)
+    if (data["pressureTendency"] !== null)
     {
-        let formatted = data["mslPresTendency"] + " hpa";
-        if (data["mslPresTendency"] > 0)
-            formatted = "+" + formatted;
+        let formatted = (data["pressureTendency"] > 0 ? "+" : "") +
+            data["pressureTendency"];
             
-        document.getElementById("msl-pres-tend").innerHTML = formatted;
+        document.getElementById("pres-tend").innerHTML = formatted + " hpa";
     }
-    else document.getElementById("msl-pres-tend").innerHTML = "No Data";
+    else document.getElementById("pres-tend").innerHTML = "No Data";
 }
 
 
 function onScrollerLeftBtnClick()
 {
-    if (isLoading)
-        return;
-    
-    requestedTime = requestedTime.minus({ minutes: 10 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.minus({ minutes: 10 }));
 }
 
 function onScrollerRightBtnClick()
 {
-    if (isLoading)
-        return;
-
-    requestedTime = requestedTime.plus({ minutes: 10 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.plus({ minutes: 10 }));
 }
 
 function onScrollerTimeBtnClick()
@@ -220,7 +236,7 @@ function onScrollerTimeBtnClick()
 
     datePicker = flatpickr("#scroller-time-btn",
     {
-        defaultDate: requestedTime.toJSDate(),
+        defaultDate: dataTime.toJSDate(),
         enableTime: true,
         time_24hr: true,
         disableMobile: true,
@@ -239,29 +255,26 @@ function onDatePickerClose()
     datePicker = null;
 
     const different =
-        selected.day !== requestedTime.day ||
-        selected.month !== requestedTime.month ||
-        selected.year !== requestedTime.year ||
-        selected.hour !== requestedTime.hour ||
-        selected.minute !== requestedTime.minute;
+        selected.day !== dataTime.day ||
+        selected.month !== dataTime.month ||
+        selected.year !== dataTime.year ||
+        selected.hour !== dataTime.hour ||
+        selected.minute !== dataTime.minute;
 
     if (different)
-    {
-        requestedTime = selected;
-        scrollerChange();
-    }
+        scrollerChange(selected);
 }
 
-function scrollerChange()
+function scrollerChange(time)
 {
     const now = luxon.DateTime.utc();
 
     const autoUpdate =
-        requestedTime.day === now.day &&
-        requestedTime.month === now.month &&
-        requestedTime.year === now.year &&
-        requestedTime.hour === now.hour &&
-        requestedTime.minute === now.minute;
+        time.day === now.day &&
+        time.month === now.month &&
+        time.year === now.year &&
+        time.hour === now.hour &&
+        time.minute === now.minute;
 
-    updateData(autoUpdate, false);
+    updateData(time, false, autoUpdate);
 }
