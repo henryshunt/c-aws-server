@@ -194,7 +194,7 @@ function displayData(data)
     if (data["sunDurPastHour"] !== null)
     {
         document.getElementById("sun-dur-ph").innerHTML =
-            roundPlaces(data["sunDurPastHour"] / 60 / 60, 2) + " hr";
+            roundPlaces(data["sunDurPastHour"] / 60 / 60, 2) + " hr"; // sec to hr
     }
     else document.getElementById("sun-dur-ph").innerHTML = "No Data";
 

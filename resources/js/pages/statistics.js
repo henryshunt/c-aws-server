@@ -1,5 +1,5 @@
 var isLoading = false;
-var requestedTime = null;
+var dataTime = null;
 var updateTimeout = null;
 var datePicker = null;
 
@@ -12,11 +12,11 @@ window.addEventListener("load", () =>
     document.getElementById("scroller-time-btn")
         .addEventListener("click", onScrollerTimeBtnClick);
 
-    updateData(true);
+    updateData(luxon.DateTime.utc(), true);
 });
 
 
-function updateData(autoUpdate)
+function updateData(time, autoUpdate)
 {
     isLoading = true;
     clearTimeout(updateTimeout);
@@ -25,10 +25,12 @@ function updateData(autoUpdate)
     document.getElementById("scroller-right-btn").disabled = true;
     document.getElementById("scroller-time-btn").disabled = true;
 
+    dataTime = time;
+
     if (autoUpdate)
     {
-        requestedTime = luxon.DateTime.fromObject({ zone: awsTimeZone });
-        updateTimeout = setInterval(() => updateData(true), 60000);
+        updateTimeout = setInterval(() =>
+            updateData(luxon.DateTime.utc(), true), 60000);
     }
 
     loadData(autoUpdate)
@@ -45,8 +47,7 @@ function loadData(showTime)
 {
     return new Promise(resolve =>
     {
-        let url = "api.php/statistics/daily/" +
-            requestedTime.toFormat("yyyy-LL-dd");
+        const url = "api.php/statistics/daily/" + dataTime.toFormat("yyyy-LL-dd");
 
         getJson(url)
             .then(data =>
@@ -56,32 +57,32 @@ function loadData(showTime)
             })
             .catch(() =>
             {
-                let timeStr = requestedTime.toFormat("dd/LL/yyyy");
+                let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
                 if (showTime)
-                    timeStr += requestedTime.toFormat(" ('at' HH:mm)");
+                    timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
 
-                document.getElementById("scroller-time-btn").innerHTML = timeStr;
-                document.getElementById("item_AirT_Avg").innerHTML = "No Data";
-                document.getElementById("item_AirT_Min").innerHTML = "No Data";
-                document.getElementById("item_AirT_Max").innerHTML = "No Data";
-                document.getElementById("item_RelH_Avg").innerHTML = "No Data";
-                document.getElementById("item_RelH_Min").innerHTML = "No Data";
-                document.getElementById("item_RelH_Max").innerHTML = "No Data";
-                document.getElementById("item_DewP_Avg").innerHTML = "No Data";
-                document.getElementById("item_DewP_Min").innerHTML = "No Data";
-                document.getElementById("item_DewP_Max").innerHTML = "No Data";
-                document.getElementById("item_WSpd_Avg").innerHTML = "No Data";
-                document.getElementById("item_WSpd_Min").innerHTML = "No Data";
-                document.getElementById("item_WSpd_Max").innerHTML = "No Data";
-                document.getElementById("item_WDir_Avg").innerHTML = "No Data";
-                document.getElementById("item_WGst_Avg").innerHTML = "No Data";
-                document.getElementById("item_WGst_Min").innerHTML = "No Data";
-                document.getElementById("item_WGst_Max").innerHTML = "No Data";
-                document.getElementById("item_SunD_Ttl").innerHTML = "No Data";
-                document.getElementById("item_Rain_Ttl").innerHTML = "No Data";
-                document.getElementById("item_MSLP_Avg").innerHTML = "No Data";
-                document.getElementById("item_MSLP_Min").innerHTML = "No Data";
-                document.getElementById("item_MSLP_Max").innerHTML = "No Data";
+                document.getElementById("scroller-time-btn").innerHTML = timeString;
+                document.getElementById("air-temp-avg").innerHTML = "No Data";
+                document.getElementById("air-temp-min").innerHTML = "No Data";
+                document.getElementById("air-temp-max").innerHTML = "No Data";
+                document.getElementById("rel-hum-avg").innerHTML = "No Data";
+                document.getElementById("rel-hum-min").innerHTML = "No Data";
+                document.getElementById("rel-hum-max").innerHTML = "No Data";
+                document.getElementById("dew-point-avg").innerHTML = "No Data";
+                document.getElementById("dew-point-min").innerHTML = "No Data";
+                document.getElementById("dew-point-max").innerHTML = "No Data";
+                document.getElementById("wind-speed-avg").innerHTML = "No Data";
+                document.getElementById("wind-speed-min").innerHTML = "No Data";
+                document.getElementById("wind-speed-max").innerHTML = "No Data";
+                document.getElementById("wind-dir-avg").innerHTML = "No Data";
+                document.getElementById("wind-gust-avg").innerHTML = "No Data";
+                document.getElementById("wind-gust-min").innerHTML = "No Data";
+                document.getElementById("wind-gust-max").innerHTML = "No Data";
+                document.getElementById("sun-dur-ttl").innerHTML = "No Data";
+                document.getElementById("rainfall-ttl").innerHTML = "No Data";
+                document.getElementById("msl-pres-avg").innerHTML = "No Data";
+                document.getElementById("msl-pres-min").innerHTML = "No Data";
+                document.getElementById("msl-pres-max").innerHTML = "No Data";
                 resolve();
             });
     });
@@ -89,11 +90,11 @@ function loadData(showTime)
 
 function displayData(data, showTime)
 {
-    let timeStr = requestedTime.toFormat("dd/LL/yyyy");
+    let timeString = dataTime.setZone(awsTimeZone).toFormat("dd/LL/yyyy");
     if (showTime)
-        timeStr += requestedTime.toFormat(" ('at' HH:mm)");
+        timeString += dataTime.setZone(awsTimeZone).toFormat(" ('at' HH:mm)");
 
-    document.getElementById("scroller-time-btn").innerHTML = timeStr;
+    document.getElementById("scroller-time-btn").innerHTML = timeString;
 
     if (data["airTempAvg"] !== null)
         document.getElementById("air-temp-avg").innerText = data["airTempAvg"] + "°C";
@@ -119,42 +120,71 @@ function displayData(data, showTime)
         document.getElementById("rel-hum-max").innerText = data["relHumMax"] + "%";
     else document.getElementById("rel-hum-max").innerText = "No Data";
 
+    if (data["dewPointAvg"] !== null)
+        document.getElementById("dew-point-avg").innerText = data["dewPointAvg"] + "°C";
+    else document.getElementById("dew-point-avg").innerText = "No Data";
+
+    if (data["dewPointMin"] !== null)
+        document.getElementById("dew-point-min").innerText = data["dewPointMin"] + "°C";
+    else document.getElementById("dew-point-min").innerText = "No Data";
+
+    if (data["dewPointMax"] !== null)
+        document.getElementById("dew-point-max").innerText = data["dewPointMax"] + "°C";
+    else document.getElementById("dew-point-max").innerText = "No Data";
+
     if (data["windSpeedAvg"] !== null)
-        document.getElementById("wind-speed-avg").innerText = data["windSpeedAvg"] + " mph";
+    {
+        document.getElementById("wind-speed-avg").innerText =
+            roundPlaces(data["windSpeedAvg"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-speed-avg").innerText = "No Data";
 
     if (data["windSpeedMin"] !== null)
-        document.getElementById("wind-speed-min").innerText = data["windSpeedMin"] + " mph";
+    {
+        document.getElementById("wind-speed-min").innerText =
+            roundPlaces(data["windSpeedMin"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-speed-min").innerText = "No Data";
 
     if (data["windSpeedMax"] !== null)
-        document.getElementById("wind-speed-max").innerText = data["windSpeedMax"] + " mph";
+    {
+        document.getElementById("wind-speed-max").innerText =
+            roundPlaces(data["windSpeedMax"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-speed-max").innerText = "No Data";
 
     if (data["windDirAvg"] !== null)
     {
-        const formatted = "{0}° ({1})".format(data["windDirAvg"],
-            degreesToCompass(data["windDirAvg"]));
-        document.getElementById("wind-dir-avg").innerHTML = formatted;
+        document.getElementById("wind-dir-avg").innerHTML =
+            "{0}° ({1})".format(data["windDirAvg"], degreesToCompass(data["windDirAvg"]));
     }
     else document.getElementById("wind-dir-avg").innerHTML = "No Data";
 
     if (data["windGustAvg"] !== null)
-        document.getElementById("wind-gust-avg").innerText = data["windGustAvg"] + " mph";
+    {
+        document.getElementById("wind-gust-avg").innerText = 
+            roundPlaces(data["windGustAvg"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-gust-avg").innerText = "No Data";
 
     if (data["windGustMin"] !== null)
-        document.getElementById("wind-gust-min").innerText = data["windGustMin"] + " mph";
+    {
+        document.getElementById("wind-gust-min").innerText =
+            roundPlaces(data["windGustMin"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-gust-min").innerText = "No Data";
 
     if (data["windGustMax"] !== null)
-        document.getElementById("wind-gust-max").innerText = data["windGustMax"] + " mph";
+    {
+        document.getElementById("wind-gust-max").innerText = 
+            roundPlaces(data["windGustMax"] * 2.237, 1) + " mph"; // m/s to mph
+    }
     else document.getElementById("wind-gust-max").innerText = "No Data";
 
     if (data["sunDurTtl"] !== null)
     {
         document.getElementById("sun-dur-ttl").innerHTML
-            = roundPlaces(data["sunDurTtl"] / 60 / 60, 2) + " hr";
+            = roundPlaces(data["sunDurTtl"] / 60 / 60, 2) + " hr"; // sec to hr
     }
     else document.getElementById("sun-dur-ttl").innerHTML = "No Data";
 
@@ -178,20 +208,14 @@ function displayData(data, showTime)
 
 function onScrollerLeftBtnClick()
 {
-    if (isLoading)
-        return;
-    
-    requestedTime = requestedTime.minus({ days: 1 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.minus({ days: 1 }));
 }
 
 function onScrollerRightBtnClick()
 {
-    if (isLoading)
-        return;
-
-    requestedTime = requestedTime.plus({ days: 1 });
-    scrollerChange();
+    if (!isLoading)
+        scrollerChange(dataTime.plus({ days: 1 }));
 }
 
 function onScrollerTimeBtnClick()
@@ -201,7 +225,7 @@ function onScrollerTimeBtnClick()
 
     datePicker = flatpickr("#scroller-time-btn",
     {
-        defaultDate: requestedTime.toJSDate(),
+        defaultDate: dataTime.toJSDate(),
         disableMobile: true,
         onClose: onDatePickerClose
     });
@@ -212,31 +236,34 @@ function onScrollerTimeBtnClick()
 function onDatePickerClose()
 {
     const selected = luxon.DateTime.fromJSDate(
-        datePicker.selectedDates[0]).setZone("UTC");
+        datePicker.selectedDates[0]);
 
     datePicker.destroy();
     datePicker = null;
 
+    const dataTimeLocal = dataTime.setZone(awsTimeZone);
+
     const different =
-        selected.day !== requestedTime.day ||
-        selected.month !== requestedTime.month ||
-        selected.year !== requestedTime.year;
+        selected.day !== dataTimeLocal.day ||
+        selected.month !== dataTimeLocal.month ||
+        selected.year !== dataTimeLocal.year;
 
     if (different)
-    {
-        requestedTime = selected;
-        scrollerChange();
-    }
+        scrollerChange(selected);
 }
 
-function scrollerChange()
+function scrollerChange(time)
 {
+    const timeLocal = time.setZone(awsTimeZone);
     const now = luxon.DateTime.utc();
+    const nowLocal = now.setZone(awsTimeZone);
 
-    const autoUpdate =
-        requestedTime.day === now.day &&
-        requestedTime.month === now.month &&
-        requestedTime.year === now.year;
+    const theSame =
+        timeLocal.day === nowLocal.day &&
+        timeLocal.month === nowLocal.month &&
+        timeLocal.year === nowLocal.year;
 
-    updateData(autoUpdate);
+    if (theSame)
+        updateData(now, true);
+    else updateData(time, false);
 }

@@ -104,6 +104,12 @@ $title = "AWS " . $config["stationName"] . " " .
                         <td><span>MIN: </span><span id="rel-hum-min"></span></td>
                         <td><span>MAX: </span><span id="rel-hum-max"></span></td>
                     </tr>
+                    <tr>
+                        <td>Dew Point</td>
+                        <td><span>AVG: </span><span id="dew-point-avg"></span></td>
+                        <td><span>MIN: </span><span id="dew-point-min"></span></td>
+                        <td><span>MAX: </span><span id="dew-point-max"></span></td>
+                    </tr>
                 </table>
             </div>
 
