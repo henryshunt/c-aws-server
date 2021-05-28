@@ -1,7 +1,7 @@
-var isLoading = false;
-var dataTime = null;
-var updateTimeout = null;
-var datePicker = null;
+let isLoading = false;
+let dataTime = null;
+let updateTimeout = null;
+let datePicker = null;
 const charts = {};
 
 window.addEventListener("load", () =>
@@ -53,7 +53,7 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
             elements:
             {
                 line: { borderWidth: 1, tension: 0, fill: false },
-                point: { hitRadius: 15, radius: 2, hoverRadius: 2 }
+                point: { hitRadius: 15, radius: 0, hoverRadius: 0 }
             },
 
             scales:
@@ -88,8 +88,11 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
         }
     }
 
-    if (line)
-        parameters.options.elements.point.radius = 0;
+    if (!line)
+    {
+        parameters.options.elements.point.radius = 2;
+        parameters.options.elements.point.hoverRadius = 2;
+    }
 
     if (yOptions !== null)
         Object.assign(parameters.options.scales.yAxes[0], yOptions);
@@ -191,31 +194,40 @@ function displayData(data, start, end, showTime)
 
     for (const observation of data)
     {
-        const time = observation.time;
-
         if (observation.airTemp !== null)
-            airTemp.push({ x: time, y: observation.airTemp });
+            airTemp.push({ x: observation.time, y: observation.airTemp });
         if (observation.dewPoint !== null)
-            dewPoint.push({ x: time, y: observation.dewPoint });
+            dewPoint.push({ x: observation.time, y: observation.dewPoint });
         if (observation.relHum !== null)
-            relHum.push({ x: time, y: observation.relHum });
+            relHum.push({ x: observation.time, y: observation.relHum });
+
         if (observation.windSpeed !== null)
-            windSpeed.push({ x: time, y: roundPlaces(observation.windSpeed * 2.237, 1) }); // m/s to mph
+        {
+            windSpeed.push({ x: observation.time,
+                y: roundPlaces(observation.windSpeed * 2.237, 1) }); // m/s to mph
+        }
+
         if (observation.windGust !== null)
-            windGust.push({ x: time, y: roundPlaces(observation.windGust * 2.237, 1) }); // m/s to mph
+        {
+            windGust.push({ x: observation.time,
+                y: roundPlaces(observation.windGust * 2.237, 1) }); // m/s to mph
+        }
+
         if (observation.windDir !== null)
-            windDir.push({ x: time, y: observation.windDir });
+            windDir.push({ x: observation.time, y: observation.windDir });
 
-        if (observation.rainfall != null)
+        if (observation.rainfall !== null)
             rainfallTtl += observation.rainfall;
-        rainfall.push({ x: time, y: rainfallTtl });
+        rainfall.push({ x: observation.time, y: rainfallTtl });
 
-        if (observation.sunDur != null)
+        if (observation.sunDur !== null)
             sunDurTtl += observation.sunDur;
-        sunDur.push({ x: time, y: roundPlaces(sunDurTtl / 60 / 60, 2) }); // sec to hr
+
+        sunDur.push({ x: observation.time,
+            y: roundPlaces(sunDurTtl / 60 / 60, 2) }); // sec to hr
 
         if (observation.mslPres !== null)
-            mslPres.push({ x: time, y: observation.mslPres });
+            mslPres.push({ x: observation.time, y: observation.mslPres });
     }
 
     charts.airTemp.data.datasets[0].data = airTemp;

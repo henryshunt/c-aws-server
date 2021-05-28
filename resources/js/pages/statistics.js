@@ -1,7 +1,7 @@
-var isLoading = false;
-var dataTime = null;
-var updateTimeout = null;
-var datePicker = null;
+let isLoading = false;
+let dataTime = null;
+let updateTimeout = null;
+let datePicker = null;
 
 window.addEventListener("load", () =>
 {
