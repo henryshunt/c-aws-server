@@ -69,7 +69,7 @@ function database_connect($config): PDO
     }
     else
     {
-        $database = $config["localDataDir"] . "/data.sq3";
+        $database = $config["localDataDir"] . "/data.sqlite";
         return new PDO("sqlite:$database", null, null, $options);
     }
 }
