@@ -107,7 +107,7 @@ class ObservationGetEndpoint extends Endpoint
             if (count($query) > 0 && $query[0]["mslPres"] !== null)
             {
                 $observation["pressureTendency"] =
-                    round($query[0]["mslPres"] - $observation["mslPres"], 1);
+                    round($observation["mslPres"] - $query[0]["mslPres"], 1);
             }
             else $observation["pressureTendency"] = null;
         }
