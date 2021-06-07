@@ -140,19 +140,6 @@ $title = "AWS " . $config["stationName"] . " " .
 
             <div class="group">
                 <div class="group-header">
-                    <h3 class="group-name">Solar Radiation</h3>
-                </div>
-
-                <table class="field-table">
-                    <tr>
-                        <td>Sunshine Duration</td>
-                        <td><span>TTL: </span><span id="sun-dur-ttl"></span></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="group">
-                <div class="group-header">
                     <h3 class="group-name">Precipitation</h3>
                 </div>
 
@@ -160,6 +147,19 @@ $title = "AWS " . $config["stationName"] . " " .
                     <tr>
                         <td>Rainfall</td>
                         <td><span>TTL: </span><span id="rainfall-ttl"></span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="group">
+                <div class="group-header">
+                    <h3 class="group-name">Solar Radiation</h3>
+                </div>
+
+                <table class="field-table">
+                    <tr>
+                        <td>Sunshine Duration</td>
+                        <td><span>TTL: </span><span id="sun-dur-ttl"></span></td>
                     </tr>
                 </table>
             </div>

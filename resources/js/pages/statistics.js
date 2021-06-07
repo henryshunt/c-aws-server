@@ -79,8 +79,8 @@ function loadData(showTime)
                 document.getElementById("wind-gust-avg").innerHTML = "No Data";
                 document.getElementById("wind-gust-min").innerHTML = "No Data";
                 document.getElementById("wind-gust-max").innerHTML = "No Data";
-                document.getElementById("sun-dur-ttl").innerHTML = "No Data";
                 document.getElementById("rainfall-ttl").innerHTML = "No Data";
+                document.getElementById("sun-dur-ttl").innerHTML = "No Data";
                 document.getElementById("msl-pres-avg").innerHTML = "No Data";
                 document.getElementById("msl-pres-min").innerHTML = "No Data";
                 document.getElementById("msl-pres-max").innerHTML = "No Data";
@@ -181,16 +181,20 @@ function displayData(data, showTime)
     }
     else document.getElementById("wind-gust-max").innerText = "No Data";
 
+    if (data["rainfallTtl"] !== null)
+    {
+        document.getElementById("rainfall-ttl").innerText =
+            roundPlaces(data["rainfallTtl"], 2) + " mm";
+    }
+    else document.getElementById("rainfall-ttl").innerText = "No Data";
+
+
     if (data["sunDurTtl"] !== null)
     {
         document.getElementById("sun-dur-ttl").innerHTML
             = roundPlaces(data["sunDurTtl"] / 60 / 60, 2) + " hr"; // sec to hr
     }
     else document.getElementById("sun-dur-ttl").innerHTML = "No Data";
-
-    if (data["rainfallTtl"] !== null)
-        document.getElementById("rainfall-ttl").innerText = data["rainfallTtl"] + " mm";
-    else document.getElementById("rainfall-ttl").innerText = "No Data";
 
     if (data["mslPresAvg"] !== null)
         document.getElementById("msl-pres-avg").innerText = data["mslPresAvg"] + " hPa";

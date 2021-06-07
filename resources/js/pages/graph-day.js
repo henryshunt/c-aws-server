@@ -41,7 +41,7 @@ function setUpCharts()
         ["Mean Sea Level Pressure (hPa)"]);
 }
 
-function setUpChart(element, line, seriesLabels, yOptions = null)
+function setUpChart(element, showLine, seriesLabels, yOptions = null)
 {
     const parameters =
     {
@@ -88,7 +88,7 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
         }
     }
 
-    if (!line)
+    if (!showLine)
     {
         parameters.options.elements.point.radius = 2;
         parameters.options.elements.point.hoverRadius = 2;
@@ -101,7 +101,7 @@ function setUpChart(element, line, seriesLabels, yOptions = null)
     {
         const dataset = { label: seriesLabels[i] };
         
-        if (line)
+        if (showLine)
             dataset.showLine = true;
 
         switch (i)
